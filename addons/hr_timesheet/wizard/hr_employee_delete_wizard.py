@@ -5,7 +5,7 @@ from odoo import api, fields, models, _
 
 
 class HrEmployeDeleteWizard(models.TransientModel):
-    _name = 'hr.employee.delete.wizard'
+    _name = 'hr.employee.delete.wizard_test'
     _description = 'Employee Delete Wizard'
 
     employee_ids = fields.Many2many('hr.employee', string='Employees', context={'active_test': False}, export_string_translation=False)
@@ -35,7 +35,7 @@ class HrEmployeDeleteWizard(models.TransientModel):
         return {
             'name': _('Employee Termination'),
             'type': 'ir.actions.act_window',
-            'res_model': 'hr.departure.wizard',
+            'res_model': 'hr.departure.wizard_test',
             'views': [[False, 'form']],
             'view_mode': 'form',
             'target': 'new',

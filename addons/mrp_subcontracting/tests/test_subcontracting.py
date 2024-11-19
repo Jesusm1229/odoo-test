@@ -884,8 +884,8 @@ class TestSubcontractingFlows(TestMrpSubcontractingCommon):
         self.assertEqual(subcontract.date_finished, picking_receipt.scheduled_date)
 
     def test_subcontracting_set_quantity_done(self):
-        """ Tests to set a quantity done directly on a subcontracted move without using the subcontracting wizard.
-            Checks that it does the same as it would do with the wizard.
+        """ Tests to set a quantity done directly on a subcontracted move without using the subcontracting wizard_test.
+            Checks that it does the same as it would do with the wizard_test.
         """
         self.bom.consumption = 'flexible'
         quantities = [10, 15, 12, 14]
@@ -934,7 +934,7 @@ class TestSubcontractingFlows(TestMrpSubcontractingCommon):
         # Register serial number for each finished product
         for lot in finished_lots:
             action = picking_receipt.move_ids.action_show_details()
-            self.assertEqual(action['name'], 'Subcontract', "It should open the subcontract record components wizard instead.")
+            self.assertEqual(action['name'], 'Subcontract', "It should open the subcontract record components wizard_test instead.")
             mo = self.env['mrp.production'].browse(action['res_id'])
             with Form(mo.with_context(action['context']), view=action['view_id']) as mo_form:
                 mo_form.qty_producing = 1
@@ -956,7 +956,7 @@ class TestSubcontractingFlows(TestMrpSubcontractingCommon):
             'product_id': self.finished.id,
         })
         action = picking_receipt.move_ids.action_show_details()
-        self.assertEqual(action['name'], 'Detailed Operations', "The subcontract record components wizard shouldn't be available now.")
+        self.assertEqual(action['name'], 'Detailed Operations', "The subcontract record components wizard_test shouldn't be available now.")
         with Form(subcontract_move.with_context(action['context']), view=action['view_id']) as move_form:
             with move_form.move_line_ids.edit(2) as move_line:
                 move_line.lot_id = new_lot

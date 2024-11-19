@@ -7,7 +7,7 @@
     'version': '1.0',
     'depends': ['mail'],
     'data': [
-        'wizard/privacy_lookup_wizard_views.xml',
+        'wizard_test/privacy_lookup_wizard_views.xml',
         'views/privacy_log_views.xml',
         'security/ir.model.access.csv',
         'data/ir_actions_server_data.xml',

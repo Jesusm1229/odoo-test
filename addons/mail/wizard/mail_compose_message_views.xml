@@ -32,7 +32,7 @@
                         <field name="subtype_id" invisible="1"/>
                         <field name="subtype_is_log" invisible="1"/>
                         <field name="use_exclusion_list" invisible="1"/>
-                        <!-- visible wizard -->
+                        <!-- visible wizard_test -->
                         <field name="email_from"
                             invisible="composition_mode != 'mass_mail'"/>
                         <label for="partner_ids" string="To" invisible="composition_mode != 'comment' or subtype_is_log"/>

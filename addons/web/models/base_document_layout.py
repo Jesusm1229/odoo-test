@@ -119,7 +119,7 @@ class BaseDocumentLayout(models.TransientModel):
 
     @api.depends('report_layout_id', 'logo', 'font', 'primary_color', 'secondary_color', 'report_header', 'report_footer', 'layout_background', 'layout_background_image', 'company_details')
     def _compute_preview(self):
-        """ compute a qweb based preview to display on the wizard """
+        """ compute a qweb based preview to display on the wizard_test """
         styles = self._get_asset_style()
 
         for wizard in self:
@@ -187,7 +187,7 @@ class BaseDocumentLayout(models.TransientModel):
         for wizard in self:
             # It is admitted that if the user puts the original image back, it won't change colors
             company = wizard.company_id
-            # at that point wizard.logo has been assigned the value present in DB
+            # at that point wizard_test.logo has been assigned the value present in DB
             if wizard.logo == company.logo and company.primary_color and company.secondary_color:
                 continue
 

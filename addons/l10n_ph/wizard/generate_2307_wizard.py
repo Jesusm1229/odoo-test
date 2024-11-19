@@ -7,7 +7,7 @@ from odoo.addons.l10n_ph import utils
 
 
 class Generate2307Wizard(models.TransientModel):
-    _name = "l10n_ph_2307.wizard"
+    _name = "l10n_ph_2307.wizard_test"
     _description = "Exports 2307 data to a XLS file."
 
     moves_to_export = fields.Many2many("account.move", string="Joural To Include")
@@ -29,5 +29,5 @@ class Generate2307Wizard(models.TransientModel):
         return {
             "type": "ir.actions.act_url",
             "target": "self",
-            "url": f"/web/content?model=l10n_ph_2307.wizard&download=true&field=xls_file&filename=Form_2307.xls&id={self.id}",
+            "url": f"/web/content?model=l10n_ph_2307.wizard_test&download=true&field=xls_file&filename=Form_2307.xls&id={self.id}",
         }

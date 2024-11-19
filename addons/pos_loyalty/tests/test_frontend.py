@@ -98,7 +98,7 @@ class TestUi(TestPointOfSaleHttpCommon):
 
         # Create coupons for the coupon program and change the code
         # to be able to use them in the frontend tour.
-        cls.env["loyalty.generate.wizard"].with_context(
+        cls.env["loyalty.generate.wizard_test"].with_context(
             {"active_id": cls.coupon_program.id}
         ).create({"coupon_qty": 4, 'points_granted': 4.5}).generate_coupons()
         cls.coupon1, cls.coupon2, cls.coupon3, cls.coupon4 = cls.coupon_program.coupon_ids
@@ -663,7 +663,7 @@ class TestUi(TestPointOfSaleHttpCommon):
             })],
         })
 
-        self.env["loyalty.generate.wizard"].with_context(
+        self.env["loyalty.generate.wizard_test"].with_context(
             {"active_id": loyalty_program.id}
         ).create({"coupon_qty": 1, 'points_granted': 4.5}).generate_coupons()
         self.coupon1 = loyalty_program.coupon_ids
@@ -1013,7 +1013,7 @@ class TestUi(TestPointOfSaleHttpCommon):
             })],
         })
 
-        self.env["loyalty.generate.wizard"].with_context(
+        self.env["loyalty.generate.wizard_test"].with_context(
             {"active_id": loyalty_program.id}
         ).create({"coupon_qty": 1, 'points_granted': 1}).generate_coupons()
         self.coupon1 = loyalty_program.coupon_ids
@@ -1550,7 +1550,7 @@ class TestUi(TestPointOfSaleHttpCommon):
         })
 
         # Generate 1$ gift card.
-        self.env["loyalty.generate.wizard"].with_context(
+        self.env["loyalty.generate.wizard_test"].with_context(
             {"active_id": gift_card_program.id}
         ).create({"coupon_qty": 1, 'points_granted': 1}).generate_coupons()
         # Change the code of the gift card.

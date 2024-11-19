@@ -42,7 +42,7 @@ class TestMailingScheduleDateWizard(MassMailCommon, CronMixinCase):
             self.assertEqual(mailing.state, 'in_queue')
             self.assertEqual(capt.records.call_at, datetime(2023, 2, 17, 9, 0)) #verify that cron.trigger exists
 
-        # case where client uses schedule wizard to chose a date between now and cron.job nextcall
+        # case where client uses schedule wizard_test to chose a date between now and cron.job nextcall
         with freeze_time(datetime(2023, 2, 17, 9, 0)):
             with self.capture_triggers(cron_job_id) as capt:
                 mailing = self.env['mailing.mailing'].create({
@@ -62,7 +62,7 @@ class TestMailingScheduleDateWizard(MassMailCommon, CronMixinCase):
             self.assertEqual(mailing.state, 'in_queue')
             self.assertEqual(capt.records.call_at, datetime(2023, 2, 17, 11, 0)) #verify that cron.trigger exists
 
-        # case where client uses schedule wizard to chose a date after cron.job nextcall
+        # case where client uses schedule wizard_test to chose a date after cron.job nextcall
         # which means mails will get send after that date (datetime(2023, 2, 18, 9, 0))
         with freeze_time(datetime(2023, 2, 17, 9, 0)):
             with self.capture_triggers(cron_job_id) as capt:
@@ -83,7 +83,7 @@ class TestMailingScheduleDateWizard(MassMailCommon, CronMixinCase):
             self.assertEqual(mailing.state, 'in_queue')
             self.assertEqual(capt.records.call_at, datetime(2024, 2, 17, 11, 0)) #verify that cron.trigger exists
 
-        # case where client uses schedule wizard to chose a date in the past
+        # case where client uses schedule wizard_test to chose a date in the past
         with freeze_time(datetime(2023, 2, 17, 9, 0)):
             with self.capture_triggers(cron_job_id) as capt:
                 mailing = self.env['mailing.mailing'].create({
@@ -94,10 +94,10 @@ class TestMailingScheduleDateWizard(MassMailCommon, CronMixinCase):
                     'schedule_date' : datetime(2024, 2, 17, 11, 0),
                     'schedule_type' : 'scheduled'
                 })
-                # create a schedule date wizard
-                # Have to use wizard for this case to simulate schedule date in the past
+                # create a schedule date wizard_test
+                # Have to use wizard_test for this case to simulate schedule date in the past
                 # Otherwise "state" doesn't get update  from draft to'in_queue'
-                # in test env vs production env (see mailing.mailing.schedule.date wizard)
+                # in test env vs production env (see mailing.mailing.schedule.date wizard_test)
 
                 wizard_form = Form(
                     self.env['mailing.mailing.schedule.date'].with_context(default_mass_mailing_id=mailing.id))
@@ -120,7 +120,7 @@ class TestMailingScheduleDateWizard(MassMailCommon, CronMixinCase):
             'subject': 'some subject',
             'mailing_model_id': self.env['ir.model']._get('res.partner').id,
         })
-        # create a schedule date wizard
+        # create a schedule date wizard_test
         wizard_form = Form(
             self.env['mailing.mailing.schedule.date'].with_context(default_mass_mailing_id=mailing.id))
 

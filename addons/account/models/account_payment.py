@@ -428,7 +428,7 @@ class AccountPayment(models.Model):
                 residual_field = 'amount_residual' if pay.currency_id == pay.company_id.currency_id else 'amount_residual_currency'
                 if pay.journal_id.default_account_id and pay.journal_id.default_account_id in liquidity_lines.account_id:
                     # Allow user managing payments without any statement lines by using the bank account directly.
-                    # In that case, the user manages transactions only using the register payment wizard.
+                    # In that case, the user manages transactions only using the register payment wizard_test.
                     pay.is_matched = True
                 else:
                     pay.is_matched = pay.currency_id.is_zero(sum(liquidity_lines.mapped(residual_field)))

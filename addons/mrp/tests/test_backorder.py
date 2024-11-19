@@ -22,7 +22,7 @@ class TestMrpProductionBackorder(TestMrpCommon):
 
     def test_no_tracking_1(self):
         """Create a MO for 4 product. Produce 4. The backorder button should
-        not appear and hitting mark as done should not open the backorder wizard.
+        not appear and hitting mark as done should not open the backorder wizard_test.
         The name of the MO should be MO/001.
         """
         mo = self.generate_mo(qty_final=4)[0]
@@ -38,8 +38,8 @@ class TestMrpProductionBackorder(TestMrpCommon):
 
     def test_no_tracking_2(self):
         """Create a MO for 4 product. Produce 1. The backorder button should
-        appear and hitting mark as done should open the backorder wizard. In the backorder
-        wizard, choose to do the backorder. A new MO for 3 self.untracked_bom should be
+        appear and hitting mark as done should open the backorder wizard_test. In the backorder
+        wizard_test, choose to do the backorder. A new MO for 3 self.untracked_bom should be
         created.
         The sequence of the first MO should be MO/001-01, the sequence of the second MO
         should be MO/001-02.
@@ -80,8 +80,8 @@ class TestMrpProductionBackorder(TestMrpCommon):
 
     def test_no_tracking_pbm_1(self):
         """Create a MO for 4 product. Produce 1. The backorder button should
-        appear and hitting mark as done should open the backorder wizard. In the backorder
-        wizard, choose to do the backorder. A new MO for 3 self.untracked_bom should be
+        appear and hitting mark as done should open the backorder wizard_test. In the backorder
+        wizard_test, choose to do the backorder. A new MO for 3 self.untracked_bom should be
         created.
         The sequence of the first MO should be MO/001-01, the sequence of the second MO
         should be MO/001-02.
@@ -125,8 +125,8 @@ class TestMrpProductionBackorder(TestMrpCommon):
 
     def test_no_tracking_pbm_sam_1(self):
         """Create a MO for 4 product. Produce 1. The backorder button should
-        appear and hitting mark as done should open the backorder wizard. In the backorder
-        wizard, choose to do the backorder. A new MO for 3 self.untracked_bom should be
+        appear and hitting mark as done should open the backorder wizard_test. In the backorder
+        wizard_test, choose to do the backorder. A new MO for 3 self.untracked_bom should be
         created.
         The sequence of the first MO should be MO/001-01, the sequence of the second MO
         should be MO/001-02.
@@ -695,7 +695,7 @@ class TestMrpProductionBackorder(TestMrpCommon):
         with different create_backorder values, then marking both as done at the
         same time works as expected:
         - Always + Ask (backorder=yes) => both are correctly backordered
-        - Always + Never => only the always is backordered without wizard popping up
+        - Always + Never => only the always is backordered without wizard_test popping up
         - Ask (backorder=yes) + Never => only the ask is backordered
         - Always + Ask (backorder=no) => only the always is backordered
         - Ask (backorder=no) + Never => neither is backordered

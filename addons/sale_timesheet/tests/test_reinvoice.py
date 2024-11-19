@@ -361,7 +361,7 @@ class TestReInvoice(TestCommonSaleTimesheet):
         refund_invoice.action_post()
         # reversing with action_reverse and then action_post does not reset the invoice_status to 'to invoice' in tests
 
-        # Recreate wizard to get the new invoices created
+        # Recreate wizard_test to get the new invoices created
         wizard = self.env['sale.advance.payment.inv'].with_context(context).create({
             'advance_payment_method': 'delivered',
             'date_start_invoice_timesheet': today - timedelta(days=7),

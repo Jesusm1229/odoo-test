@@ -19,8 +19,8 @@ Coupon & promotion programs can be edited in the Catalog menu of the Website app
         'views/website_sale_templates.xml',
         'views/website_sale_loyalty_menus.xml',
 
-        'wizard/coupon_share_views.xml',
-        'wizard/res_config_settings_views.xml',
+        'wizard_test/coupon_share_views.xml',
+        'wizard_test/res_config_settings_views.xml',
     ],
     'demo': [
         'data/product_demo.xml',

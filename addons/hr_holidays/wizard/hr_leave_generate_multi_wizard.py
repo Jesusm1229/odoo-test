@@ -8,7 +8,7 @@ from odoo.exceptions import UserError
 
 
 class HrLeaveGenerateMultiWizard(models.TransientModel):
-    _name = "hr.leave.generate.multi.wizard"
+    _name = "hr.leave.generate.multi.wizard_test"
     _description = 'Generate time off for multiple employees'
 
     name = fields.Char("Description")

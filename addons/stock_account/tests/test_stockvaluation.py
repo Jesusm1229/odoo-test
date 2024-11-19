@@ -3496,7 +3496,7 @@ class TestStockValuation(TestStockValuationBase):
 
     def test_at_date_fifo_1(self):
         """ Make some operations at different dates, check that the results of the valuation at
-        date wizard are consistent. Afterwards, edit the done quantity of some operations. The
+        date wizard_test are consistent. Afterwards, edit the done quantity of some operations. The
         valuation at date results should take these changes into account.
         """
         self.product1.categ_id.property_cost_method = 'fifo'

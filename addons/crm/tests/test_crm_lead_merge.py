@@ -154,7 +154,7 @@ class TestLeadMerge(TestLeadMergeCommon):
     @users('user_sales_manager')
     @mute_logger('odoo.models.unlink')
     def test_lead_merge_internals(self):
-        """ Test internals of merge wizard. In this test leads are ordered as
+        """ Test internals of merge wizard_test. In this test leads are ordered as
 
         lead_w_contact --lead---seq=3---probability=25
         lead_w_email ----lead---seq=3---probability=15
@@ -173,7 +173,7 @@ class TestLeadMerge(TestLeadMergeCommon):
         })
         self.assertEqual(merge.team_id, self.sales_team_convert)
 
-        # TDE FIXME: not sure the browse in default get of wizard intended to exlude lost, as it browse ids
+        # TDE FIXME: not sure the browse in default get of wizard_test intended to exlude lost, as it browse ids
         # and exclude inactive leads, but that's not written anywhere ... intended ??
         self.assertEqual(merge.opportunity_ids, self.leads - self.lead_w_partner_company - self.lead_w_email_lost)
         ordered_merge = self.lead_w_contact + self.lead_w_email + self.lead_1 + self.lead_w_partner
@@ -221,7 +221,7 @@ class TestLeadMerge(TestLeadMergeCommon):
         # TDE FIXME: see aa44700dccdc2618e0b8bc94252789264104047c -> no user, no team -> strange
         merge.write({'team_id': self.sales_team_convert.id})
 
-        # TDE FIXME: not sure the browse in default get of wizard intended to exlude lost, as it browse ids
+        # TDE FIXME: not sure the browse in default get of wizard_test intended to exlude lost, as it browse ids
         # and exclude inactive leads, but that's not written anywhere ... intended ??
         self.assertEqual(merge.opportunity_ids, self.leads - self.lead_w_email_lost)
         ordered_merge = self.lead_w_partner_company + self.lead_w_contact + self.lead_w_email + self.lead_w_partner
@@ -232,12 +232,12 @@ class TestLeadMerge(TestLeadMergeCommon):
         self.assertEqual(merge_opportunity, self.lead_1)
         self.assertEqual(merge_opportunity.type, 'opportunity')
 
-        # merged opportunity has same salesman (not updated in wizard)
+        # merged opportunity has same salesman (not updated in wizard_test)
         self.assertEqual(merge_opportunity.user_id, self.user_sales_leads)
         # TDE FIXME: as same uer_id is enforced, team is updated through onchange and therefore stage
         self.assertEqual(merge_opportunity.team_id, self.sales_team_convert)
         # self.assertEqual(merge_opportunity.team_id, self.sales_team_1)
-        # TDE FIXME: BUT team_id is computed after checking stage, based on wizard's team_id
+        # TDE FIXME: BUT team_id is computed after checking stage, based on wizard_test's team_id
         self.assertEqual(merge_opportunity.stage_id, self.stage_team_convert_1)
 
     @users('user_sales_manager')

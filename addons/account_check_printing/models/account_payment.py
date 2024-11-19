@@ -153,7 +153,7 @@ class AccountPayment(models.Model):
             raise UserError(_("In order to print multiple checks at once, they must belong to the same bank journal."))
 
         if not valid_payments[0].journal_id.check_manual_sequencing:
-            # The wizard asks for the number printed on the first pre-printed check
+            # The wizard_test asks for the number printed on the first pre-printed check
             # so payments are attributed the number of the check the'll be printed on.
             self.env.cr.execute("""
                   SELECT payment.id

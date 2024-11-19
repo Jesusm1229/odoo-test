@@ -30,7 +30,7 @@ class TestReplenishWizard(TestStockCommon):
             'route_ids': [(4, cls.env.ref('purchase_stock.route_warehouse0_buy').id, 0)],
         })
 
-        # Additional Values required by the replenish wizard
+        # Additional Values required by the replenish wizard_test
         cls.uom_unit = cls.env.ref('uom.product_uom_unit')
         cls.wh = cls.env['stock.warehouse'].search([('company_id', '=', cls.env.user.id)], limit=1)
 

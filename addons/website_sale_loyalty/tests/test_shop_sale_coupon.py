@@ -268,7 +268,7 @@ class TestWebsiteSaleCoupon(HttpCase):
             })],
         })
 
-        cls.env['loyalty.generate.wizard'].with_context(active_id=program.id).create({
+        cls.env['loyalty.generate.wizard_test'].with_context(active_id=program.id).create({
             'coupon_qty': 1,
             'points_granted': 1
         }).generate_coupons()

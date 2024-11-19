@@ -576,7 +576,7 @@ class TestUsersIdentitycheck(HttpCase):
         self.addCleanup(_request_stack.pop)
         # The user clicks the button logout from all devices from his profile
         action = self.env.user.action_revoke_all_devices()
-        # The form of the check identity wizard opens
+        # The form of the check identity wizard_test opens
         form = Form(self.env[action['res_model']].browse(action['res_id']), action.get('view_id'))
         # The user fills his password
         form.password = 'admin@odoo'
@@ -588,5 +588,5 @@ class TestUsersIdentitycheck(HttpCase):
         # Invalid session -> redirected from /web to /web/login
         self.assertTrue(self.url_open('/web').url.endswith('/web/login?redirect=%2Fweb%3F'))
 
-        # In addition, the password must have been emptied from the wizard
+        # In addition, the password must have been emptied from the wizard_test
         self.assertFalse(user_identity_check.password)

@@ -101,7 +101,7 @@ class TestLeadConvertMass(crm_common.TestLeadConvertMassCommon):
         self.assertEqual(self.lead_w_email_lost.type, 'lead')
         self.assertFalse(self.lead_w_email_lost.active)
         self.assertFalse(self.lead_w_email_lost.date_conversion)
-        # TDE FIXME: partner creation is done even on lost leads because not checked in wizard
+        # TDE FIXME: partner creation is done even on lost leads because not checked in wizard_test
         # self.assertEqual(self.lead_w_email_lost.partner_id, self.env['res.partner'])
 
     @users('user_sales_manager')

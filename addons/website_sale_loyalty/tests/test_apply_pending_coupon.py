@@ -29,7 +29,7 @@ class TestSaleCouponApplyPending(HttpCase, TestSaleCouponNumbersCommon):
                 'reward_product_id': self.largeCabinet.id,
             })]
         })
-        self.env['loyalty.generate.wizard'].with_context(active_id=self.coupon_program.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.coupon_program.id).create({
             'coupon_qty': 1,
             'points_granted': 1,
         }).generate_coupons()

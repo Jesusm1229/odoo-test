@@ -10,7 +10,7 @@ class TestMrpSerialMassProduce(TestMrpCommon):
 
     def test_smp_serial(self):
         """Create a MO for a product not tracked by serial number.
-        The smp wizard should not open.
+        The smp wizard_test should not open.
         """
         mo = self.generate_mo()[0]
         self.assertEqual(mo.state, 'confirmed')
@@ -19,7 +19,7 @@ class TestMrpSerialMassProduce(TestMrpCommon):
 
     def test_smp_produce_all(self):
         """Create a MO for a product tracked by serial number.
-        Open the smp wizard, generate all serial numbers to produce all quantities.
+        Open the smp wizard_test, generate all serial numbers to produce all quantities.
         """
         mo = self.generate_mo(tracking_final='serial')[0]
         count = mo.product_qty
@@ -31,10 +31,10 @@ class TestMrpSerialMassProduce(TestMrpCommon):
                 'location_id': mo.location_src_id.id,
             })._apply_inventory()
         mo.action_assign()
-        # Open the wizard
+        # Open the wizard_test
         action = mo.action_mass_produce()
         wizard_form = Form(self.env['mrp.batch.produce'].with_context(**action['context']))
-        # Let the wizard generate all serial numbers
+        # Let the wizard_test generate all serial numbers
         wizard_form.lot_name = "sn#1"
         wizard_form.lot_qty = count
         wizard = wizard_form.save()
@@ -50,7 +50,7 @@ class TestMrpSerialMassProduce(TestMrpCommon):
 
     def test_smp_produce_all_but_one(self):
         """Create a MO for a product tracked by serial number.
-        Open the smp wizard, generate all but one serial numbers and create a back order.
+        Open the smp wizard_test, generate all but one serial numbers and create a back order.
         """
         mo = self.generate_mo(tracking_final='serial')[0]
         count = mo.product_qty
@@ -78,7 +78,7 @@ class TestMrpSerialMassProduce(TestMrpCommon):
     def test_smp_produce_complex(self):
         """Create a MO for a product tracked by serial number
         and with complex components (serial and multiple lots).
-        Open the smp wizard, generate all serial numbers to produce all quantities.
+        Open the smp wizard_test, generate all serial numbers to produce all quantities.
         Check lot splitting.
         """
         mo, dummy, dummy, product_to_use_1, product_to_use_2 = self.generate_mo(tracking_final='serial', tracking_base_1='lot', tracking_base_2='serial', qty_final=3, qty_base_1=2, qty_base_2=1)
@@ -105,10 +105,10 @@ class TestMrpSerialMassProduce(TestMrpCommon):
                 'lot_id': lot.id,
             })._apply_inventory()
         mo.action_assign()
-        # Open the wizard
+        # Open the wizard_test
         action = mo.action_mass_produce()
         wizard = Form(self.env['mrp.batch.produce'].with_context(**action['context']))
-        # Let the wizard generate all serial numbers
+        # Let the wizard_test generate all serial numbers
         wizard.lot_name = "sn#1"
         wizard.lot_qty = count
         wizard = wizard.save()
@@ -216,16 +216,16 @@ class TestMrpSerialMassProduce(TestMrpCommon):
         self.assertEqual(mo.state, 'confirmed')
 
         mo.action_assign()
-        # Open the wizard
+        # Open the wizard_test
         action = mo.action_mass_produce()
 
         wizard = Form(self.env['mrp.batch.produce'].with_context(**action['context']))
-        # Let the wizard generate all serial numbers
+        # Let the wizard_test generate all serial numbers
         wizard.lot_name = "sn#3"
         wizard.lot_qty = 2
         wizard = wizard.save()
         wizard.action_generate_production_text()
-        # Reload the wizard to apply generated serial numbers
+        # Reload the wizard_test to apply generated serial numbers
         wizard.action_prepare()
         # Initial MO should have a backorder-sequenced name and be in to_close state
         self.assertTrue("-001" in mo.name)
@@ -256,12 +256,12 @@ class TestMrpSerialMassProduce(TestMrpCommon):
         # In the end mass produce the SN's
         action = mo.action_mass_produce()
         wizard = Form(self.env['mrp.batch.produce'].with_context(**action['context']))
-        # Let the wizard generate all serial numbers
+        # Let the wizard_test generate all serial numbers
         wizard.lot_name = "sn#5"
         wizard.lot_qty = 3
         wizard = wizard.save()
         wizard.action_generate_production_text()
-        # Reload the wizard to apply generated serial numbers
+        # Reload the wizard_test to apply generated serial numbers
         wizard.action_prepare()
 
         # Initial MO should have a backorder-sequenced name and be in to_close state
@@ -285,7 +285,7 @@ class TestMrpSerialMassProduce(TestMrpCommon):
 
     def test_smp_produce_with_consumable_component(self):
         """Create a MO for a product tracked by serial number with a consumable component.
-        Open the smp wizard, You should be able to generate all serial numbers.
+        Open the smp wizard_test, You should be able to generate all serial numbers.
         BoM:
         - 1x final product (tracked by serial number)
         components:
@@ -316,10 +316,10 @@ class TestMrpSerialMassProduce(TestMrpCommon):
         mo.action_confirm()
         self.assertEqual(mo.state, 'confirmed')
 
-        # Open the wizard
+        # Open the wizard_test
         action = mo.button_mark_done()
         wizard = Form(self.env['mrp.batch.produce'].with_context(**action['context']))
-        # Let the wizard generate all serial numbers
+        # Let the wizard_test generate all serial numbers
         wizard.lot_name = "sn#1"
         wizard.lot_qty = mo.product_qty
         wizard = wizard.save()
@@ -334,7 +334,7 @@ class TestMrpSerialMassProduce(TestMrpCommon):
 
     def test_smp_two_steps(self):
         """Create a MO for a product tracked by lot and with a component untracked and tracked by lot.
-           As the smp wizard should not open even if in two steps
+           As the smp wizard_test should not open even if in two steps
         """
         self.env['res.config.settings'].write({
             'group_stock_adv_location': True,

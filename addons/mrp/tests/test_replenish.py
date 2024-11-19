@@ -90,7 +90,7 @@ class TestMrpReplenish(TestMrpCommon):
             self.assertEqual(fields.Datetime.from_string('2023-01-07 00:00:00'), wizard3.date_planned)
 
     def test_replenish_from_scrap(self):
-        """ Test that when ticking replenish on the scrap wizard of a MO, the new move
+        """ Test that when ticking replenish on the scrap wizard_test of a MO, the new move
         is linked to the MO and validating it will automatically reserve the quantity
         on the MO. """
         warehouse = self.env.ref('stock.warehouse0')

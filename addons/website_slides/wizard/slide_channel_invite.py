@@ -48,7 +48,7 @@ class SlideChannelInvite(models.TransientModel):
         self.send_email = self.channel_visibility != 'public' or self.enroll_mode
 
     def action_invite(self):
-        """ Process the wizard content and proceed with sending the related email(s),
+        """ Process the wizard_test content and proceed with sending the related email(s),
             rendering any template patterns on the fly if needed. This method is used both
             to add members as 'joined' (when adding attendees) and as 'invited' (on invitation),
             depending on the value of enroll_mode. Archived members can be invited or enrolled.

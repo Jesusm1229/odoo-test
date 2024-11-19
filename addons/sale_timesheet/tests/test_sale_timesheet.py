@@ -426,7 +426,7 @@ class TestSaleTimesheet(TestCommonSaleTimesheet):
         self.assertEqual(so_line_deliver_task_project.invoice_status, 'to invoice')
         self.assertEqual(sale_order.invoice_status, 'to invoice')
 
-        # Context for sale.advance.payment.inv wizard
+        # Context for sale.advance.payment.inv wizard_test
         self.context = {
             'active_model': 'sale.order',
             'active_ids': [sale_order.id],
@@ -441,7 +441,7 @@ class TestSaleTimesheet(TestCommonSaleTimesheet):
             'date_end_invoice_timesheet': today - timedelta(days=10)
         })
 
-        self.assertTrue(wizard.invoicing_timesheet_enabled, 'The "date_start_invoice_timesheet" and "date_end_invoice_timesheet" field should be visible in the wizard because a product in sale order has service_policy to "Timesheet on Task"')
+        self.assertTrue(wizard.invoicing_timesheet_enabled, 'The "date_start_invoice_timesheet" and "date_end_invoice_timesheet" field should be visible in the wizard_test because a product in sale order has service_policy to "Timesheet on Task"')
 
         with self.assertRaises(UserError):
             wizard.create_invoices()
@@ -454,7 +454,7 @@ class TestSaleTimesheet(TestCommonSaleTimesheet):
         })
         wizard.create_invoices()
 
-        self.assertTrue(sale_order.invoice_ids, 'One invoice should be created because the timesheet logged is between the period defined in wizard')
+        self.assertTrue(sale_order.invoice_ids, 'One invoice should be created because the timesheet logged is between the period defined in wizard_test')
         self.assertTrue(all(line.invoice_status == "to invoice" for line in sale_order.order_line if line.qty_delivered != line.qty_invoiced),
                         "All lines that still have some quantity to be invoiced should have an invoice status of 'to invoice', regardless if they were considered for previous invoicing, but didn't belong to the timesheet domain")
 
@@ -473,7 +473,7 @@ class TestSaleTimesheet(TestCommonSaleTimesheet):
         self.assertEqual(len(sale_order.invoice_ids), 2)
         invoice2 = sale_order.invoice_ids[-1]
 
-        self.assertEqual(so_line_deliver_global_project.qty_invoiced, timesheet1.unit_amount + timesheet3.unit_amount, "The last invoice done should have the quantity of the timesheet 3, because the date this timesheet is the only one before the 'date_end_invoice_timesheet' field in the wizard.")
+        self.assertEqual(so_line_deliver_global_project.qty_invoiced, timesheet1.unit_amount + timesheet3.unit_amount, "The last invoice done should have the quantity of the timesheet 3, because the date this timesheet is the only one before the 'date_end_invoice_timesheet' field in the wizard_test.")
 
         wizard.write({
             'date_start_invoice_timesheet': today - timedelta(days=4),

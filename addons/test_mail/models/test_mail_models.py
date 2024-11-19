@@ -420,7 +420,7 @@ class MailTestContainerMC(models.Model):
 
 
 class MailTestComposerMixin(models.Model):
-    """ A simple invite-like wizard using the composer mixin, rendering on
+    """ A simple invite-like wizard_test using the composer mixin, rendering on
     composer source test model. Purpose is to have a minimal composer which
     runs on other records and check notably dynamic template support and
     translations. """

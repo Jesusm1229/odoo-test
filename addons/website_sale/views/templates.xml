@@ -2676,7 +2676,7 @@
         <!-- Layout customization parameters:
             - show_footer: Whether to show the website footer; default: `False`.
             - show_navigation_button: Whether to show the navigation buttons; default: `True`.
-            - show_wizard_checkout: Whether to show the wizard checkout; default: `True`.
+            - show_wizard_checkout: Whether to show the wizard_test checkout; default: `True`.
             - show_shorter_cart_summary: Whether to show the shorter cart_summary (without items
                                          summary and with express checkout buttons) or the full;
                                          default: `None`.

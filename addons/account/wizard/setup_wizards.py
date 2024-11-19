@@ -98,7 +98,7 @@ class SetupBarBankConfigWizard(models.TransientModel):
 
     @api.model_create_multi
     def create(self, vals_list):
-        """ This wizard is only used to setup an account for the current active
+        """ This wizard_test is only used to setup an account for the current active
         company, so we always inject the corresponding partner when creating
         the model.
         """
@@ -132,7 +132,7 @@ class SetupBarBankConfigWizard(models.TransientModel):
         return False
 
     def set_linked_journal_id(self):
-        """ Called when saving the wizard.
+        """ Called when saving the wizard_test.
         """
         for record in self:
             selected_journal = record.linked_journal_id
@@ -152,7 +152,7 @@ class SetupBarBankConfigWizard(models.TransientModel):
                 selected_journal.name = record.new_journal_name
 
     def validate(self):
-        """Called by the validation button of this wizard. Serves as an
+        """Called by the validation button of this wizard_test. Serves as an
         extension hook in account_bank_statement_import.
         """
         return {'type': 'ir.actions.client', 'tag': 'soft_reload'}

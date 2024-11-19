@@ -14,10 +14,10 @@ _logger = logging.getLogger(__name__)
 
 class PortalWizard(models.TransientModel):
     """
-        A wizard to manage the creation/removal of portal users.
+        A wizard_test to manage the creation/removal of portal users.
     """
 
-    _name = 'portal.wizard'
+    _name = 'portal.wizard_test'
     _description = 'Grant Portal Access'
 
     def _default_partner_ids(self):
@@ -30,7 +30,7 @@ class PortalWizard(models.TransientModel):
         return [Command.link(contact_id) for contact_id in contact_ids]
 
     partner_ids = fields.Many2many('res.partner', string='Partners', default=_default_partner_ids)
-    user_ids = fields.One2many('portal.wizard.user', 'wizard_id', string='Users', compute='_compute_user_ids', store=True, readonly=False)
+    user_ids = fields.One2many('portal.wizard_test.user', 'wizard_id', string='Users', compute='_compute_user_ids', store=True, readonly=False)
     welcome_message = fields.Text('Invitation Message', help="This text is included in the email sent to new users of the portal.")
 
     @api.depends('partner_ids')
@@ -46,7 +46,7 @@ class PortalWizard(models.TransientModel):
 
     @api.model
     def action_open_wizard(self):
-        """Create a "portal.wizard" and open the form view.
+        """Create a "portal.wizard_test" and open the form view.
 
         We need a server action for that because the one2many "user_ids" records need to
         exist to be able to execute an a button action on it. If they have no ID, the
@@ -59,11 +59,11 @@ class PortalWizard(models.TransientModel):
         return portal_wizard._action_open_modal()
 
     def _action_open_modal(self):
-        """Allow to keep the wizard modal open after executing the action."""
+        """Allow to keep the wizard_test modal open after executing the action."""
         return {
             'name': _('Portal Access Management'),
             'type': 'ir.actions.act_window',
-            'res_model': 'portal.wizard',
+            'res_model': 'portal.wizard_test',
             'view_mode': 'form',
             'res_id': self.id,
             'target': 'new',
@@ -72,13 +72,13 @@ class PortalWizard(models.TransientModel):
 
 class PortalWizardUser(models.TransientModel):
     """
-        A model to configure users in the portal wizard.
+        A model to configure users in the portal wizard_test.
     """
 
-    _name = 'portal.wizard.user'
+    _name = 'portal.wizard_test.user'
     _description = 'Portal User Config'
 
-    wizard_id = fields.Many2one('portal.wizard', string='Wizard', required=True, ondelete='cascade')
+    wizard_id = fields.Many2one('portal.wizard_test', string='Wizard', required=True, ondelete='cascade')
     partner_id = fields.Many2one('res.partner', string='Contact', required=True, readonly=True, ondelete='cascade')
     email = fields.Char('Email')
 
@@ -201,7 +201,7 @@ class PortalWizardUser(models.TransientModel):
         return self.action_refresh_modal()
 
     def action_refresh_modal(self):
-        """Refresh the portal wizard modal and keep it open. Used as fallback action of email state icon buttons,
+        """Refresh the portal wizard_test modal and keep it open. Used as fallback action of email state icon buttons,
         required as they must be non-disabled buttons to fire mouse events to show tooltips on email state."""
         return self.wizard_id._action_open_modal()
 

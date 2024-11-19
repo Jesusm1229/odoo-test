@@ -269,7 +269,7 @@ class TestSaleStock(TestSaleStockCommon, ValuationReconciliationTestCommon):
         # deliver them
         # One of the move is for a consumable product, thus is assigned. The second one is for a
         # storable product, thus is unavailable. Hitting `button_validate` will first ask to
-        # process all the reserved quantities and, if the user chose to process, a second wizard
+        # process all the reserved quantities and, if the user chose to process, a second wizard_test
         # will ask to create a backorder for the unavailable product.
         self.assertEqual(len(self.so.picking_ids), 1)
         res_dict = self.so.picking_ids.sorted()[0].button_validate()
@@ -1233,7 +1233,7 @@ class TestSaleStock(TestSaleStockCommon, ValuationReconciliationTestCommon):
         return_picking.button_validate()
 
     def test_return_for_exchange_negativ(self):
-        """test product added into the return wizard are excluded in case of return for exchange"""
+        """test product added into the return wizard_test are excluded in case of return for exchange"""
         sale_order = self._get_new_sale_order()
         sale_order.action_confirm()
         picking = sale_order.picking_ids
@@ -1926,7 +1926,7 @@ class TestSaleStock(TestSaleStockCommon, ValuationReconciliationTestCommon):
 
     def test_sol_reserved_qty_wizard_3_steps_delivery(self):
         """
-        Check that the reserved qty wizard related to a sol is computed from
+        Check that the reserved qty wizard_test related to a sol is computed from
         the pick move in 2+ step deliveries.
         """
         admin = self.env.ref('base.user_admin')

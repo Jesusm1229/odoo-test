@@ -210,7 +210,7 @@ class TestLeaveRequests(TestHrHolidaysCommon):
         """ Create a department leave """
         self.employee_hrmanager.write({'department_id': self.hr_dept.id})
         self.assertFalse(self.env['hr.leave'].search([('employee_id', 'in', self.hr_dept.member_ids.ids)]))
-        leave_wizard_form = Form(self.env['hr.leave.generate.multi.wizard'].with_user(self.user_hrmanager))
+        leave_wizard_form = Form(self.env['hr.leave.generate.multi.wizard_test'].with_user(self.user_hrmanager))
         leave_wizard_form.allocation_mode = 'department'
         leave_wizard_form.department_id = self.hr_dept
         leave_wizard_form.holiday_status_id = self.holidays_type_1
@@ -305,7 +305,7 @@ class TestLeaveRequests(TestHrHolidaysCommon):
         self.env.user.tz = 'Australia/Sydney' # GMT+12
         company = self.env['res.company'].create({'name': "Hergé"})
         employee = self.env['hr.employee'].create({'name': "Remi", 'company_id': company.id})
-        leave_wizard_form = Form(self.env['hr.leave.generate.multi.wizard'])
+        leave_wizard_form = Form(self.env['hr.leave.generate.multi.wizard_test'])
         leave_wizard_form.allocation_mode = 'company'
         leave_wizard_form.company_id = company
         leave_wizard_form.holiday_status_id = self.holidays_type_1
@@ -550,7 +550,7 @@ class TestLeaveRequests(TestHrHolidaysCommon):
 
     def test_company_leaves(self):
         # First expired allocation
-        self.env['hr.leave.allocation.generate.multi.wizard'].create({
+        self.env['hr.leave.allocation.generate.multi.wizard_test'].create({
             'name': 'Allocation',
             'company_id': self.env.company.id,
             'holiday_status_id': self.holidays_type_1.id,

@@ -560,7 +560,7 @@ class TestLoyalty(TestSaleCouponCommon):
             })]
         })
 
-        self.env['loyalty.generate.wizard'].with_context(active_id=program_gift_card.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=program_gift_card.id).create({
             'coupon_qty': 1,
             'points_granted': 50,
         }).generate_coupons()
@@ -707,7 +707,7 @@ class TestLoyalty(TestSaleCouponCommon):
         ])
 
         self.code_promotion_program.active = True
-        self.env['loyalty.generate.wizard'].with_context(
+        self.env['loyalty.generate.wizard_test'].with_context(
             active_id=self.code_promotion_program.id
         ).create({'coupon_qty': 7, 'points_granted': 1}).generate_coupons()
         coupons = self.code_promotion_program.coupon_ids
@@ -841,7 +841,7 @@ class TestLoyalty(TestSaleCouponCommon):
         self.assertEqual(giftcard_program.coupon_count, 0)
 
     def test_ewallet_code_use_restriction(self):
-        self.env['loyalty.generate.wizard'].with_context(active_id=self.ewallet_program.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.ewallet_program.id).create({
             'coupon_qty': 1,
             'points_granted': 100,
         }).generate_coupons()

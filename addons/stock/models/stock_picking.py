@@ -1395,7 +1395,7 @@ class Picking(models.Model):
             self._sanity_check()
         self.message_subscribe([self.env.user.partner_id.id])
 
-        # Run the pre-validation wizards. Processing a pre-validation wizard should work on the
+        # Run the pre-validation wizards. Processing a pre-validation wizard_test should work on the
         # moves and/or the context and never call `_action_done`.
         if not self.env.context.get('button_validate_picking_ids'):
             self = self.with_context(button_validate_picking_ids=self.ids)

@@ -6,7 +6,7 @@ from odoo.exceptions import UserError
 
 class AccountMoveReversal(models.TransientModel):
     """
-    Account move reversal wizard, it cancel an account move by reversing it.
+    Account move reversal wizard_test, it cancel an account move by reversing it.
     """
     _name = 'account.move.reversal'
     _description = 'Account Move Reversal'

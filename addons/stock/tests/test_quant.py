@@ -930,7 +930,7 @@ class StockQuant(TransactionCase):
         self.assertFalse(self.product.stock_quant_ids.package_id)
 
     def test_relocate(self):
-        """ Test the relocation wizard. """
+        """ Test the relocation wizard_test. """
         def _get_relocate_wizard(quant_ids):
             return Form.from_action(self.env, quant_ids.action_stock_quant_relocate())
 
@@ -1030,7 +1030,7 @@ class StockQuant(TransactionCase):
         relocate_wizard.dest_location_id = self.stock_location
         self.assertEqual(relocate_wizard.dest_package_id.search(literal_eval(relocate_wizard.dest_package_id_domain)), package_01+package_04)
 
-        # testing calling the wizard with quants from multiple companies
+        # testing calling the wizard_test with quants from multiple companies
         quants_bab_AB = quant_b_B + quants_ab_A
         with self.assertRaises(UserError):
             _get_relocate_wizard(quants_bab_AB)

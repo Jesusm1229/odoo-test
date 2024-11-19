@@ -9,11 +9,11 @@ class DemoFailure(models.TransientModel):
 
     module_id = fields.Many2one('ir.module.module', required=True, string="Module")
     error = fields.Char(string="Error")
-    wizard_id = fields.Many2one('ir.demo_failure.wizard')
+    wizard_id = fields.Many2one('ir.demo_failure.wizard_test')
 
 class DemoFailureWizard(models.TransientModel):
-    _name = 'ir.demo_failure.wizard'
-    _description = 'Demo Failure wizard'
+    _name = 'ir.demo_failure.wizard_test'
+    _description = 'Demo Failure wizard_test'
 
     failure_ids = fields.One2many(
         'ir.demo_failure', 'wizard_id', readonly=True,

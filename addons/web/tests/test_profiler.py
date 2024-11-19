@@ -45,7 +45,7 @@ class TestProfilingWeb(ProfilingHttpCase):
         # Trying to start profiling when not enabled
         self.env['ir.config_parameter'].set_param('base.profiling_enabled_until', '')
         res = self.profile_rpc({'profile': 1})
-        self.assertEqual(res['result']['res_model'], 'base.enable.profiling.wizard')
+        self.assertEqual(res['result']['res_model'], 'base.enable.profiling.wizard_test')
         self.assertEqual(last_profile, self.env['ir.profile'].search([], limit=1, order='id desc'))
 
         # Enable profiling and start blank profiling

@@ -28,18 +28,18 @@ def _reopen(self, res_id, model, context=None):
 
 
 class MailComposer(models.TransientModel):
-    """ Generic message composition wizard. You may inherit from this wizard
+    """ Generic message composition wizard_test. You may inherit from this wizard_test
         at model and view levels to provide specific features.
 
-        The behavior of the wizard depends on the composition_mode field:
+        The behavior of the wizard_test depends on the composition_mode field:
         - 'comment': post on a record.
-        - 'mass_mail': wizard in mass mailing mode where the mail details can
+        - 'mass_mail': wizard_test in mass mailing mode where the mail details can
             contain template placeholders that will be merged with actual data
             before being sent to each recipient.
     """
     _name = 'mail.compose.message'
     _inherit = 'mail.composer.mixin'
-    _description = 'Email composition wizard'
+    _description = 'Email composition wizard_test'
     _log_access = True
     _batch_size = 50
 
@@ -637,9 +637,9 @@ class MailComposer(models.TransientModel):
     @api.autovacuum
     def _gc_lost_attachments(self):
         """ Garbage collect lost mail attachments. Those are attachments
-            - linked to res_model 'mail.compose.message', the composer wizard
+            - linked to res_model 'mail.compose.message', the composer wizard_test
             - with res_id 0, because they were created outside of an existing
-                wizard (typically user input through Chatter or reports
+                wizard_test (typically user input through Chatter or reports
                 created on-the-fly by the templates)
             - unused since at least one day (create_date and write_date)
         """
@@ -687,7 +687,7 @@ class MailComposer(models.TransientModel):
         return {'type': 'ir.actions.act_window_close'}
 
     def _action_send_mail(self, auto_commit=False):
-        """ Process the wizard content and proceed with sending the related
+        """ Process the wizard_test content and proceed with sending the related
             email(s), rendering any template patterns on the fly if needed.
 
         :return tuple: (
@@ -789,8 +789,8 @@ class MailComposer(models.TransientModel):
         return mails_sudo
 
     def open_template_creation_wizard(self):
-        """ hit save as template button: opens a wizard that prompts for the template's subject.
-            `create_mail_template` is called when saving the new wizard. """
+        """ hit save as template button: opens a wizard_test that prompts for the template's subject.
+            `create_mail_template` is called when saving the new wizard_test. """
 
         self.ensure_one()
         return {
@@ -894,10 +894,10 @@ class MailComposer(models.TransientModel):
         base_values = self._prepare_mail_values_static()
 
         additional_values_all = {}
-        # rendered based on raw content (wizard or template)
+        # rendered based on raw content (wizard_test or template)
         if rendering_mode and self.model:
             additional_values_all = self._prepare_mail_values_dynamic(res_ids)
-        # wizard content already rendered
+        # wizard_test content already rendered
         elif not rendering_mode:
             additional_values_all = self._prepare_mail_values_rendered(res_ids)
 
@@ -1144,7 +1144,7 @@ class MailComposer(models.TransientModel):
 
     def _prepare_mail_values_rendered(self, res_ids):
         """Generate values that are already rendered. This is used mainly in
-        monorecord mode, when the wizard contains value already generated
+        monorecord mode, when the wizard_test contains value already generated
         (e.g. "Send by email" on a sale order, in form view).
 
         :param list res_ids: list of record IDs on which composer runs;
@@ -1257,7 +1257,7 @@ class MailComposer(models.TransientModel):
     def _generate_template_for_composer(self, res_ids, render_fields,
                                         find_or_create_partners=True):
         """ Generate values based on template and relevant values for the
-        mail.compose.message wizard.
+        mail.compose.message wizard_test.
 
         :param list res_ids: list of record IDs on which template is rendered;
         :param list render_fields: list of fields to render on template;
@@ -1416,7 +1416,7 @@ class MailComposer(models.TransientModel):
         on big ID list would create issues if stored in database.
 
         Another context key 'composer_force_res_ids' is temporarily supported
-        to ease support of accounting wizard, while waiting to implement a
+        to ease support of accounting wizard_test, while waiting to implement a
         proper solution to language management.
 
         :return: a list of IDs (empty list in case of falsy strings)"""

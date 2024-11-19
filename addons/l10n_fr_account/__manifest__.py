@@ -41,7 +41,7 @@ configuration of their taxes and fiscal positions manually.
         'data/tax_report_data.xml',
         'views/report_invoice.xml',
         'views/res_partner_views.xml',
-        'wizard/account_fr_fec_export_wizard_view.xml',
+        'wizard_test/account_fr_fec_export_wizard_view.xml',
         'security/ir.model.access.csv',
         'data/res.bank.csv',
     ],

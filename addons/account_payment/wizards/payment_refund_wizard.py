@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 
 
 class PaymentRefundWizard(models.TransientModel):
-    _name = 'payment.refund.wizard'
+    _name = 'payment.refund.wizard_test'
     _description = "Payment Refund Wizard"
 
     payment_id = fields.Many2one(

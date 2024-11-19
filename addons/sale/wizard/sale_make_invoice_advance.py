@@ -77,7 +77,7 @@ class SaleAdvancePaymentInv(models.TransientModel):
             )
 
     # next computed fields are only used for down payments invoices and therefore should only
-    # have a value when 1 unique SO is invoiced through the wizard
+    # have a value when 1 unique SO is invoiced through the wizard_test
     @api.depends('sale_order_ids')
     def _compute_currency_id(self):
         self.currency_id = False

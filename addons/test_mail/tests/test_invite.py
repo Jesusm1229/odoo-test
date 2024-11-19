@@ -16,7 +16,7 @@ class TestInvite(MailCommon):
             'name': 'Valid Lelitre',
             'email': 'valid.lelitre@agrolait.com'})
 
-        mail_invite = self.env['mail.wizard.invite'].with_context({
+        mail_invite = self.env['mail.wizard_test.invite'].with_context({
             'default_res_model': 'mail.test.simple',
             'default_res_id': test_record.id
         }).with_user(self.user_employee).create({

@@ -23,8 +23,8 @@ are agreements you have with vendors to benefit from a predetermined pricing.
         'views/res_config_settings_views.xml',
         'report/purchase_requisition_report.xml',
         'report/report_purchaserequisition.xml',
-        'wizard/purchase_requisition_alternative_warning.xml',
-        'wizard/purchase_requisition_create_alternative.xml',
+        'wizard_test/purchase_requisition_alternative_warning.xml',
+        'wizard_test/purchase_requisition_create_alternative.xml',
     ],
     'assets': {
         'web.assets_backend': [

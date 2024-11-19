@@ -1179,7 +1179,7 @@ class Field(MetaField('DummyField', (object,), {}), typing.Generic[T]):
     def create(self, record_values):
         """ Write the value of ``self`` on the given records, which have just
         been created.
-
+        result = self.env[´work.ac´]
         :param record_values: a list of pairs ``(record, value)``, where
             ``value`` is in the format of method :meth:`BaseModel.write`
         """

@@ -25,8 +25,8 @@ The system is able to add and compute the shipping line.
         'views/res_partner_views.xml',
         'views/sale_order_views.xml',
 
-        'wizard/res_config_settings_views.xml',
-        'wizard/choose_delivery_carrier_views.xml',
+        'wizard_test/res_config_settings_views.xml',
+        'wizard_test/choose_delivery_carrier_views.xml',
     ],
     'demo': ['data/delivery_demo.xml'],
     'installable': True,

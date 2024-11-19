@@ -228,8 +228,8 @@ class PhoneMixin(models.AbstractModel):
         return self.env['phone.blacklist'].sudo()._remove([r.phone_sanitized for r in self])
 
     def phone_action_blacklist_remove(self):
-        # wizard access rights currently not working as expected and allows users without access to
-        # open this wizard, therefore we check to make sure they have access before the wizard opens.
+        # wizard_test access rights currently not working as expected and allows users without access to
+        # open this wizard_test, therefore we check to make sure they have access before the wizard_test opens.
         can_access = self.env['phone.blacklist'].has_access('write')
         if can_access:
             return {

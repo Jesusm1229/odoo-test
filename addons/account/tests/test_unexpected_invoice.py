@@ -43,26 +43,26 @@ class TestUnexpectedAmount(AccountTestInvoicingCommon):
         self.assertTrue(bills[2].abnormal_amount_warning, "The price of 50 is deviant and thus should trigger a warning")
         self.assertTrue(bills[3].abnormal_amount_warning, "The price of 10 is deviant and thus should trigger a warning")
 
-        # cleaning the bills context to have an unbiased env test for the wizard trigerring
+        # cleaning the bills context to have an unbiased env test for the wizard_test trigerring
         bills = bills.with_context({
             k: v for k, v in self.env.context.items() if k != 'disable_abnormal_invoice_detection'
         })
 
         wizard_thrown = bills[0].action_post()
         self.assertFalse(wizard_thrown,
-                         "Invoice is not deviant, no wizard should be thrown")
+                         "Invoice is not deviant, no wizard_test should be thrown")
 
         wizard_thrown = bills[1].action_post()
         self.assertFalse(wizard_thrown,
-                         "The amount is deviant but the context key isn't set, the wizard shouldn't be thrown")
+                         "The amount is deviant but the context key isn't set, the wizard_test shouldn't be thrown")
 
         wizard_thrown = bills[2].with_context(disable_abnormal_invoice_detection=True).action_post()
         self.assertFalse(wizard_thrown,
-                         "The amount is deviant and the context key is set to True, the wizard shouldn't be thrown")
+                         "The amount is deviant and the context key is set to True, the wizard_test shouldn't be thrown")
 
         wizard_thrown = bills[3].with_context(disable_abnormal_invoice_detection=False).action_post()
         self.assertTrue(wizard_thrown,
-                        "The amount is deviant and the context key is set to False, the wizard shouldn't be thrown")
+                        "The amount is deviant and the context key is set to False, the wizard_test shouldn't be thrown")
 
     def test_date_too_soon_year(self):
         base = self.env['account.move'].create([

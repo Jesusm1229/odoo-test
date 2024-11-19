@@ -50,7 +50,7 @@ Featuring
         'views/website_slides_templates_utils.xml',
         'views/website_pages_views.xml',
         'views/slide_channel_add.xml',
-        'wizard/slide_channel_invite_views.xml',
+        'wizard_test/slide_channel_invite_views.xml',
         'data/gamification_data.xml',
         'data/mail_activity_type_data.xml',
         'data/mail_message_subtype_data.xml',

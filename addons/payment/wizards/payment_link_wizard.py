@@ -8,7 +8,7 @@ from odoo.addons.payment import utils as payment_utils
 
 
 class PaymentLinkWizard(models.TransientModel):
-    _name = 'payment.link.wizard'
+    _name = 'payment.link.wizard_test'
     _description = "Generate Payment Link"
 
     @api.model

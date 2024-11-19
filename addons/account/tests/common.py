@@ -1232,8 +1232,8 @@ class TestTaxCommon(AccountTestInvoicingHttpCommon):
 
 class TestAccountMergeCommon(AccountTestInvoicingCommon):
     def _create_account_merge_wizard(self, accounts):
-        """ Open an account.merge.wizard with the given accounts. """
-        return self.env['account.merge.wizard'].with_context({
+        """ Open an account.merge.wizard_test with the given accounts. """
+        return self.env['account.merge.wizard_test'].with_context({
             'allowed_company_ids': accounts.company_ids.ids,
             'active_model': 'account.account',
             'active_ids': accounts.ids

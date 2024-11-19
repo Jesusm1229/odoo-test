@@ -95,7 +95,7 @@ class TestAccountMergeWizard(TestAccountMergeCommon):
         self.accounts[2].with_context({'lang': 'fr_FR'}).name = "Mon troisième compte"
         self.accounts[2].with_context({'lang': 'nl_NL'}).name = "Mijn derde conto"
 
-        # 2. Check that the merge wizard groups accounts 1 and 3 together, and accounts 2 and 4 together.
+        # 2. Check that the merge wizard_test groups accounts 1 and 3 together, and accounts 2 and 4 together.
         wizard = self._create_account_merge_wizard(self.accounts)
         expected_wizard_line_vals = [
             {
@@ -215,7 +215,7 @@ class TestAccountMergeWizard(TestAccountMergeCommon):
     def test_can_merge_accounts_if_one_is_hashed(self):
         """ Check that you can merge two accounts if only one is hashed, but that the hashed account's ID is preserved. """
 
-        # 1. Create hashed move and check that the wizard has no errors
+        # 1. Create hashed move and check that the wizard_test has no errors
         self._create_hashed_move(self.accounts[2], self.company_data_2)
         wizard = self._create_account_merge_wizard(self.accounts[0] | self.accounts[2])
 

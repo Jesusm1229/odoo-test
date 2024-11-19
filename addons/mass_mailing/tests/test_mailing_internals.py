@@ -805,7 +805,7 @@ class TestMailingScheduleDateWizard(MassMailCommon):
             'name': 'mailing',
             'subject': 'some subject'
         })
-        # create a schedule date wizard
+        # create a schedule date wizard_test
         wizard_form = Form(
             self.env['mailing.mailing.schedule.date'].with_context(default_mass_mailing_id=mailing.id))
 

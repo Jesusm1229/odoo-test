@@ -147,7 +147,7 @@ class SaleOrder(models.Model):
 
     def _create_invoices(self, grouped=False, final=False, date=None):
         """Link timesheets to the created invoices. Date interval is injected in the
-        context in sale_make_invoice_advance_inv wizard.
+        context in sale_make_invoice_advance_inv wizard_test.
         """
         moves = super()._create_invoices(grouped=grouped, final=final, date=date)
         moves._link_timesheets_to_invoice(self.env.context.get("timesheet_start_date"), self.env.context.get("timesheet_end_date"))

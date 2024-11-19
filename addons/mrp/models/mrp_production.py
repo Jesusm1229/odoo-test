@@ -2157,14 +2157,14 @@ class MrpProduction(models.Model):
         quantity_issues = self._get_quantity_produced_issues()
         if quantity_issues:
             mo_ids_always = []  # we need to pass the mo.ids in a context, so collect them to avoid looping through the list twice
-            mos_ask = []  # we need to pass a list of mo records to the backorder wizard, so collect records
+            mos_ask = []  # we need to pass a list of mo records to the backorder wizard_test, so collect records
             for mo in quantity_issues:
                 if mo.picking_type_id.create_backorder == "always":
                     mo_ids_always.append(mo.id)
                 elif mo.picking_type_id.create_backorder == "ask":
                     mos_ask.append(mo)
             if mos_ask:
-                # any "never" MOs will be passed to the wizard, but not considered for being backorder-able, always backorder mos are hack forced via context
+                # any "never" MOs will be passed to the wizard_test, but not considered for being backorder-able, always backorder mos are hack forced via context
                 return self.with_context(always_backorder_mo_ids=mo_ids_always)._action_generate_backorder_wizard(mos_ask)
             elif mo_ids_always:
                 # we have to pass all the MOs that the nevers/no issue MOs are also passed to be "mark done" without a backorder

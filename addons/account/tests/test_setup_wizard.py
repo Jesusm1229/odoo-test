@@ -8,7 +8,7 @@ class TestSetupWizard(AccountTestInvoicingCommon):
 
     def test_setup_bank_account(self):
         """
-        Test that no error is raised when creating the bank setup wizard
+        Test that no error is raised when creating the bank setup wizard_test
         """
         wizard = self.env['account.setup.bank.manual.config'].create([
             {

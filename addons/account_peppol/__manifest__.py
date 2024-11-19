@@ -25,8 +25,8 @@
         'views/account_portal_templates.xml',
         'views/res_partner_views.xml',
         'views/res_config_settings_views.xml',
-        'wizard/peppol_registration_views.xml',
-        'wizard/service_wizard.xml',
+        'wizard_test/peppol_registration_views.xml',
+        'wizard_test/service_wizard.xml',
     ],
     'demo': [
         'demo/account_peppol_demo.xml',

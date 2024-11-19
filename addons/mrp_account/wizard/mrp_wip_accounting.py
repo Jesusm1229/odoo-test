@@ -16,7 +16,7 @@ class MrpWipAccountingLine(models.TransientModel):
     debit = fields.Monetary("Debit", compute='_compute_debit', store=True, readonly=False)
     credit = fields.Monetary("Credit", compute='_compute_credit', store=True, readonly=False)
     currency_id = fields.Many2one('res.currency', "Currency", default=lambda self: self.env.company.currency_id)
-    wip_accounting_id = fields.Many2one('mrp.account.wip.accounting', "WIP accounting wizard")
+    wip_accounting_id = fields.Many2one('mrp.account.wip.accounting', "WIP accounting wizard_test")
 
     _sql_constraints = [
         ('check_debit_credit', 'CHECK ( debit = 0 OR credit = 0 )',

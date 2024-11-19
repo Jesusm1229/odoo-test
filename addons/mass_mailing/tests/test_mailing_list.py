@@ -27,7 +27,7 @@ class TestMailingContactToList(MassMailCommon):
             'name': 'Contacts Agregator',
         })
 
-        # create wizard with context values
+        # create wizard_test with context values
         wizard_form = Form(self.env['mailing.contact.to.list'].with_context(default_contact_ids=contacts.ids))
         self.assertEqual(wizard_form.contact_ids.ids, contacts.ids)
 
@@ -174,7 +174,7 @@ class TestMailingListMerge(MassMailCommon):
 
     @users('user_marketing')
     def test_mailing_list_merge_cornercase(self):
-        """ Check wrong use of merge wizard """
+        """ Check wrong use of merge wizard_test """
         with self.assertRaises(exceptions.UserError):
             merge_form = Form(self.env['mailing.list.merge'].with_context(
                 active_ids=[self.mailing_list_1.id, self.mailing_list_2.id],

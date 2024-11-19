@@ -381,7 +381,7 @@ class TestStockLot(TestStockCommon):
 
     def test_05_confirmation_on_delivery(self):
         """ Test when user tries to delivery expired lot, he/she gets a
-        confirmation wizard. """
+        confirmation wizard_test. """
         partner = self.env['res.partner'].create({
             'name': 'Cider & Son',
             'company_id': self.env.ref('base.main_company').id,
@@ -456,7 +456,7 @@ class TestStockLot(TestStockCommon):
         })]
         delivery_2.move_ids.picked = True
         res = delivery_2.button_validate()
-        # Validate a delivery containing expired products must raise a confirmation wizard.
+        # Validate a delivery containing expired products must raise a confirmation wizard_test.
         self.assertNotEqual(res, True)
         self.assertEqual(res['res_model'], 'expiry.picking.confirmation')
 
@@ -482,7 +482,7 @@ class TestStockLot(TestStockCommon):
         })]
         delivery_3.move_ids.picked = True
         res = delivery_3.button_validate()
-        # Validate a delivery containing expired products must raise a confirmation wizard.
+        # Validate a delivery containing expired products must raise a confirmation wizard_test.
         self.assertNotEqual(res, True)
         self.assertEqual(res['res_model'], 'expiry.picking.confirmation')
 

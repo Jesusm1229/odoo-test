@@ -7,8 +7,8 @@ from odoo.tests.common import TransactionCase, tagged
 IGNORE_MODEL_NAMES = {
     'ir.attachment',
     'test_new_api.attachment',
-    'payment.link.wizard',
-    'account.multicurrency.revaluation.wizard',
+    'payment.link.wizard_test',
+    'account.multicurrency.revaluation.wizard_test',
     'account_followup.manual_reminder',
 }
 

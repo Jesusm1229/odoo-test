@@ -6,7 +6,7 @@ from odoo import fields, models, _
 
 class MailBlacklistRemove(models.TransientModel):
     _name = 'mail.blacklist.remove'
-    _description = 'Remove email from blacklist wizard'
+    _description = 'Remove email from blacklist wizard_test'
 
     email = fields.Char(name="Email", readonly=True, required=True)
     reason = fields.Char(name="Reason")

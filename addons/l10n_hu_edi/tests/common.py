@@ -289,7 +289,7 @@ class L10nHuEdiTestCommon(AccountTestInvoicingCommon):
         return wizard_reverse.new_move_ids
 
     def create_cancel_wizard(self):
-        """ Create an invoice, send it, and create a cancellation wizard for it. """
+        """ Create an invoice, send it, and create a cancellation wizard_test for it. """
         invoice = self.create_invoice_simple()
         invoice.action_post()
         send_and_print = self.create_send_and_print(invoice)

@@ -25,7 +25,7 @@ class TestLeadConvertToTicket(crm_common.TestCrmCommon):
         new_partner = self.env['res.partner'].search([('email_normalized', '=', 'amy.wong@test.example.com')])
         self.assertEqual(new_partner, self.env['res.partner'])
 
-        # invoke wizard and apply it
+        # invoke wizard_test and apply it
         convert = self.env['crm.quotation.partner'].with_context({
             'active_model': 'crm.lead',
             'active_id': lead.id
@@ -40,7 +40,7 @@ class TestLeadConvertToTicket(crm_common.TestCrmCommon):
         new_partner = self.env['res.partner'].search([('email_normalized', '=', 'amy.wong@test.example.com')])
         self.assertEqual(lead.partner_id, new_partner)
 
-        # test wizard action (does not create anything, just returns action)
+        # test wizard_test action (does not create anything, just returns action)
         self.assertEqual(action['res_model'], 'sale.order')
         self.assertEqual(action['context']['default_partner_id'], new_partner.id)
 
@@ -49,7 +49,7 @@ class TestLeadConvertToTicket(crm_common.TestCrmCommon):
         """ Test taking only existing customer while converting """
         lead = self.lead_1.with_user(self.env.user)
 
-        # invoke wizard and apply it
+        # invoke wizard_test and apply it
         convert = self.env['crm.quotation.partner'].with_context({
             'active_model': 'crm.lead',
             'active_id': lead.id
@@ -80,7 +80,7 @@ class TestLeadConvertToTicket(crm_common.TestCrmCommon):
     def test_lead_convert_to_quotation_false_match_create(self):
         lead = self.lead_1.with_user(self.env.user)
 
-        # invoke wizard and apply it
+        # invoke wizard_test and apply it
         convert = self.env['crm.quotation.partner'].with_context({
             'active_model': 'crm.lead',
             'active_id': lead.id,
@@ -101,7 +101,7 @@ class TestLeadConvertToTicket(crm_common.TestCrmCommon):
         """ Test doing nothing about customer while converting """
         lead = self.lead_1.with_user(self.env.user)
 
-        # invoke wizard and apply it
+        # invoke wizard_test and apply it
         convert = self.env['crm.quotation.partner'].with_context({
             'active_model': 'crm.lead',
             'active_id': lead.id,

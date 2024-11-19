@@ -6,7 +6,7 @@ from odoo.tools import format_amount
 
 
 class PaymentCaptureWizard(models.TransientModel):
-    _name = 'payment.capture.wizard'
+    _name = 'payment.capture.wizard_test'
     _description = "Payment Capture Wizard"
 
     transaction_ids = fields.Many2many(  # All the source txs related to the capture request

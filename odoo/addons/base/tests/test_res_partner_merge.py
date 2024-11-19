@@ -49,14 +49,14 @@ class TestMergePartner(TransactionCase):
         """ Test merging partners without any bank accounts """
         partner4 = self.Partner.create({'name': 'Partner 4', 'email': 'partner4@example.com'})
         partner5 = self.Partner.create({'name': 'Partner 5', 'email': 'partner5@example.com'})
-        wizard = self.env['base.partner.merge.automatic.wizard'].create({})
+        wizard = self.env['base.partner.merge.automatic.wizard_test'].create({})
         wizard._merge([partner4.id, partner5.id], partner4)
         self.assertFalse(partner5.exists(), "Source partner should be deleted after merge")
         self.assertTrue(partner4.exists(), "Destination partner should exist after merge")
 
     def test_merge_partners_with_unique_bank_accounts(self):
         """ Test merging partners with unique bank accounts """
-        wizard = self.env['base.partner.merge.automatic.wizard'].create({})
+        wizard = self.env['base.partner.merge.automatic.wizard_test'].create({})
         wizard._merge([self.partner1.id, self.partner2.id], self.partner1)
 
         self.assertFalse(self.partner2.exists(), "Source partner should be deleted after merge")
@@ -66,7 +66,7 @@ class TestMergePartner(TransactionCase):
 
     def test_merge_partners_with_duplicate_bank_accounts(self):
         """ Test merging partners with duplicate bank accounts among themselves """
-        wizard = self.env['base.partner.merge.automatic.wizard'].create({})
+        wizard = self.env['base.partner.merge.automatic.wizard_test'].create({})
         src_partners = self.partner1 + self.partner3
         wizard._merge((src_partners + self.partner2).ids, self.partner2)
 
@@ -81,7 +81,7 @@ class TestMergePartner(TransactionCase):
 
     def test_merge_partners_with_duplicate_bank_accounts_with_destination(self):
         """ Test merging partners with duplicate bank accounts with the destination partner """
-        wizard = self.env['base.partner.merge.automatic.wizard'].create({})
+        wizard = self.env['base.partner.merge.automatic.wizard_test'].create({})
         wizard._merge([self.partner1.id, self.partner3.id], self.partner1)
 
         self.assertFalse(self.partner3.exists(), "Source partner should be deleted after merge")
@@ -92,7 +92,7 @@ class TestMergePartner(TransactionCase):
 
     def test_merge_partners_with_references(self):
         """ Test merging partners with references """
-        wizard = self.env['base.partner.merge.automatic.wizard'].create({})
+        wizard = self.env['base.partner.merge.automatic.wizard_test'].create({})
         wizard._merge([self.partner1.id, self.partner2.id], self.partner1)
 
         self.assertFalse(self.partner2.exists(), "Source partner should be deleted after merge")

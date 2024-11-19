@@ -6,7 +6,7 @@ from odoo import Command, api, fields, models, _
 
 
 class ProjectShareWizard(models.TransientModel):
-    _name = 'project.share.wizard'
+    _name = 'project.share.wizard_test'
     _inherit = 'portal.share'
     _description = 'Project Sharing'
 
@@ -53,7 +53,7 @@ class ProjectShareWizard(models.TransientModel):
         return [(project_model.model, project_model.name)]
 
     share_link = fields.Char("Public Link", help="Anyone with this link can access the project in read mode.")
-    collaborator_ids = fields.One2many('project.share.collaborator.wizard', 'parent_wizard_id', string='Collaborators')
+    collaborator_ids = fields.One2many('project.share.collaborator.wizard_test', 'parent_wizard_id', string='Collaborators')
     existing_partner_ids = fields.Many2many('res.partner', compute='_compute_existing_partner_ids', export_string_translation=False)
 
     @api.depends('res_model', 'res_id')
@@ -144,7 +144,7 @@ class ProjectShareWizard(models.TransientModel):
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
             'views': [(self.env.ref('project.project_share_wizard_confirm_form').id, 'form')],
-            'res_model': 'project.share.wizard',
+            'res_model': 'project.share.wizard_test',
             'res_id': self.id,
             'target': 'new',
             'context': self.env.context,

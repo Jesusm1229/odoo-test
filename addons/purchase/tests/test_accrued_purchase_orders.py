@@ -60,7 +60,7 @@ class TestAccruedPurchaseOrders(AccountTestInvoicingCommon):
         cls.purchase_order.button_confirm()
         cls.account_revenue = cls.company_data['default_account_revenue']
         cls.account_expense = cls.company_data['default_account_expense']
-        cls.wizard = cls.env['account.accrued.orders.wizard'].with_context({
+        cls.wizard = cls.env['account.accrued.orders.wizard_test'].with_context({
             'active_model': 'purchase.order',
             'active_ids': cls.purchase_order.ids
         }).create({

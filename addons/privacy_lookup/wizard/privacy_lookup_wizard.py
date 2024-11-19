@@ -9,14 +9,14 @@ from odoo.tools import SQL
 
 
 class PrivacyLookupWizard(models.TransientModel):
-    _name = 'privacy.lookup.wizard'
+    _name = 'privacy.lookup.wizard_test'
     _description = 'Privacy Lookup Wizard'
     _transient_max_count = 0
     _transient_max_hours = 24
 
     name = fields.Char(required=True)
     email = fields.Char(required=True)
-    line_ids = fields.One2many('privacy.lookup.wizard.line', 'wizard_id')
+    line_ids = fields.One2many('privacy.lookup.wizard_test.line', 'wizard_id')
     execution_details = fields.Text(compute='_compute_execution_details', store=True)
     log_id = fields.Many2one('privacy.log')
     records_description = fields.Text(compute='_compute_records_description')
@@ -210,7 +210,7 @@ class PrivacyLookupWizard(models.TransientModel):
 
 
 class PrivacyLookupWizardLine(models.TransientModel):
-    _name = 'privacy.lookup.wizard.line'
+    _name = 'privacy.lookup.wizard_test.line'
     _description = 'Privacy Lookup Wizard Line'
     _transient_max_count = 0
     _transient_max_hours = 24
@@ -219,7 +219,7 @@ class PrivacyLookupWizardLine(models.TransientModel):
     def _selection_target_model(self):
         return [(model.model, model.name) for model in self.env['ir.model'].sudo().search([])]
 
-    wizard_id = fields.Many2one('privacy.lookup.wizard')
+    wizard_id = fields.Many2one('privacy.lookup.wizard_test')
     res_id = fields.Integer(
         string="Resource ID",
         required=True)

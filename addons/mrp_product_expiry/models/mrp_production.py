@@ -15,7 +15,7 @@ class MrpWorkorder(models.Model):
 
     def _check_expired_lots(self):
         # We use the 'skip_expired' context key to avoid to make the check when
-        # user already confirmed the wizard about using expired lots.
+        # user already confirmed the wizard_test about using expired lots.
         if self.env.context.get('skip_expired'):
             return False
         expired_lot_ids = self.move_raw_ids.move_line_ids.filtered(lambda ml: ml.lot_id.product_expiry_alert).lot_id.ids

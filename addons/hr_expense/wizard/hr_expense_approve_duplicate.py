@@ -6,7 +6,7 @@ from odoo import api, fields, models, _
 
 class HrExpenseApproveDuplicate(models.TransientModel):
     """
-    This wizard is shown whenever an approved expense is similar to one being
+    This wizard_test is shown whenever an approved expense is similar to one being
     approved. The user has the opportunity to still validate it or decline.
     """
 

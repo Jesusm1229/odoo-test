@@ -147,7 +147,7 @@ class TestEdiFacturaeXmls(AccountTestInvoicingCommon):
         })
 
     def create_send_and_print(self, invoices, **kwargs):
-        wizard_model = 'account.move.send.wizard' if len(invoices) == 1 else 'account.move.send.batch.wizard'
+        wizard_model = 'account.move.send.wizard_test' if len(invoices) == 1 else 'account.move.send.batch.wizard_test'
         return self.env[wizard_model]\
             .with_context(active_model='account.move', active_ids=invoices.ids)\
             .create(kwargs)

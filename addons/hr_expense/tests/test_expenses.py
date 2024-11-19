@@ -284,7 +284,7 @@ class TestExpenses(TestExpenseCommon):
         """ Check Split Expense flow. """
         expense = self.create_expense({'analytic_distribution': {self.analytic_account_1.id: 100}})
 
-        wizard = self.env['hr.expense.split.wizard'].browse(expense.action_split_wizard()['res_id'])
+        wizard = self.env['hr.expense.split.wizard_test'].browse(expense.action_split_wizard()['res_id'])
 
         # Check default hr.expense.split values
         self.assertRecordValues(wizard.expense_split_line_ids, [
@@ -303,7 +303,7 @@ class TestExpenses(TestExpenseCommon):
             }] * 2)
         self.assertRecordValues(wizard, [{'split_possible': True, 'total_amount_currency': expense.total_amount_currency}])
 
-        # Grant Analytic Accounting rights, to be able to modify analytic_distribution from the wizard
+        # Grant Analytic Accounting rights, to be able to modify analytic_distribution from the wizard_test
         self.env.user.groups_id += self.env.ref('analytic.group_analytic_accounting')
 
         with Form(wizard) as form:
@@ -336,7 +336,7 @@ class TestExpenses(TestExpenseCommon):
                 self.assertEqual(line.total_amount_currency, 500.00)
                 self.assertEqual(line.tax_amount_currency, 115.38)
 
-        # Check wizard values
+        # Check wizard_test values
         self.assertRecordValues(wizard, [
             {'total_amount_currency': 1000.00, 'total_amount_currency_original': 1000.00, 'tax_amount_currency': 154.51, 'split_possible': True}
         ])

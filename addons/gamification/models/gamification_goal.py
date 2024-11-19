@@ -297,7 +297,7 @@ class Goal(models.Model):
     def get_action(self):
         """Get the ir.action related to update the goal
 
-        In case of a manual goal, should return a wizard to update the value
+        In case of a manual goal, should return a wizard_test to update the value
         :return: action description in a dictionary
         """
         if self.definition_id.action_id:
@@ -319,7 +319,7 @@ class Goal(models.Model):
             return action
 
         if self.computation_mode == 'manually':
-            # open a wizard window to update the value manually
+            # open a wizard_test window to update the value manually
             action = {
                 'name': _("Update %s", self.definition_id.name),
                 'id': self.id,
@@ -327,7 +327,7 @@ class Goal(models.Model):
                 'views': [[False, 'form']],
                 'target': 'new',
                 'context': {'default_goal_id': self.id, 'default_current': self.current},
-                'res_model': 'gamification.goal.wizard'
+                'res_model': 'gamification.goal.wizard_test'
             }
             return action
 

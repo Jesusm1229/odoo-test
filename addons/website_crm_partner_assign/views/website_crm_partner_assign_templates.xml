@@ -616,7 +616,7 @@
                     Opportunity -
                     <span t-field="opportunity.name"/>
                 </h4>
-                <!-- todo: replace by design system wizard -->
+                <!-- todo: replace by design system wizard_test -->
                 <div class="d-flex justify-content-between align-items-center gap-2">
                     <p class="mb-0 fw-bold">Stage:</p>
                     <div t-foreach="stages[::-1]" t-as="stage" class="d-flex justify-content-between align-items-center gap-2">

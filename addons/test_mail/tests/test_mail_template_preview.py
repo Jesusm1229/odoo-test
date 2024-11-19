@@ -20,7 +20,7 @@ class TestMailTemplateTools(TestMailTemplateCommon):
         self.assertTrue(self.test_record.email_from)
 
     def test_mail_template_preview_empty_database(self):
-        """Check behaviour of the wizard when there is no record for the target model."""
+        """Check behaviour of the wizard_test when there is no record for the target model."""
         self.env['mail.test.lang'].search([]).unlink()
         test_template = self.env['mail.template'].browse(self.test_template.ids)
         preview = self.env['mail.template.preview'].create({

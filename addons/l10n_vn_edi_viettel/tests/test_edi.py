@@ -302,7 +302,7 @@ class TestVNEDI(AccountTestInvoicingCommon):
 
     @freeze_time('2024-01-01')
     def test_cancel_invoice(self):
-        """ Ensure that trying to cancel a sent invoice returns the wizard action, and test the wizard flow. """
+        """ Ensure that trying to cancel a sent invoice returns the wizard_test action, and test the wizard_test flow. """
         invoice = self.init_invoice(
             move_type='out_invoice',
             products=self.product_a,
@@ -311,7 +311,7 @@ class TestVNEDI(AccountTestInvoicingCommon):
             currency=self.other_currency,
         )
         self._send_invoice(invoice)
-        # Trying to cancel a sent invoice should result in an action to open the cancellation wizard.
+        # Trying to cancel a sent invoice should result in an action to open the cancellation wizard_test.
         action = invoice.button_request_cancel()
         self.assertEqual(action['res_model'], 'l10n_vn_edi_viettel.cancellation')
         with patch('odoo.addons.l10n_vn_edi_viettel.models.account_move._l10n_vn_edi_send_request', return_value=(None, None)):
@@ -383,4 +383,4 @@ class TestVNEDI(AccountTestInvoicingCommon):
         with patch('odoo.addons.l10n_vn_edi_viettel.models.account_move.AccountMove._l10n_vn_edi_fetch_invoice_pdf_file_data', return_value=pdf_response), \
              patch('odoo.addons.l10n_vn_edi_viettel.models.account_move.AccountMove._l10n_vn_edi_fetch_invoice_xml_file_data', return_value=xml_response), \
              patch('odoo.addons.l10n_vn_edi_viettel.models.account_move._l10n_vn_edi_send_request', return_value=(request_response, None)):
-            self.env['account.move.send.wizard'].with_context(active_model=invoice._name, active_ids=invoice.ids).create({}).action_send_and_print()
+            self.env['account.move.send.wizard_test'].with_context(active_model=invoice._name, active_ids=invoice.ids).create({}).action_send_and_print()

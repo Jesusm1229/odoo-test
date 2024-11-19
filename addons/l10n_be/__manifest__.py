@@ -10,9 +10,9 @@
 This is the base module to manage the accounting chart for Belgium in Odoo.
 ==============================================================================
 
-After installing this module, the Configuration wizard for accounting is launched.
+After installing this module, the Configuration wizard_test for accounting is launched.
     * We have the account templates which can be helpful to generate Charts of Accounts.
-    * On that particular wizard, you will be asked to pass the name of the company,
+    * On that particular wizard_test, you will be asked to pass the name of the company,
       the chart template to follow, the no. of digits to generate, the code for your
       account and bank account, currency to create journals.
 

@@ -78,7 +78,7 @@ class TestWorkingHours(TestHrCalendarCommon):
         self.env.user.company_id = self.company_A
         self.env.user.company_ids = [self.company_A.id, self.company_B.id]
 
-        company_leave = self.env['hr.leave.generate.multi.wizard'].create({
+        company_leave = self.env['hr.leave.generate.multi.wizard_test'].create({
             'name': 'holiday from monday to tuesday',
             'allocation_mode': 'company',
             'company_id': self.company_A.id,

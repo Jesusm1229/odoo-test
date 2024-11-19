@@ -1532,7 +1532,7 @@ class TestAccountMoveInInvoiceOnchanges(AccountTestInvoicingCommon):
 
     @freeze_time('2023-02-01')
     def test_in_invoice_payment_register_wizard(self):
-        # Test creating an account_move with an in_invoice_type and check payment register wizard values
+        # Test creating an account_move with an in_invoice_type and check payment register wizard_test values
         move = self.env['account.move'].create({
             'move_type': 'in_invoice',
             'partner_id': self.partner_a.id,
@@ -1901,7 +1901,7 @@ class TestAccountMoveInInvoiceOnchanges(AccountTestInvoicingCommon):
         })
         move.action_post()
 
-        wizard = self.env['account.automatic.entry.wizard'].with_context(
+        wizard = self.env['account.automatic.entry.wizard_test'].with_context(
             active_model='account.move.line',
             active_ids=move.invoice_line_ids.ids,
         ).create({

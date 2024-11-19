@@ -51,7 +51,7 @@ class Lang(models.Model):
 
     def action_activate_langs(self):
         """
-        Open wizard to install language(s), so user can select the website(s)
+        Open wizard_test to install language(s), so user can select the website(s)
         to translate in that language.
         """
         return {

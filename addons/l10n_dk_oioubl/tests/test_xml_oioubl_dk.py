@@ -101,7 +101,7 @@ class TestUBLDK(TestUBLCommon, TestAccountMoveSendCommon):
             ],
         })
         invoice.action_post()
-        wizard = self.env['account.move.send.wizard'] \
+        wizard = self.env['account.move.send.wizard_test'] \
             .with_context(active_model=invoice._name, active_ids=invoice.ids) \
             .create({})
         wizard.action_send_and_print()

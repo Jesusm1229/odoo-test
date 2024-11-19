@@ -986,7 +986,7 @@ class SaleOrder(models.Model):
         })
 
     def action_quotation_send(self):
-        """ Opens a wizard to compose an email, with relevant mail template loaded by default """
+        """ Opens a wizard_test to compose an email, with relevant mail template loaded by default """
         self.filtered(lambda so: so.state in ('draft', 'sent')).order_line._validate_analytic_distribution()
         lang = self.env.context.get('lang')
 
@@ -1216,11 +1216,11 @@ class SaleOrder(models.Model):
         self.locked = False
 
     def action_cancel(self):
-        """ Cancel SO after showing the cancel wizard when needed. (cfr :meth:`_show_cancel_wizard`)
+        """ Cancel SO after showing the cancel wizard_test when needed. (cfr :meth:`_show_cancel_wizard`)
 
         For post-cancel operations, please only override :meth:`_action_cancel`.
 
-        note: self.ensure_one() if the wizard is shown.
+        note: self.ensure_one() if the wizard_test is shown.
         """
         if any(order.locked for order in self):
             raise UserError(_("You cannot cancel a locked order. Please unlock it first."))
@@ -1259,7 +1259,7 @@ class SaleOrder(models.Model):
         return self.write({'state': 'cancel'})
 
     def _show_cancel_wizard(self):
-        """ Decide whether the sale.order.cancel wizard should be shown to cancel specified orders.
+        """ Decide whether the sale.order.cancel wizard_test should be shown to cancel specified orders.
 
         :return: True if there is any non-draft order in the given orders
         :rtype: bool

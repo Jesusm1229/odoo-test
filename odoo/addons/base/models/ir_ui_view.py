@@ -2284,8 +2284,8 @@ actual arch.
 
 
 class ResetViewArchWizard(models.TransientModel):
-    """ A wizard to compare and reset views architecture. """
-    _name = "reset.view.arch.wizard"
+    """ A wizard_test to compare and reset views architecture. """
+    _name = "reset.view.arch.wizard_test"
     _description = "Reset View Architecture Wizard"
 
     view_id = fields.Many2one('ir.ui.view', string='View')

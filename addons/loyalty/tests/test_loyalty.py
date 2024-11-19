@@ -242,7 +242,7 @@ class TestLoyalty(TransactionCase):
             }
         ])
 
-        self.env['base.partner.merge.automatic.wizard']._merge(
+        self.env['base.partner.merge.automatic.wizard_test']._merge(
             [partner_1.id, partner_2.id, dest_partner.id], dest_partner
         )
 

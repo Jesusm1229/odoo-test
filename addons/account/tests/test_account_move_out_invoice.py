@@ -2729,7 +2729,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
         })
         move.action_post()
 
-        wizard = self.env['account.automatic.entry.wizard']\
+        wizard = self.env['account.automatic.entry.wizard_test']\
             .with_context(active_model='account.move.line', active_ids=move.invoice_line_ids.ids).create({
             'action': 'change_period',
             'date': '2018-01-01',
@@ -2822,7 +2822,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
             'active_model': 'account.move.line',
             'active_ids': move.mapped('invoice_line_ids').ids
         }
-        wizard = self.env['account.automatic.entry.wizard'] \
+        wizard = self.env['account.automatic.entry.wizard_test'] \
             .with_context(context) \
             .create({
                 'action': 'change_period',
@@ -2871,7 +2871,7 @@ class TestAccountMoveOutInvoiceOnchanges(AccountTestInvoicingCommon):
         moves = self.env['account.move'].create(values)
         moves.action_post()
 
-        wizard = self.env['account.automatic.entry.wizard'].with_context(
+        wizard = self.env['account.automatic.entry.wizard_test'].with_context(
             active_model='account.move.line',
             active_ids=moves.invoice_line_ids.ids,
         ).create({

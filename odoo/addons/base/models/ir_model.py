@@ -2649,7 +2649,7 @@ class IrModelData(models.Model):
 
 
 class WizardModelMenu(models.TransientModel):
-    _name = 'wizard.ir.model.menu.create'
+    _name = 'wizard_test.ir.model.menu.create'
     _description = 'Create Menu Wizard'
 
     menu_id = fields.Many2one('ir.ui.menu', string='Parent Menu', required=True, ondelete='cascade')

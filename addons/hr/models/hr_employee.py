@@ -576,7 +576,7 @@ class HrEmployeePrivate(models.Model):
             return {
                 'type': 'ir.actions.act_window',
                 'name': _('Register Departure'),
-                'res_model': 'hr.departure.wizard',
+                'res_model': 'hr.departure.wizard_test',
                 'view_mode': 'form',
                 'target': 'new',
                 'context': {'active_id': self.id},

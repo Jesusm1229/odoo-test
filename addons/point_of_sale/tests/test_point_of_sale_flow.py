@@ -795,7 +795,7 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
             'last_order_preparation_change': '{}'
         })
 
-        # I click on the "Make Payment" wizard to pay the PoS order
+        # I click on the "Make Payment" wizard_test to pay the PoS order
         context_make_payment = {"active_ids": [self.pos_order_pos1.id], "active_id": self.pos_order_pos1.id}
         self.pos_make_payment = self.PosMakePayment.with_context(context_make_payment).create({
             'amount': untax1 + untax2 + atax1 + atax2,
@@ -1043,7 +1043,7 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
             abs(self.pos_order_pos0.amount_total - (450 * 2 + 300 * 3 * 1.05)),
             0.01, 'The order has a wrong total including tax and discounts')
 
-        # I click on the "Make Payment" wizard to pay the PoS order with a
+        # I click on the "Make Payment" wizard_test to pay the PoS order with a
         # partial amount of 100.0 EUR
         context_make_payment = {"active_ids": [self.pos_order_pos0.id], "active_id": self.pos_order_pos0.id}
         self.pos_make_payment_0 = self.PosMakePayment.with_context(context_make_payment).create({
@@ -1131,7 +1131,7 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
             'last_order_preparation_change': '{}'
         })
 
-        # I click on the "Make Payment" wizard to pay the PoS order
+        # I click on the "Make Payment" wizard_test to pay the PoS order
         context_make_payment = {"active_ids": [self.pos_order_pos1.id], "active_id": self.pos_order_pos1.id}
         self.pos_make_payment = self.PosMakePayment.with_context(context_make_payment).create({
             'amount': 855 * 2,
@@ -1226,7 +1226,7 @@ class TestPointOfSaleFlow(TestPointOfSaleCommon):
         # with the rollback of the test runner. So instead, we directly call the method
         # that returns the action by specifying the imbalance amount.
         action = pos_session._close_session_action(5.0)
-        wizard = self.env['pos.close.session.wizard'].browse(action['res_id'])
+        wizard = self.env['pos.close.session.wizard_test'].browse(action['res_id'])
         wizard.with_context(action['context']).close_session()
 
         # check the difference line

@@ -22,7 +22,7 @@
 
                 <!-- Added to ensure a correct default_get behavior
 
-                The wizard is always opened with default_pick_ids values in context,
+                The wizard_test is always opened with default_pick_ids values in context,
                 which are used to generate the backorder_confirmation_line_ids.
 
                 To ensure default_pick_ids is correctly converted from the context

@@ -199,8 +199,8 @@ class TestProgramRules(TestSaleCouponCommon):
             'order_id': order.id,
         })
 
-        # Default value for coupon generate wizard is generate by quantity and generate only one coupon
-        self.env['loyalty.generate.wizard'].with_context(active_id=program.id).create({'coupon_qty': 1, 'points_granted': 1}).generate_coupons()
+        # Default value for coupon generate wizard_test is generate by quantity and generate only one coupon
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=program.id).create({'coupon_qty': 1, 'points_granted': 1}).generate_coupons()
         coupon = program.coupon_ids[0]
 
         # Not enough amount since we only have 220 (100*2 + 5*4)

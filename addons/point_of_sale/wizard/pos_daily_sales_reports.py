@@ -5,7 +5,7 @@ from odoo import fields, models
 
 
 class PosDailyReport(models.TransientModel):
-    _name = 'pos.daily.sales.reports.wizard'
+    _name = 'pos.daily.sales.reports.wizard_test'
     _description = 'Point of Sale Daily Report'
 
     pos_session_id = fields.Many2one('pos.session', required=True)

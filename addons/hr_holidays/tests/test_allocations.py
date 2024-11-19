@@ -39,7 +39,7 @@ class TestAllocations(TestHrHolidaysCommon):
         })
 
     def test_allocation_whole_company(self):
-        company_allocation = self.env['hr.leave.allocation.generate.multi.wizard'].create({
+        company_allocation = self.env['hr.leave.allocation.generate.multi.wizard_test'].create({
             'name': 'Bank Holiday',
             'allocation_mode': 'company',
             'company_id': self.company.id,
@@ -54,7 +54,7 @@ class TestAllocations(TestHrHolidaysCommon):
         self.assertEqual(num_of_allocations, 1)
 
     def test_allocation_multi_employee(self):
-        employee_allocation = self.env['hr.leave.allocation.generate.multi.wizard'].create({
+        employee_allocation = self.env['hr.leave.allocation.generate.multi.wizard_test'].create({
             'name': 'Bank Holiday',
             'allocation_mode': 'employee',
             'employee_ids': [(4, self.employee.id), (4, self.employee_emp.id)],
@@ -69,7 +69,7 @@ class TestAllocations(TestHrHolidaysCommon):
         self.assertEqual(num_of_allocations, 1)
 
     def test_allocation_department(self):
-        department_allocation = self.env['hr.leave.allocation.generate.multi.wizard'].create({
+        department_allocation = self.env['hr.leave.allocation.generate.multi.wizard_test'].create({
             'name': 'Bank Holiday',
             'allocation_mode': 'department',
             'department_id': self.department.id,
@@ -84,7 +84,7 @@ class TestAllocations(TestHrHolidaysCommon):
         self.assertEqual(num_of_allocations, 1)
 
     def test_allocation_category(self):
-        category_allocation = self.env['hr.leave.allocation.generate.multi.wizard'].create({
+        category_allocation = self.env['hr.leave.allocation.generate.multi.wizard_test'].create({
             'name': 'Bank Holiday',
             'allocation_mode': 'category',
             'category_id': self.category_tag.id,
@@ -159,7 +159,7 @@ class TestAllocations(TestHrHolidaysCommon):
         self.leave_type.request_unit = 'hour'
         self.employee.resource_calendar_id = self.ref('resource.resource_calendar_std_35h')
 
-        hour_type_allocation = self.env['hr.leave.allocation.generate.multi.wizard'].create({
+        hour_type_allocation = self.env['hr.leave.allocation.generate.multi.wizard_test'].create({
             'name': 'Hours Allocation',
             'allocation_mode': 'employee',
             'employee_ids': [(4, self.employee.id), (4, self.employee_emp.id)],

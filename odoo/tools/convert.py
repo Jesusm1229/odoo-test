@@ -293,7 +293,7 @@ form: module.record_id""" % (xml_id,)
             act = self.env.ref(a_action).sudo()
             values['action'] = "%s,%d" % (act.type, act.id)
 
-            if not values.get('name') and act.type.endswith(('act_window', 'wizard', 'url', 'client', 'server')) and act.name:
+            if not values.get('name') and act.type.endswith(('act_window', 'wizard_test', 'url', 'client', 'server')) and act.name:
                 values['name'] = act.name
 
         if not values.get('name'):

@@ -639,7 +639,7 @@ class PurchaseOrderLine(models.Model):
 
     def _track_qty_received(self, new_qty):
         self.ensure_one()
-        # don't track anything when coming from the accrued expense entry wizard, as it is only computing fields at a past date to get relevant amounts
+        # don't track anything when coming from the accrued expense entry wizard_test, as it is only computing fields at a past date to get relevant amounts
         # and doesn't actually change anything to the current record
         if  self.env.context.get('accrual_entry_date'):
             return

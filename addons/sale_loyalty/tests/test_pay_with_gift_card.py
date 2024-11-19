@@ -10,7 +10,7 @@ from odoo.addons.sale_loyalty.tests.common import TestSaleCouponCommon
 class TestPayWithGiftCard(TestSaleCouponCommon):
 
     def test_paying_with_single_gift_card_over(self):
-        self.env['loyalty.generate.wizard'].with_context(active_id=self.program_gift_card.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.program_gift_card.id).create({
             'coupon_qty': 1,
             'points_granted': 100,
         }).generate_coupons()
@@ -31,7 +31,7 @@ class TestPayWithGiftCard(TestSaleCouponCommon):
         self.assertEqual(before_gift_card_payment - order.amount_total, 100 - gift_card.points)
 
     def test_paying_with_single_gift_card_under(self):
-        self.env['loyalty.generate.wizard'].with_context(active_id=self.program_gift_card.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.program_gift_card.id).create({
             'coupon_qty': 1,
             'points_granted': 100,
         }).generate_coupons()
@@ -52,7 +52,7 @@ class TestPayWithGiftCard(TestSaleCouponCommon):
         self.assertEqual(before_gift_card_payment - order.amount_total, 100 - gift_card.points)
 
     def test_paying_with_multiple_gift_card(self):
-        self.env['loyalty.generate.wizard'].with_context(active_id=self.program_gift_card.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.program_gift_card.id).create({
             'coupon_qty': 2,
             'points_granted': 100,
         }).generate_coupons()
@@ -73,7 +73,7 @@ class TestPayWithGiftCard(TestSaleCouponCommon):
 
     def test_paying_with_gift_card_and_discount(self):
         # Test that discounts take precedence on payment rewards
-        self.env['loyalty.generate.wizard'].with_context(active_id=self.program_gift_card.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.program_gift_card.id).create({
             'coupon_qty': 1,
             'points_granted': 50,
         }).generate_coupons()
@@ -114,7 +114,7 @@ class TestPayWithGiftCard(TestSaleCouponCommon):
 
     def test_paying_with_gift_card_blocking_discount(self):
         # Test that a payment program making the order total 0 still allows the user to claim discounts
-        self.env['loyalty.generate.wizard'].with_context(active_id=self.program_gift_card.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.program_gift_card.id).create({
             'coupon_qty': 1,
             'points_granted': 100,
         }).generate_coupons()
@@ -189,7 +189,7 @@ class TestPayWithGiftCard(TestSaleCouponCommon):
         before_gift_card_payment = order.amount_total
         self.assertNotEqual(before_gift_card_payment, 0)
 
-        self.env['loyalty.generate.wizard'].with_context(active_id=self.program_gift_card.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.program_gift_card.id).create({
             'coupon_qty': 1,
             'points_granted': 100,
         }).generate_coupons()

@@ -118,7 +118,7 @@ class MailingContactImport(models.TransientModel):
         }
 
     def action_open_base_import(self):
-        """Open the base import wizard to import mailing list contacts with a xlsx file."""
+        """Open the base import wizard_test to import mailing list contacts with a xlsx file."""
         self.ensure_one()
 
         return {

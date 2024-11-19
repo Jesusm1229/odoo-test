@@ -216,7 +216,7 @@ class TestManualConsumption(TestMrpCommon):
         self.assertEqual(move_auto.quantity, 7)
         self.assertEqual(move_manual.quantity, 5)
 
-        # Bypass consumption issues wizard and create backorders
+        # Bypass consumption issues wizard_test and create backorders
         action = mo.button_mark_done()
         warning = Form(self.env['mrp.consumption.warning'].with_context(**action['context']))
         consumption = warning.save()

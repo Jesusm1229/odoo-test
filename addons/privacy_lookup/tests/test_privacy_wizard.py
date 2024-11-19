@@ -15,7 +15,7 @@ class TestPrivacyWizard(TransactionCase):
             'email': 'rintin.tin@gmail.com'})
 
     def test_wizard(self):
-        wizard = self.env['privacy.lookup.wizard'].with_context(
+        wizard = self.env['privacy.lookup.wizard_test'].with_context(
             default_email=self.partner.email,
             default_name=self.partner.name,
         ).create({})
@@ -58,7 +58,7 @@ class TestPrivacyWizard(TransactionCase):
         })
         self.assertNotEqual(self.partner.company_id, other_partner.company_id)
 
-        wizard = self.env['privacy.lookup.wizard'].with_context(
+        wizard = self.env['privacy.lookup.wizard_test'].with_context(
             default_email=self.partner.email,
             default_name=self.partner.name,
         ).with_user(self.env.ref('base.user_admin')).create({})
@@ -77,7 +77,7 @@ class TestPrivacyWizard(TransactionCase):
             'email': 'rintin.tin@gmail.com'
         })
 
-        wizard = self.env['privacy.lookup.wizard'].with_context(
+        wizard = self.env['privacy.lookup.wizard_test'].with_context(
             default_email=self.partner.email,
             default_name=self.partner.name,
         ).create({})
@@ -94,7 +94,7 @@ class TestPrivacyWizard(TransactionCase):
     def test_wizard_indirect_reference(self):
         self.env.company.partner_id = self.partner
 
-        wizard = self.env['privacy.lookup.wizard'].with_context(
+        wizard = self.env['privacy.lookup.wizard_test'].with_context(
             default_email=self.partner.email,
             default_name=self.partner.name,
         ).create({})
@@ -116,7 +116,7 @@ class TestPrivacyWizard(TransactionCase):
             'company_id': self.env.company.id
         })
 
-        wizard = self.env['privacy.lookup.wizard'].with_context(
+        wizard = self.env['privacy.lookup.wizard_test'].with_context(
             default_email=self.partner.email,
             default_name=self.partner.name,
         ).create({})
@@ -133,7 +133,7 @@ class TestPrivacyWizard(TransactionCase):
             'name': 'Rintin Tin',
             'email': 'rintin.tin@gmail.com'})
 
-        wizard = self.env['privacy.lookup.wizard'].with_context(
+        wizard = self.env['privacy.lookup.wizard_test'].with_context(
             default_email=self.partner.email,
             default_name=self.partner.name,
         ).create({})

@@ -84,7 +84,7 @@ class TestSaleCouponMultiwebsite(TestSaleCouponNumbersCommon):
         # ==============================
 
         order.website_id = False
-        self.env['loyalty.generate.wizard'].with_context(active_id=self.discount_coupon_program.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.discount_coupon_program.id).create({
             'coupon_qty': 4,
             'points_granted': 1,
         }).generate_coupons()

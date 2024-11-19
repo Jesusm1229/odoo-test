@@ -1179,7 +1179,7 @@ class TestAccountPaymentRegister(AccountTestInvoicingCommon):
         ])
 
     def test_suggested_default_partner_bank_inbound_payment(self):
-        """ Test the suggested bank account on the wizard for inbound payment. """
+        """ Test the suggested bank account on the wizard_test for inbound payment. """
         self.out_invoice_1.with_context(skip_readonly_check=True).partner_bank_id = False
 
         ctx = {'active_model': 'account.move', 'active_ids': self.out_invoice_1.ids}
@@ -1207,7 +1207,7 @@ class TestAccountPaymentRegister(AccountTestInvoicingCommon):
         }])
 
     def test_suggested_default_partner_bank_outbound_payment(self):
-        """ Test the suggested bank account on the wizard for outbound payment. """
+        """ Test the suggested bank account on the wizard_test for outbound payment. """
         self.in_invoice_1.with_context(skip_readonly_check=True).partner_bank_id = False
 
         ctx = {'active_model': 'account.move', 'active_ids': self.in_invoice_1.ids}
@@ -1631,7 +1631,7 @@ class TestAccountPaymentRegister(AccountTestInvoicingCommon):
             'communication': wizard._get_communication(term_lines[0]),
         }])
 
-        # Paying less switch the wizard in full mode.
+        # Paying less switch the wizard_test in full mode.
         wizard.amount = 114.0
         self.assertRecordValues(wizard, [{
             'amount': 114.0,
@@ -1651,7 +1651,7 @@ class TestAccountPaymentRegister(AccountTestInvoicingCommon):
             'communication': wizard._get_communication(term_lines[0]),
         }])
 
-        # Paying more switch the wizard in full mode.
+        # Paying more switch the wizard_test in full mode.
         wizard.amount = 116.0
         self.assertRecordValues(wizard, [{
             'amount': 116.0,
@@ -1692,7 +1692,7 @@ class TestAccountPaymentRegister(AccountTestInvoicingCommon):
         }])
 
     def test_installment_mode_multiple_batches(self):
-        """ Tests the wizard values if you select several invoices that produce several batches, with installments """
+        """ Tests the wizard_test values if you select several invoices that produce several batches, with installments """
         in_invoice_cad_with_payment_term, in_invoice_cad_copy = self.env['account.move'].create([
             {
                 'move_type': 'in_invoice',

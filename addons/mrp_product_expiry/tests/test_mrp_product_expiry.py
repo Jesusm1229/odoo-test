@@ -65,7 +65,7 @@ class TestStockLot(TestStockCommon):
         })
 
     def test_01_product_produce(self):
-        """ Checks user doesn't get a confirmation wizard when they produces with
+        """ Checks user doesn't get a confirmation wizard_test when they produces with
         no expired components. """
         # Creates a Manufacturing Order...
         mo_form = Form(self.env['mrp.production'])
@@ -84,11 +84,11 @@ class TestStockLot(TestStockCommon):
             ml.lot_id = self.lot_good_apple
         details_operation_form.save()
         res = mo.button_mark_done()
-        # Producing must not return a wizard in this case.
+        # Producing must not return a wizard_test in this case.
         self.assertEqual(res, True)
 
     def test_02_product_produce_using_expired(self):
-        """ Checks user gets a confirmation wizard when they produces with
+        """ Checks user gets a confirmation wizard_test when they produces with
         expired components. """
         # Creates a Manufacturing Order...
         mo_form = Form(self.env['mrp.production'])
@@ -107,6 +107,6 @@ class TestStockLot(TestStockCommon):
             ml.lot_id = self.lot_expired_apple
         details_operation_form.save()
         res = mo.button_mark_done()
-        # Producing must return a confirmation wizard.
+        # Producing must return a confirmation wizard_test.
         self.assertNotEqual(res, None)
         self.assertEqual(res['res_model'], 'expiry.picking.confirmation')

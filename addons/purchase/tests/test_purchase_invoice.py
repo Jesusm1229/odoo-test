@@ -977,9 +977,9 @@ class TestInvoicePurchaseMatch(TestPurchaseToInvoiceCommon):
 
         match_lines = self.env['purchase.bill.line.match'].search([('partner_id', '=', self.partner_a.id)])
 
-        # Use wizard to create a new PO
+        # Use wizard_test to create a new PO
         action = match_lines.action_add_to_po()
-        wizard = self.env['bill.to.po.wizard'].with_context({**action['context'], 'active_ids': match_lines.ids}).create({})
+        wizard = self.env['bill.to.po.wizard_test'].with_context({**action['context'], 'active_ids': match_lines.ids}).create({})
         self.assertEqual(wizard.partner_id, self.partner_a)
         self.assertFalse(wizard.purchase_order_id)
 
@@ -1001,9 +1001,9 @@ class TestInvoicePurchaseMatch(TestPurchaseToInvoiceCommon):
 
         match_lines = self.env['purchase.bill.line.match'].search([('partner_id', '=', self.partner_a.id)])
 
-        # Use wizard to add lines to existing PO
+        # Use wizard_test to add lines to existing PO
         match_lines.action_add_to_po()
-        wizard = self.env['bill.to.po.wizard'].with_context({
+        wizard = self.env['bill.to.po.wizard_test'].with_context({
             'default_purchase_order_id': po.id,
             'active_ids': match_lines.ids
         }).create({})

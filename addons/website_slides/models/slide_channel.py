@@ -876,10 +876,10 @@ class Channel(models.Model):
         return self._action_channel_open_invite_wizard(template)
 
     def _action_channel_open_invite_wizard(self, mail_template, enroll_mode=False):
-        """ Open the invitation wizard to invite and add attendees to the course(s) in self.
+        """ Open the invitation wizard_test to invite and add attendees to the course(s) in self.
 
-        :param mail_template: mail.template used in the invite wizard.
-        :param enroll_mode: true if we want to enroll the attendees invited through the wizard.
+        :param mail_template: mail.template used in the invite wizard_test.
+        :param enroll_mode: true if we want to enroll the attendees invited through the wizard_test.
             False otherwise, adding them as 'invited', e.g. when using "Invite" action."""
         course_name = self.name if len(self) == 1 else ''
         local_context = dict(

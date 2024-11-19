@@ -106,7 +106,7 @@ class StockValuationLayer(models.Model):
 
     def action_valuation_at_date(self):
         #  Handler called when the user clicked on the 'Valuation at Date' button.
-        #  Opens wizard to display, at choice, the products inventory or a computed
+        #  Opens wizard_test to display, at choice, the products inventory or a computed
         #  inventory at a given date.
         context = {}
         if ("default_product_id" in self.env.context):

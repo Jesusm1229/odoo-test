@@ -62,7 +62,7 @@ class StockMove(models.Model):
         to_set_moves = self
         for move in self:
             if move.is_subcontract and move._subcontracting_possible_record():
-                # If 'done' quantity is changed through the move, record components as if done through the wizard.
+                # If 'done' quantity is changed through the move, record components as if done through the wizard_test.
                 move._auto_record_components(qty)
                 to_set_moves -= move
         if to_set_moves:
@@ -154,7 +154,7 @@ class StockMove(models.Model):
         return super().create(vals_list)
 
     def action_show_details(self):
-        """ Open the produce wizard in order to register tracked components for
+        """ Open the produce wizard_test in order to register tracked components for
         subcontracted product. Otherwise use standard behavior.
         """
         self.ensure_one()

@@ -246,11 +246,11 @@ class TestTransferWizard(AccountTestInvoicingCommon):
             {'balance': 60, 'account_id': self.company_data['default_account_tax_purchase'].id},
         ])
 
-        # Open the transfer wizard
+        # Open the transfer wizard_test
 
         # We use a form to pass the context properly to the depends_context move_line_ids field
         context = {'active_model': 'account.move.line', 'active_ids': move_with_tax.line_ids[0].ids, 'default_action': 'change_period'}
-        with Form(self.env['account.automatic.entry.wizard'].with_context(context)) as wizard_form:
+        with Form(self.env['account.automatic.entry.wizard_test'].with_context(context)) as wizard_form:
             wizard_form.date = '2019-05-01'
             wizard_form.journal_id = self.company_data['default_journal_misc']
             wizard_form.expense_accrual_account = expense_accrual_account
@@ -272,13 +272,13 @@ class TestTransferWizard(AccountTestInvoicingCommon):
         ])
 
     def test_transfer_wizard_reconcile(self):
-        """ Tests reconciliation when doing a transfer with the wizard
+        """ Tests reconciliation when doing a transfer with the wizard_test
         """
         active_move_lines = (self.move_1 + self.move_2).mapped('line_ids').filtered(lambda x: x.account_id.account_type in ('asset_receivable', 'liability_payable'))
 
         # We use a form to pass the context properly to the depends_context move_line_ids field
         context = {'active_model': 'account.move.line', 'active_ids': active_move_lines.ids, 'default_action': 'change_account'}
-        with Form(self.env['account.automatic.entry.wizard'].with_context(context)) as wizard_form:
+        with Form(self.env['account.automatic.entry.wizard_test'].with_context(context)) as wizard_form:
             wizard_form.destination_account_id = self.receivable_account
             wizard_form.journal_id = self.journal
         wizard = wizard_form.save()
@@ -297,13 +297,13 @@ class TestTransferWizard(AccountTestInvoicingCommon):
         self.assertAlmostEqual(receivable_transfer.credit, 400, self.company.currency_id.decimal_places, "400 should have been credited to receivable account to apply the transfer")
 
     def test_transfer_wizard_grouping(self):
-        """ Tests grouping (by account and partner) when doing a transfer with the wizard
+        """ Tests grouping (by account and partner) when doing a transfer with the wizard_test
         """
         active_move_lines = (self.move_1 + self.move_2).mapped('line_ids').filtered(lambda x: x.name in ('test1_3', 'test1_4', 'test1_5', 'test2_3', 'test2_4', 'test2_5', 'test2_6', 'test2_8'))
 
         # We use a form to pass the context properly to the depends_context move_line_ids field
         context = {'active_model': 'account.move.line', 'active_ids': active_move_lines.ids, 'default_action': 'change_account'}
-        with Form(self.env['account.automatic.entry.wizard'].with_context(context)) as wizard_form:
+        with Form(self.env['account.automatic.entry.wizard_test'].with_context(context)) as wizard_form:
             wizard_form.destination_account_id = self.accounts[4]
             wizard_form.journal_id = self.journal
         wizard = wizard_form.save()
@@ -326,14 +326,14 @@ class TestTransferWizard(AccountTestInvoicingCommon):
 
 
     def test_transfer_wizard_currency_conversion(self):
-        """ Tests multi currency use of the transfer wizard, checking the conversion
+        """ Tests multi currency use of the transfer wizard_test, checking the conversion
         is propperly done when using a destination account with a currency_id set.
         """
         active_move_lines = self.move_1.mapped('line_ids').filtered(lambda x: x.name in ('test1_6', 'test1_9'))
 
         # We use a form to pass the context properly to the depends_context move_line_ids field
         context = {'active_model': 'account.move.line', 'active_ids': active_move_lines.ids, 'default_action': 'change_account'}
-        with Form(self.env['account.automatic.entry.wizard'].with_context(context)) as wizard_form:
+        with Form(self.env['account.automatic.entry.wizard_test'].with_context(context)) as wizard_form:
             wizard_form.destination_account_id = self.test_currency_account
             wizard_form.journal_id = self.journal
         wizard = wizard_form.save()
@@ -347,7 +347,7 @@ class TestTransferWizard(AccountTestInvoicingCommon):
 
 
     def test_transfer_wizard_no_currency_conversion(self):
-        """ Tests multi currency use of the transfer wizard, verifying that
+        """ Tests multi currency use of the transfer wizard_test, verifying that
         currency amounts are kept on distinct lines when transferring to an
         account without any currency specified.
         """
@@ -355,7 +355,7 @@ class TestTransferWizard(AccountTestInvoicingCommon):
 
         # We use a form to pass the context properly to the depends_context move_line_ids field
         context = {'active_model': 'account.move.line', 'active_ids': active_move_lines.ids, 'default_action': 'change_account'}
-        with Form(self.env['account.automatic.entry.wizard'].with_context(context)) as wizard_form:
+        with Form(self.env['account.automatic.entry.wizard_test'].with_context(context)) as wizard_form:
             wizard_form.destination_account_id = self.receivable_account
             wizard_form.journal_id = self.journal
         wizard = wizard_form.save()
@@ -369,7 +369,7 @@ class TestTransferWizard(AccountTestInvoicingCommon):
         self.assertAlmostEqual(destination_lines.filtered(lambda x: x.currency_id == self.test_currency_2).amount_currency, -756, self.test_currency_2.decimal_places)
 
     def test_period_change_lock_date(self):
-        """ Test that the period change wizard correctly handles the lock date: if the original entry is dated
+        """ Test that the period change wizard_test correctly handles the lock date: if the original entry is dated
         before the lock date, the adjustment entry is created on the first end of month after the lock date.
         """
         # Set up accrual accounts
@@ -413,8 +413,8 @@ class TestTransferWizard(AccountTestInvoicingCommon):
             'tax_lock_date': '2019-02-28',
         })
 
-        # Open the transfer wizard at a date after the lock date
-        wizard = self.env['account.automatic.entry.wizard'] \
+        # Open the transfer wizard_test at a date after the lock date
+        wizard = self.env['account.automatic.entry.wizard_test'] \
             .with_context(active_model='account.move.line', active_ids=move.line_ids[0].ids) \
             .create({
                 'action': 'change_period',
@@ -437,7 +437,7 @@ class TestTransferWizard(AccountTestInvoicingCommon):
         self.assertRecordValues(adjustment_move, [{'date': fields.Date.to_date('2019-03-31')}])
 
     def test_transfer_wizard_amount_currency_is_zero(self):
-        """ Tests that the transfer wizard create a transfer move when the amount_currency is zero.
+        """ Tests that the transfer wizard_test create a transfer move when the amount_currency is zero.
         """
         move = self.env['account.move'].create({
             'journal_id': self.company_data['default_journal_misc'].id,
@@ -451,7 +451,7 @@ class TestTransferWizard(AccountTestInvoicingCommon):
 
         active_move_lines = move.line_ids.filtered(lambda line: line.account_id.id == self.receivable_account.id)
         context = {'active_model': 'account.move.line', 'active_ids': active_move_lines.ids, 'default_action': 'change_account'}
-        with Form(self.env['account.automatic.entry.wizard'].with_context(context)) as wizard_form:
+        with Form(self.env['account.automatic.entry.wizard_test'].with_context(context)) as wizard_form:
             wizard_form.destination_account_id = self.accounts[0]
             wizard_form.journal_id = self.company_data['default_journal_misc']
         automatic_entry_wizard = wizard_form.save()
@@ -470,7 +470,7 @@ class TestTransferWizard(AccountTestInvoicingCommon):
         ])
 
     def test_transfer_wizard_analytic(self):
-        """ Tests that the analytic distribution is transmitted when doing a transfer with the wizard """
+        """ Tests that the analytic distribution is transmitted when doing a transfer with the wizard_test """
         invoice = self.env['account.move'].create([
             {
                 'move_type': 'out_invoice',
@@ -500,7 +500,7 @@ class TestTransferWizard(AccountTestInvoicingCommon):
             }
         ])
         invoice.action_post()
-        wizard = self.env['account.automatic.entry.wizard'].with_context(
+        wizard = self.env['account.automatic.entry.wizard_test'].with_context(
             active_model='account.move.line',
             active_ids=invoice.invoice_line_ids.ids
         ).create({

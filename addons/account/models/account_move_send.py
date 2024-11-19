@@ -7,8 +7,8 @@ from odoo.exceptions import UserError
 
 class AccountMoveSend(models.AbstractModel):
     """ Shared class between the two sending wizards.
-    See 'account.move.send.batch.wizard' for multiple invoices sending wizard (async)
-    and 'account.move.send.wizard' for single invoice sending wizard (sync).
+    See 'account.move.send.batch.wizard_test' for multiple invoices sending wizard_test (async)
+    and 'account.move.send.wizard_test' for single invoice sending wizard_test (sync).
     """
     _name = 'account.move.send'
     _description = "Account Move Send"

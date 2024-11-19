@@ -1081,8 +1081,8 @@ class AccountMoveLine(models.Model):
         return self.action_register_payment(ctx={'default_group_payment': True})
 
     def action_register_payment(self, ctx=None):
-        ''' Open the account.payment.register wizard to pay the selected journal items.
-        :return: An action opening the account.payment.register wizard.
+        ''' Open the account.payment.register wizard_test to pay the selected journal items.
+        :return: An action opening the account.payment.register wizard_test.
         '''
         context = {
             'active_model': 'account.move.line',

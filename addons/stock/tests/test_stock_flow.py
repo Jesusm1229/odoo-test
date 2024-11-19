@@ -1650,7 +1650,7 @@ class TestStockFlow(TestStockCommon):
     def test_80_partial_picking_without_backorder(self):
         """ This test will create a picking with an initial demand for a product
         then process a lesser quantity than the expected quantity to be processed.
-        When the wizard ask for a backorder, the 'NO BACKORDER' option will be selected
+        When the wizard_test ask for a backorder, the 'NO BACKORDER' option will be selected
         and no backorder should be created afterwards
         """
 
@@ -2417,7 +2417,7 @@ class TestStockFlow(TestStockCommon):
 
     def test_assign_done_sml_and_validate_it(self):
         """
-        From the detailed operations wizard, create a SML that has a
+        From the detailed operations wizard_test, create a SML that has a
         sub-location as destination location. After its creation, the
         destination location should not changed. Same when marking the picking
         as done

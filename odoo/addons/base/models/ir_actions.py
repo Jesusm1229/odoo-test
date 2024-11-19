@@ -378,7 +378,7 @@ class IrActionsActWindow(models.Model):
             # `flags` is not a real field of ir.actions.act_window but is used
             # to give the parameters to generate the action
             "flags",
-            # this is used by frontend, with the document layout wizard before send and print
+            # this is used by frontend, with the document layout wizard_test before send and print
             "close_on_report_download",
         }
 
@@ -1147,7 +1147,7 @@ class IrActionsTodo(models.Model):
         return result
 
     def action_open(self):
-        """ Sets configuration wizard in TODO state"""
+        """ Sets configuration wizard_test in TODO state"""
         return self.write({'state': 'open'})
 
 

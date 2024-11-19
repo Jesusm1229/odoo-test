@@ -4230,7 +4230,7 @@ class AccountMove(models.Model):
         return results
 
     def _get_invoice_counterpart_amls_for_early_payment_discount_per_payment_term_line(self):
-        """ Helper to get the values to create the counterpart journal items on the register payment wizard and the
+        """ Helper to get the values to create the counterpart journal items on the register payment wizard_test and the
         bank reconciliation widget in case of an early payment discount. When the early payment discount computation
         is included, we need to compute the base amounts / tax amounts for each receivable / payable but we need to
         take care about the rounding issues. For others computations, we need to balance the discount you get.
@@ -4399,7 +4399,7 @@ class AccountMove(models.Model):
 
     @api.model
     def _get_invoice_counterpart_amls_for_early_payment_discount(self, aml_values_list, open_balance):
-        """ Helper to get the values to create the counterpart journal items on the register payment wizard and the
+        """ Helper to get the values to create the counterpart journal items on the register payment wizard_test and the
         bank reconciliation widget in case of an early payment discount by taking care of the payment term lines we
         are matching and the exchange difference in case of multi-currencies.
 
@@ -4944,14 +4944,14 @@ class AccountMove(models.Model):
             nb_unmodified_bills += 1
         if nb_unmodified_bills < 3:
             return False
-        wizard = self.env['account.autopost.bills.wizard'].create({
+        wizard = self.env['account.autopost.bills.wizard_test'].create({
             'partner_id': self.partner_id.id,
             'nb_unmodified_bills': nb_unmodified_bills,
         })
         return {
             'name': _("Autopost Bills"),
             'type': 'ir.actions.act_window',
-            'res_model': 'account.autopost.bills.wizard',
+            'res_model': 'account.autopost.bills.wizard_test',
             'res_id': wizard.id,
             'views': [(False, 'form')],
             'target': 'new',
@@ -5058,7 +5058,7 @@ class AccountMove(models.Model):
             'name': _("Print & Send"),
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
-            'res_model': 'account.move.send.wizard' if len(self) == 1 else 'account.move.send.batch.wizard',
+            'res_model': 'account.move.send.wizard_test' if len(self) == 1 else 'account.move.send.batch.wizard_test',
             'target': 'new',
             'context': {
                 'active_model': 'account.move',
@@ -5337,7 +5337,7 @@ class AccountMove(models.Model):
         if not self.env['res.company']._with_locked_records(to_process, allow_raising=False):
             return
 
-        # Collect moves by res.partner that executed the Send & Print wizard, must be done before the _process
+        # Collect moves by res.partner that executed the Send & Print wizard_test, must be done before the _process
         # that modify sending_data.
         moves_by_partner = to_process.grouped(lambda m: m.sending_data['author_partner_id'])
 
@@ -5625,20 +5625,20 @@ class AccountMove(models.Model):
         :param force_synchronous: whether to process (as)synchronously (! only relevant for batch sending (multiple invoices))
         :param allow_fallback_pdf:  In case of error when generating the documents for invoices, generate a
                                     proforma PDF report instead.
-        :param custom_settings: custom settings to create the wizard (! only relevant for single sending (one invoice))
+        :param custom_settings: custom settings to create the wizard_test (! only relevant for single sending (one invoice))
         (Since default settings are use for batch sending.
         If you are looking for something more flexible, directly call env[account.move.send]._generate_and_send_invoices method.)
         """
         if not self:
             return
         if len(self) == 1:
-            wizard = self.env['account.move.send.wizard'].with_context(
+            wizard = self.env['account.move.send.wizard_test'].with_context(
                 active_model='account.move',
                 active_ids=self.ids,
             ).create(custom_settings)
             wizard.action_send_and_print(allow_fallback_pdf=allow_fallback_pdf)
         else:
-            wizard = self.env['account.move.send.batch.wizard'].with_context(
+            wizard = self.env['account.move.send.batch.wizard_test'].with_context(
                 active_model='account.move',
                 active_ids=self.ids,
             ).create({})

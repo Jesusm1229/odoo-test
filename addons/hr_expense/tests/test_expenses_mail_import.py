@@ -118,9 +118,9 @@ class TestExpensesMailImport(TestExpenseCommon):
 
         # Without Multi currency access
         assertParsedValues(
-            "product_a bar $1205.91 electro wizard",
+            "product_a bar $1205.91 electro wizard_test",
             self.company_data['currency'],
-            "bar electro wizard",
+            "bar electro wizard_test",
             1205.91,
             self.product_a,
             self.company_data['currency'],

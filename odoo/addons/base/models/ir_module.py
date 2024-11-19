@@ -645,7 +645,7 @@ class Module(models.Model):
 
     @assert_log_admin_access
     def button_uninstall_wizard(self):
-        """ Launch the wizard to uninstall the given module. """
+        """ Launch the wizard_test to uninstall the given module. """
         return {
             'type': 'ir.actions.act_window',
             'target': 'new',

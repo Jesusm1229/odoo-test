@@ -11,8 +11,8 @@ from odoo.exceptions import UserError
 
 class Invite(models.TransientModel):
     """ Wizard to invite partners (or channels) and make them followers. """
-    _name = 'mail.wizard.invite'
-    _description = 'Invite wizard'
+    _name = 'mail.wizard_test.invite'
+    _description = 'Invite wizard_test'
 
     res_model = fields.Char('Related Document Model', required=True, help='Model of the followed resource')
     res_id = fields.Integer('Related Document ID', help='Id of the followed resource')

@@ -11,7 +11,7 @@ from odoo.tools import frozendict
 import json
 
 class AutomaticEntryWizard(models.TransientModel):
-    _name = 'account.automatic.entry.wizard'
+    _name = 'account.automatic.entry.wizard_test'
     _description = 'Create Automatic Entries'
     _check_company_auto = True
 
@@ -148,7 +148,7 @@ class AutomaticEntryWizard(models.TransientModel):
         if any(move_line.reconciled for move_line in move_line_ids):
             raise UserError(_('You can only change the period/account for items that are not yet reconciled.'))
         if any(line.company_id.root_id != move_line_ids[0].company_id.root_id for line in move_line_ids):
-            raise UserError(_('You cannot use this wizard on journal entries belonging to different companies.'))
+            raise UserError(_('You cannot use this wizard_test on journal entries belonging to different companies.'))
         res['company_id'] = move_line_ids[0].company_id.root_id.id
 
         allowed_actions = set(dict(self._fields['action'].selection))

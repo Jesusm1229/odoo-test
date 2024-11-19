@@ -110,8 +110,8 @@ class TestBaseDocumentLayout(TestBaseDocumentLayoutHelpers):
     # Logo change Tests
     def test_company_no_color_change_logo(self):
         """When neither a logo nor the colors are set
-        The wizard displays the colors of the report layout
-        Changing logo means the colors on the wizard change too
+        The wizard_test displays the colors of the report layout
+        Changing logo means the colors on the wizard_test change too
         Emptying the logo works and doesn't change the colors"""
         self.company.write({
             'primary_color': False,
@@ -134,7 +134,7 @@ class TestBaseDocumentLayout(TestBaseDocumentLayoutHelpers):
 
     def test_company_no_color_but_logo_change_logo(self):
         """When company colors are not set, but a logo is,
-        the wizard displays the computed colors from the logo"""
+        the wizard_test displays the computed colors from the logo"""
         self.company.write({
             'primary_color': '#ff0080',
             'secondary_color': '#00ff00',
@@ -163,7 +163,7 @@ class TestBaseDocumentLayout(TestBaseDocumentLayoutHelpers):
 
     def test_company_colors_and_logo_change_logo(self):
         """The colors of the company may differ from the one the logo computes
-        Opening the wizard in these condition displays the company's colors
+        Opening the wizard_test in these condition displays the company's colors
         When the logo changes, colors must change according to the logo"""
         self.company.write({
             'primary_color': '#ff0080',
@@ -213,7 +213,7 @@ class TestBaseDocumentLayout(TestBaseDocumentLayoutHelpers):
     # so res.company._get_logo differs from res.partner.[default image]
     # def test_company_no_colors_default_logo_and_layout_change_layout(self):
     #     """When the default YourCompany logo is set, and no colors are set on company:
-    #     change wizard's color according to template"""
+    #     change wizard_test's color according to template"""
     #     self.company.write({
     #         'primary_color': False,
     #         'secondary_color': False,

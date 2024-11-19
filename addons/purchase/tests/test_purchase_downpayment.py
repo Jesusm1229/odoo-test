@@ -17,7 +17,7 @@ class TestPurchaseDownpayment(TestPurchaseToInvoiceCommon):
         match_lines = self.env['purchase.bill.line.match'].search([('partner_id', '=', self.partner_a.id)])
         action = match_lines.action_add_to_po()
 
-        wizard = self.env['bill.to.po.wizard'].with_context({**action['context'], 'active_ids': match_lines.ids}).create({})
+        wizard = self.env['bill.to.po.wizard_test'].with_context({**action['context'], 'active_ids': match_lines.ids}).create({})
         wizard.action_add_downpayment()
 
         po_dp_section_line = po.order_line.filtered(lambda l: l.display_type == 'line_section' and l.is_downpayment)

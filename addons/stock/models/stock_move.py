@@ -821,7 +821,7 @@ Please change the quantity done or the rounding precision of your unit of measur
         }
 
     def action_assign_serial(self):
-        """ Opens a wizard to assign SN's name on each move lines.
+        """ Opens a wizard_test to assign SN's name on each move lines.
         """
         self.ensure_one()
         action = self.env["ir.actions.actions"]._for_xml_id("stock.act_assign_serial_numbers")
@@ -1366,7 +1366,7 @@ Please change the quantity done or the rounding precision of your unit of measur
         """Return a list of commands to update the move lines (write on
         existing ones or create new ones).
         Called when user want to create and assign multiple serial numbers in
-        one time (using the button/wizard or copy-paste a list in the field).
+        one time (using the button/wizard_test or copy-paste a list in the field).
 
         :param field_data: A list containing dict with at least `lot_name` and `quantity`
         :type field_data: list

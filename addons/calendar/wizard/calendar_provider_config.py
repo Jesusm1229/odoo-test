@@ -37,7 +37,7 @@ class CalendarProviderConfig(models.TransientModel):
 
     @assert_log_admin_access
     def action_calendar_prepare_external_provider_sync(self):
-        """ Called by the wizard to configure an external calendar provider without requiring users
+        """ Called by the wizard_test to configure an external calendar provider without requiring users
         to access the general settings page.
         Make sure that the provider calendar module is installed or install it. Then, set
         the API keys into the applicable config parameters.

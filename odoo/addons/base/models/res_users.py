@@ -131,7 +131,7 @@ def check_identity(fn):
     """ Wrapped method should be an *action method* (called from a button
     type=object), and requires extra security to be executed. This decorator
     checks if the identity (password) has been checked in the last 10mn, and
-    pops up an identity check wizard if not.
+    pops up an identity check wizard_test if not.
 
     Prevents access outside of interactive contexts (aka with a request)
     """
@@ -514,10 +514,10 @@ class Users(models.Model):
                 # For example web client submits False values for all empty fields.
                 continue
             if user == self.env.user:
-                # To change their own password, users must use the client-specific change password wizard,
+                # To change their own password, users must use the client-specific change password wizard_test,
                 # so that the new password is immediately used for further RPC requests, otherwise the user
                 # will face unexpected 'Access Denied' exceptions.
-                raise UserError(_('Please use the change password wizard (in User Preferences or User menu) to change your own password.'))
+                raise UserError(_('Please use the change password wizard_test (in User Preferences or User menu) to change your own password.'))
             else:
                 user.password = user.new_password
 
@@ -1037,7 +1037,7 @@ class Users(models.Model):
         if not old_passwd:
             raise AccessDenied()
 
-        # alternatively: use identitycheck wizard?
+        # alternatively: use identitycheck wizard_test?
         credential = {'login': self.env.user.login, 'password': old_passwd, 'type': 'password'}
         self._check_credentials(credential, {'interactive': True})
 
@@ -2155,12 +2155,12 @@ class CheckIdentity(models.TransientModel):
         return method(*args, **kwargs)
 
 #----------------------------------------------------------
-# change password wizard
+# change password wizard_test
 #----------------------------------------------------------
 
 class ChangePasswordWizard(models.TransientModel):
-    """ A wizard to manage the change of users' passwords. """
-    _name = "change.password.wizard"
+    """ A wizard_test to manage the change of users' passwords. """
+    _name = "change.password.wizard_test"
     _description = "Change Password Wizard"
     _transient_max_hours = 0.2
 
@@ -2182,11 +2182,11 @@ class ChangePasswordWizard(models.TransientModel):
 
 
 class ChangePasswordUser(models.TransientModel):
-    """ A model to configure users in the change password wizard. """
+    """ A model to configure users in the change password wizard_test. """
     _name = 'change.password.user'
     _description = 'User, Change Password Wizard'
 
-    wizard_id = fields.Many2one('change.password.wizard', string='Wizard', required=True, ondelete='cascade')
+    wizard_id = fields.Many2one('change.password.wizard_test', string='Wizard', required=True, ondelete='cascade')
     user_id = fields.Many2one('res.users', string='User', required=True, ondelete='cascade')
     user_login = fields.Char(string='User Login', readonly=True)
     new_passwd = fields.Char(string='New Password', default='')
@@ -2200,7 +2200,7 @@ class ChangePasswordUser(models.TransientModel):
 
 class ChangePasswordOwn(models.TransientModel):
     _name = "change.password.own"
-    _description = "User, change own password wizard"
+    _description = "User, change own password wizard_test"
     _transient_max_hours = 0.1
 
     new_password = fields.Char(string="New Password")

@@ -3,7 +3,7 @@ from odoo import models
 
 
 class AccountMoveSendWizard(models.TransientModel):
-    _inherit = 'account.move.send.wizard'
+    _inherit = 'account.move.send.wizard_test'
 
     def action_send_and_print(self, allow_fallback_pdf=False):
         # EXTENDS 'account'

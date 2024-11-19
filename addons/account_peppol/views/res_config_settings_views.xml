@@ -17,7 +17,7 @@
                             </div>
 
                             <!-- If the participant is not registered at all (can neither send or receive)
-                                 they should only see this text and the register wizard button -->
+                                 they should only see this text and the register wizard_test button -->
                             <div invisible="account_peppol_proxy_state  not in ('not_registered', 'in_verification')">
                                 <div class="text-muted oe_inline mb-4">
                                     Register on Peppol either only as a sender or as both a sender and a receiver in two steps.

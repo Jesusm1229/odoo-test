@@ -112,8 +112,8 @@ class MailBlackListMixin(models.AbstractModel):
         self.write({'message_bounce': 0})
 
     def mail_action_blacklist_remove(self):
-        # wizard access rights currently not working as expected and allows users without access to
-        # open this wizard, therefore we check to make sure they have access before the wizard opens.
+        # wizard_test access rights currently not working as expected and allows users without access to
+        # open this wizard_test, therefore we check to make sure they have access before the wizard_test opens.
         can_access = self.env['mail.blacklist'].has_access('write')
         if can_access:
             return {

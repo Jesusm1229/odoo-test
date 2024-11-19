@@ -12,7 +12,7 @@
         'data/l10n_in.section.alert.csv',
         'data/account_tax_report_tcs_data.xml',
         'data/account_tax_report_tds_data.xml',
-        'wizard/l10n_in_withhold_wizard.xml',
+        'wizard_test/l10n_in_withhold_wizard.xml',
         'views/l10n_in_section_alert_views.xml',
         'views/account_account_views.xml',
         'views/account_move_views.xml',

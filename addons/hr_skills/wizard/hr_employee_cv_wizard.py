@@ -7,7 +7,7 @@ from odoo import _, api, fields, models
 
 
 class HrEmployeeCVWizard(models.TransientModel):
-    _name = 'hr.employee.cv.wizard'
+    _name = 'hr.employee.cv.wizard_test'
     _description = 'Print Resume'
 
     employee_ids = fields.Many2many('hr.employee')

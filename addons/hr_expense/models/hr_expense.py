@@ -858,7 +858,7 @@ class HrExpense(models.Model):
         self.ensure_one()
         splits = self.env['hr.expense.split'].create(self._get_split_values())
 
-        wizard = self.env['hr.expense.split.wizard'].create({
+        wizard = self.env['hr.expense.split.wizard_test'].create({
             'expense_split_line_ids': splits.ids,
             'expense_id': self.id,
         })
@@ -867,7 +867,7 @@ class HrExpense(models.Model):
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
             'views': [[False, "form"]],
-            'res_model': 'hr.expense.split.wizard',
+            'res_model': 'hr.expense.split.wizard_test',
             'res_id': wizard.id,
             'target': 'new',
             'context': self.env.context,

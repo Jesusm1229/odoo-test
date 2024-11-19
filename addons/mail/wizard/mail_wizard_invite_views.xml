@@ -2,7 +2,7 @@
 <odoo>
     <data>
 
-        <!-- wizard view -->
+        <!-- wizard_test view -->
         <record model="ir.ui.view" id="mail_wizard_invite_form">
             <field name="name">Add Followers</field>
             <field name="model">mail.wizard.invite</field>

@@ -59,7 +59,7 @@ class TestLeadConvertForm(crm_common.TestLeadConvertCommon):
 class TestLeadConvert(crm_common.TestLeadConvertCommon):
     """
     TODO: created partner (handle assignation) has team of lead
-    TODO: create partner has user_id  coming from wizard
+    TODO: create partner has user_id  coming from wizard_test
     """
 
     @classmethod
@@ -268,14 +268,14 @@ class TestLeadConvert(crm_common.TestLeadConvertCommon):
 
     @users('user_sales_manager')
     def test_lead_convert_internals(self):
-        """ Test internals of convert wizard """
+        """ Test internals of convert wizard_test """
         convert = self.env['crm.lead2opportunity.partner'].with_context({
             'active_model': 'crm.lead',
             'active_id': self.lead_1.id,
             'active_ids': self.lead_1.ids,
         }).create({})
 
-        # test internals of convert wizard
+        # test internals of convert wizard_test
         self.assertEqual(convert.lead_id, self.lead_1)
         self.assertEqual(convert.user_id, self.lead_1.user_id)
         self.assertEqual(convert.team_id, self.lead_1.team_id)
@@ -303,7 +303,7 @@ class TestLeadConvert(crm_common.TestLeadConvertCommon):
 
     @users('user_sales_manager')
     def test_lead_convert_action_exist(self):
-        """ Test specific use case of 'exist' action in conver wizard """
+        """ Test specific use case of 'exist' action in conver wizard_test """
         self.lead_1.write({'partner_id': self.contact_1.id})
 
         convert = self.env['crm.lead2opportunity.partner'].with_context({
@@ -318,7 +318,7 @@ class TestLeadConvert(crm_common.TestLeadConvertCommon):
 
     @users('user_sales_manager')
     def test_lead_convert_action_nothing(self):
-        """ Test specific use case of 'nothing' action in conver wizard """
+        """ Test specific use case of 'nothing' action in conver wizard_test """
         self.lead_1.write({'contact_name': False})
 
         convert = self.env['crm.lead2opportunity.partner'].with_context({
@@ -336,7 +336,7 @@ class TestLeadConvert(crm_common.TestLeadConvertCommon):
 
     @users('user_sales_manager')
     def test_lead_convert_contact_mutlicompany(self):
-        """ Check the wizard convert to opp don't find contact
+        """ Check the wizard_test convert to opp don't find contact
         You are not able to see because they belong to another company """
         # Use superuser_id because creating a company with a user add directly
         # the company in company_ids of the user.
@@ -357,7 +357,7 @@ class TestLeadConvert(crm_common.TestLeadConvertCommon):
             'active_ids': lead.ids,
         }).create({'name': 'convert', 'action': 'exist'})
         self.assertNotEqual(convert.partner_id, partner_company_2,
-            "Conversion wizard should not be able to find the partner from another company")
+            "Conversion wizard_test should not be able to find the partner from another company")
 
     @users('user_sales_manager')
     def test_lead_convert_same_partner(self):
@@ -417,7 +417,7 @@ class TestLeadConvert(crm_common.TestLeadConvertCommon):
 
     @users('user_sales_manager')
     def test_lead_merge(self):
-        """ Test convert wizard working in merge mode """
+        """ Test convert wizard_test working in merge mode """
         date = Datetime.from_string('2020-01-20 16:00:00')
         self.crm_lead_dt_mock.now.return_value = date
 
@@ -437,7 +437,7 @@ class TestLeadConvert(crm_common.TestLeadConvertCommon):
             'active_ids': self.lead_1.ids,
         }).create({})
 
-        # test internals of convert wizard
+        # test internals of convert wizard_test
         self.assertEqual(convert.duplicated_lead_ids, self.lead_1 | leads)
         self.assertEqual(convert.user_id, self.lead_1.user_id)
         self.assertEqual(convert.team_id, self.lead_1.team_id)
@@ -454,7 +454,7 @@ class TestLeadConvert(crm_common.TestLeadConvertCommon):
 
     @users('user_sales_salesman')
     def test_lead_merge_user(self):
-        """ Test convert wizard working in merge mode with sales user """
+        """ Test convert wizard_test working in merge mode with sales user """
         date = Datetime.from_string('2020-01-20 16:00:00')
         self.crm_lead_dt_mock.now.return_value = date
 
@@ -474,7 +474,7 @@ class TestLeadConvert(crm_common.TestLeadConvertCommon):
             'active_ids': leads[0].ids,
         }).create({})
 
-        # test internals of convert wizard
+        # test internals of convert wizard_test
         self.assertEqual(convert.duplicated_lead_ids, leads)
         self.assertEqual(convert.name, 'merge')
         self.assertEqual(convert.action, 'create')
@@ -577,7 +577,7 @@ class TestLeadConvertBatch(crm_common.TestLeadConvertMassCommon):
 
     @users('user_sales_manager')
     def test_lead_convert_batch_internals(self):
-        """ Test internals of convert wizard, working in batch mode """
+        """ Test internals of convert wizard_test, working in batch mode """
         date = self.env.cr.now()
 
         lead_w_partner = self.lead_w_partner
@@ -592,7 +592,7 @@ class TestLeadConvertBatch(crm_common.TestLeadConvertMassCommon):
             'active_ids': (self.lead_1 | lead_w_partner | lead_w_contact | lead_w_email_lost).ids,
         }).create({})
 
-        # test internals of convert wizard
+        # test internals of convert wizard_test
         # self.assertEqual(convert.lead_id, self.lead_1)
         self.assertEqual(convert.user_id, self.lead_1.user_id)
         self.assertEqual(convert.team_id, self.lead_1.team_id)
@@ -610,7 +610,7 @@ class TestLeadConvertBatch(crm_common.TestLeadConvertMassCommon):
         self.assertEqual(lead_w_email_lost.stage_id, self.stage_team1_2)  # did not change
         # other leads are converted into opportunities
         for opp in (self.lead_1 | lead_w_partner | lead_w_contact):
-            # team management update: opportunity linked to chosen wizard values
+            # team management update: opportunity linked to chosen wizard_test values
             self.assertEqual(opp.type, 'opportunity')
             self.assertTrue(opp.active)
             self.assertEqual(opp.user_id, convert.user_id)

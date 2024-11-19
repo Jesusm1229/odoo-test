@@ -5,7 +5,7 @@ from odoo import fields, models
 
 class L10nVNEdiCancellation(models.TransientModel):
     _name = 'l10n_vn_edi_viettel.cancellation'
-    _description = 'E-invoice cancellation wizard'
+    _description = 'E-invoice cancellation wizard_test'
 
     invoice_id = fields.Many2one(
         comodel_name='account.move',

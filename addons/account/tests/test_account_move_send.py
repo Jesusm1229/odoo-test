@@ -225,7 +225,7 @@ class TestAccountComposerPerformance(AccountTestInvoicingCommon, MailCommon):
         test_customer = self.test_customers[0].with_env(self.env)
         move_template = self.move_template.with_env(self.env)
 
-        composer = self.env['account.move.send.wizard'].with_context(active_model='account.move', active_ids=test_move.ids).create({
+        composer = self.env['account.move.send.wizard_test'].with_context(active_model='account.move', active_ids=test_move.ids).create({
             'sending_methods': ['email'],
             'mail_template_id': move_template.id,
         })
@@ -312,7 +312,7 @@ class TestAccountComposerPerformance(AccountTestInvoicingCommon, MailCommon):
         test_customer = self.test_customers[1].with_env(self.env)
         move_template = self.move_template.with_env(self.env)
 
-        composer = self.env['account.move.send.wizard'].with_context(active_model='account.move', active_ids=test_move.ids).create({
+        composer = self.env['account.move.send.wizard_test'].with_context(active_model='account.move', active_ids=test_move.ids).create({
             'sending_methods': ['email'],
             'mail_template_id': move_template.id,
         })
@@ -406,7 +406,7 @@ class TestAccountComposerPerformance(AccountTestInvoicingCommon, MailCommon):
             'email': "additional@example.com",
         })
 
-        composer = self.env['account.move.send.wizard'].with_context(active_model='account.move', active_ids=test_move.ids).create({
+        composer = self.env['account.move.send.wizard_test'].with_context(active_model='account.move', active_ids=test_move.ids).create({
             'sending_methods': ['email'],
             'mail_template_id': move_template.id,
             'mail_partner_ids': additional_partner.ids,
@@ -452,7 +452,7 @@ class TestAccountMoveSendCommon(AccountTestInvoicingCommon):
             )
 
     def create_send_and_print(self, invoices, **kwargs):
-        wizard_model = 'account.move.send.wizard' if len(invoices) == 1 else 'account.move.send.batch.wizard'
+        wizard_model = 'account.move.send.wizard_test' if len(invoices) == 1 else 'account.move.send.batch.wizard_test'
         return self.env[wizard_model]\
             .with_context(active_model='account.move', active_ids=invoices.ids)\
             .create(kwargs)
@@ -834,7 +834,7 @@ class TestAccountMoveSend(TestAccountMoveSendCommon):
         self.assertEqual(invoice.message_main_attachment_id.name, 'INV_2019_00001_proforma.pdf')
 
     def test_with_empty_mail_template_single(self):
-        """ Test you can use the send & print wizard without any mail template if and only if you are in single mode. """
+        """ Test you can use the send & print wizard_test without any mail template if and only if you are in single mode. """
         invoice = self.init_invoice("out_invoice", amounts=[1000], post=True)
 
         custom_subject = "turlututu"
@@ -861,7 +861,7 @@ class TestAccountMoveSend(TestAccountMoveSendCommon):
         self.assertTrue(invoice_2.invoice_pdf_report_id)
 
     def test_with_draft_invoices(self):
-        """ Use Send & Print wizard on draft invoice(s) should raise an error. """
+        """ Use Send & Print wizard_test on draft invoice(s) should raise an error. """
         invoice_posted = self.init_invoice("out_invoice", amounts=[1000], post=True)
         invoice_draft = self.init_invoice("out_invoice", amounts=[1000], post=False)
 

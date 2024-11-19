@@ -720,7 +720,7 @@ def is_leaf(element):
 
         :param tuple element: a leaf in form (left, operator, right)
 
-        Note: OLD TODO change the share wizard to use this function.
+        Note: OLD TODO change the share wizard_test to use this function.
     """
     INTERNAL_OPS = TERM_OPERATORS + ('<>',)
     return (isinstance(element, tuple) or isinstance(element, list)) \

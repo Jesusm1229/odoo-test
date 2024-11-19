@@ -113,7 +113,7 @@ class TestMrpMulticompany(common.TransactionCase):
         self.assertEqual(mo.move_finished_ids.company_id, self.company_a)
 
     def test_product_produce_1(self):
-        """Check that using a finished lot of company b in the produce wizard of a production
+        """Check that using a finished lot of company b in the produce wizard_test of a production
         of company a is not allowed """
 
         product = self.env['product.product'].create({
@@ -146,7 +146,7 @@ class TestMrpMulticompany(common.TransactionCase):
             mo.with_user(self.user_b).action_confirm()
 
     def test_product_produce_2(self):
-        """Check that using a component lot of company b in the produce wizard of a production
+        """Check that using a component lot of company b in the produce wizard_test of a production
         of company a is not allowed """
 
         product = self.env['product.product'].create({

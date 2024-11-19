@@ -53,7 +53,7 @@ class TestCompanyLeave(TransactionCase):
             'request_date_to': date(2020, 1, 9),
         })
 
-        company_leave = self.env['hr.leave.generate.multi.wizard'].create({
+        company_leave = self.env['hr.leave.generate.multi.wizard_test'].create({
             'name': 'Bank Holiday',
             'allocation_mode': 'company',
             'company_id': self.company.id,
@@ -98,7 +98,7 @@ class TestCompanyLeave(TransactionCase):
         })
         leave._compute_date_from_to()
 
-        company_leave = self.env['hr.leave.generate.multi.wizard'].create({
+        company_leave = self.env['hr.leave.generate.multi.wizard_test'].create({
             'name': 'Bank Holiday',
             'allocation_mode': 'company',
             'company_id': self.company.id,
@@ -147,7 +147,7 @@ class TestCompanyLeave(TransactionCase):
         })
         leave._compute_date_from_to()
 
-        company_leave = self.env['hr.leave.generate.multi.wizard'].create({
+        company_leave = self.env['hr.leave.generate.multi.wizard_test'].create({
             'name': 'Bank Holiday',
             'allocation_mode': 'company',
             'company_id': self.company.id,
@@ -183,7 +183,7 @@ class TestCompanyLeave(TransactionCase):
         })
         leave._compute_date_from_to()
 
-        company_leave = self.env['hr.leave.generate.multi.wizard'].create({
+        company_leave = self.env['hr.leave.generate.multi.wizard_test'].create({
             'name': 'Bank Holiday',
             'allocation_mode': 'company',
             'company_id': self.company.id,
@@ -231,7 +231,7 @@ class TestCompanyLeave(TransactionCase):
         })
         leave._compute_date_from_to()
 
-        company_leave = self.env['hr.leave.generate.multi.wizard'].create({
+        company_leave = self.env['hr.leave.generate.multi.wizard_test'].create({
             'name': 'Bank Holiday',
             'allocation_mode': 'company',
             'company_id': self.company.id,
@@ -276,7 +276,7 @@ class TestCompanyLeave(TransactionCase):
         } for employee in employees[0:15]])
         leaves._compute_date_from_to()
 
-        company_leave = self.env['hr.leave.generate.multi.wizard'].create({
+        company_leave = self.env['hr.leave.generate.multi.wizard_test'].create({
             'name': 'Bank Holiday',
             'allocation_mode': 'company',
             'company_id': self.company.id,

@@ -451,7 +451,7 @@ class PosSession(models.Model):
                 # records.
                 # We don't, however, want them to be committed when the account move creation
                 # failed; therefore, we need to roll back this transaction before showing the
-                # close session wizard.
+                # close session wizard_test.
                 self.env.cr.rollback()
                 return self._close_session_action(balance)
 
@@ -517,9 +517,9 @@ class PosSession(models.Model):
                 ))
 
     def _close_session_action(self, amount_to_balance):
-        # NOTE This can't handle `bank_payment_method_diffs` because there is no field in the wizard that can carry it.
+        # NOTE This can't handle `bank_payment_method_diffs` because there is no field in the wizard_test that can carry it.
         default_account = self._get_balancing_account()
-        wizard = self.env['pos.close.session.wizard'].create({
+        wizard = self.env['pos.close.session.wizard_test'].create({
             'amount_to_balance': amount_to_balance,
             'account_id': default_account.id,
             'account_readonly': not self.env.user.has_group('account.group_account_readonly'),
@@ -529,7 +529,7 @@ class PosSession(models.Model):
             'name': _("Force Close Session"),
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
-            'res_model': 'pos.close.session.wizard',
+            'res_model': 'pos.close.session.wizard_test',
             'res_id': wizard.id,
             'target': 'new',
             'context': {**self.env.context, 'active_ids': self.ids, 'active_model': 'pos.session'},
@@ -560,7 +560,7 @@ class PosSession(models.Model):
         validate_result = self.action_pos_session_closing_control(bank_payment_method_diffs=bank_payment_method_diffs)
 
         # If an error is raised, the user will still be redirected to the back end to manually close the session.
-        # If the return result is a dict, this means that normally we have a redirection or a wizard => we redirect the user
+        # If the return result is a dict, this means that normally we have a redirection or a wizard_test => we redirect the user
         if isinstance(validate_result, dict):
             # imbalance accounting entry
             return {

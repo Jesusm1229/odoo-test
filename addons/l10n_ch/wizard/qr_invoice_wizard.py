@@ -7,12 +7,12 @@ class QrInvoiceWizard(models.TransientModel):
     '''
     Wizard :
     When multiple invoices are selected to be printed in the QR-Iban format,
-    this wizard will appear if one or more invoice(s) could not be QR-printed (wrong format...)
+    this wizard_test will appear if one or more invoice(s) could not be QR-printed (wrong format...)
     The user will then be able to print the invoices that couldn't be printed in the QR format in the normal format, or
     to see a list of those.
     The non-QR invoices will have a note logged in their chatter, detailing the reason of the failure.
     '''
-    _name = 'l10n_ch.qr_invoice.wizard'
+    _name = 'l10n_ch.qr_invoice.wizard_test'
     _description = 'Handles problems occurring while creating multiple QR-invoices at once'
 
     nb_qr_inv = fields.Integer(readonly=True)

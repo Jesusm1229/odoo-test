@@ -8,7 +8,7 @@ class TestFECExport(AccountTestInvoicingCommon):
         self.init_invoice("out_invoice", self.partner_a, "2019-01-01", amounts=[1000, 2000], post=True)
         self.init_invoice("out_invoice", self.partner_a, "2020-01-01", amounts=[1000, 2000], post=True)
         # Create a new FEC export
-        fec_export = self.env['l10n_fr.fec.export.wizard'].create({
+        fec_export = self.env['l10n_fr.fec.export.wizard_test'].create({
             'date_from': '2020-01-01',
             'date_to': '2020-12-31',
         })
@@ -49,7 +49,7 @@ class TestFECExport(AccountTestInvoicingCommon):
         for i, company in enumerate(all_companies, start=1):
             self.init_invoice('out_invoice', invoice_date="2021-01-01", post=True, amounts=[i * 100], company=company)
 
-        fec_export = self.env['l10n_fr.fec.export.wizard'].create({
+        fec_export = self.env['l10n_fr.fec.export.wizard_test'].create({
             'date_from': '2021-01-01',
             'date_to': '2021-12-31',
         })
@@ -73,7 +73,7 @@ class TestFECExport(AccountTestInvoicingCommon):
             'company_id': main_company.id,
         })
 
-        fec_export = self.env['l10n_fr.fec.export.wizard'].create({
+        fec_export = self.env['l10n_fr.fec.export.wizard_test'].create({
             'date_from': '2021-01-01',
             'date_to': '2021-12-31',
         })

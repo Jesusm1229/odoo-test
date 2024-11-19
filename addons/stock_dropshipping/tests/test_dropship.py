@@ -215,7 +215,7 @@ class TestDropship(common.TransactionCase):
 
     def test_sol_reserved_qty_wizard_dropship(self):
         """
-        Check that the reserved qty wizard related to a sol is computed from
+        Check that the reserved qty wizard_test related to a sol is computed from
         the PO if the product is dropshipped.
         """
         product = self.dropship_product

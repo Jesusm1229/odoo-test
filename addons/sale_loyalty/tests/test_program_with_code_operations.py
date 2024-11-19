@@ -19,7 +19,7 @@ class TestProgramWithCodeOperations(TestSaleCouponCommon):
         # In this case, it will generate the coupon for every partner.
         # Thus, we should ensure that if you leave the domain untouched, it generates a coupon for each partner
         # as hinted on the screen ('Match all records (X records)')
-        self.env['loyalty.generate.wizard'].with_context(active_id=self.code_promotion_program.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.code_promotion_program.id).create({
             'mode': 'selected',
         }).generate_coupons()
         self.assertEqual(len(self.code_promotion_program.coupon_ids), len(self.env['res.partner'].search([])), "It should have generated a coupon for every partner")
@@ -31,7 +31,7 @@ class TestProgramWithCodeOperations(TestSaleCouponCommon):
         self.code_promotion_program.reward_ids.reward_type = 'discount'
         self.code_promotion_program.reward_ids.discount = 10
 
-        self.env['loyalty.generate.wizard'].with_context(active_id=self.code_promotion_program.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.code_promotion_program.id).create({
             'mode': 'selected',
             'customer_ids': self.partner,
             'points_granted': 1,
@@ -75,7 +75,7 @@ class TestProgramWithCodeOperations(TestSaleCouponCommon):
         self.code_promotion_program.reward_ids.reward_type = 'discount'
         self.code_promotion_program.reward_ids.discount = 10
 
-        self.env['loyalty.generate.wizard'].with_context(active_id=self.code_promotion_program.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.code_promotion_program.id).create({
             'coupon_qty': 1,
             'points_granted': 1,
         }).generate_coupons()
@@ -119,7 +119,7 @@ class TestProgramWithCodeOperations(TestSaleCouponCommon):
         # Test case: Generate a coupon (10% discount) and apply it on an order with a specific pricelist (10% discount)
 
         self.code_promotion_program_with_discount.applies_on = 'future'
-        self.env['loyalty.generate.wizard'].with_context(active_id=self.code_promotion_program_with_discount.id).create({
+        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.code_promotion_program_with_discount.id).create({
             'coupon_qty': 1,
             'points_granted': 1,
         }).generate_coupons()

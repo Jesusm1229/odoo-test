@@ -156,7 +156,7 @@ class AccountPayment(models.Model):
             'name': _("Refund"),
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
-            'res_model': 'payment.refund.wizard',
+            'res_model': 'payment.refund.wizard_test',
             'target': 'new',
         }
 

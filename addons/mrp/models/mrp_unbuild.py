@@ -169,7 +169,7 @@ class MrpUnbuild(models.Model):
     def action_unbuild(self):
         self.ensure_one()
         self._check_company()
-        # remove the default_* keys that was only needed in the unbuild wizard
+        # remove the default_* keys that was only needed in the unbuild wizard_test
         self.env.context = dict(clean_context(self.env.context))
         if self.product_id.tracking != 'none' and not self.lot_id.id:
             raise UserError(_('You should provide a lot number for the final product.'))

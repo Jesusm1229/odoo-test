@@ -6,7 +6,7 @@ from odoo.tools import float_compare
 
 
 class L10nInWithholdWizard(models.TransientModel):
-    _name = 'l10n_in.withhold.wizard'
+    _name = 'l10n_in.withhold.wizard_test'
     _description = "Withhold Wizard"
     _check_company_auto = True
 
@@ -70,7 +70,7 @@ class L10nInWithholdWizard(models.TransientModel):
         compute='_compute_l10n_in_tds_tax_type'
     )
     withhold_line_ids = fields.One2many(
-        comodel_name='l10n_in.withhold.wizard.line',
+        comodel_name='l10n_in.withhold.wizard_test.line',
         inverse_name='withhold_id',
         string="TDS Lines",
         readonly=False,
@@ -244,13 +244,13 @@ class L10nInWithholdWizard(models.TransientModel):
 
 
 class L10nInWithholdWizardLine(models.TransientModel):
-    _name = 'l10n_in.withhold.wizard.line'
+    _name = 'l10n_in.withhold.wizard_test.line'
     _description = "Withhold Wizard Lines"
 
     base = fields.Monetary(string="Base")
     currency_id = fields.Many2one(related='withhold_id.currency_id')
     l10n_in_tds_tax_type = fields.Char(related='withhold_id.l10n_in_tds_tax_type')
-    withhold_id = fields.Many2one(comodel_name='l10n_in.withhold.wizard', required=True)
+    withhold_id = fields.Many2one(comodel_name='l10n_in.withhold.wizard_test', required=True)
     tax_id = fields.Many2one(
         comodel_name='account.tax',
         string="TDS Tax",
