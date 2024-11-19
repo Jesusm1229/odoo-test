@@ -1,0 +1,38 @@
+<odoo>
+  <data>
+    <record id="view_wizard" model="ir.ui.view">
+      <field name="name">wizard.form.view</field>
+      <field name="model">wizard_test.test</field>
+      <field name="arch" type="xml">
+        <form string="Wizard">
+          <group>
+            <field name="date_from"/>
+            <field name="date_to"/>
+          </group>
+          <footer>
+            <button name="print_report" string="Print Report" type="object" class="btn-primary"/>
+            <button string="Cancel" class="btn-secondary" special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+
+
+    <record id="action_wizard" model="ir.actions.act_window">
+      <field name="name">Wizard</field>
+      <field name="res_model">wizard_test.test</field>
+      <field name="view_mode">form</field>
+      <field name="view_id" ref="view_wizard"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+            id="menu_root"
+            name="Wizard"
+    />
+
+       <menuitem id="menu_wizard_test" name="Wizards" parent="menu_root"/>
+<menuitem id="menu_wizard_test_list" name="Wizards List" parent="menu_wizard_test" action="action_wizard"/>
+
+  </data>
+</odoo>

@@ -1,0 +1,42 @@
+<odoo>
+    <data>
+        <record id="nomina_tree:view" model="ir.ui.view">
+            <field name="name">nomina.tree.view</field>
+            <field name="model">nomina.nomina</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="value"/>
+                </list>
+            </field>
+        </record>
+        <record id="nomina_form_view" model="ir.ui.view">
+            <field name="name">Nomina Form View</field>
+            <field name="model">nomina.nomina</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <field name="value"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        #Añadiendo elemento a vista pestaña
+        <record id="nomina_action" model="ir.actions.act_window">
+            <field name="name">Nomina</field>
+            <field name="res_model">nomina.nomina</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_root" name="Nomina"/>
+        <menuitem id="menu_nomina" name="Nominas" parent="menu_root"/>
+        <menuitem id="menu_nomina_list" name="Nomina List"
+                  parent="menu_nomina" action="nomina_action"/>
+
+
+    </data>
+</odoo>

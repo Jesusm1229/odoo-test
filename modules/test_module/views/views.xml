@@ -1,0 +1,50 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="view_work_activity_list">
+            <field name="name">Work Activity List</field>
+            <field name="model">work.activity</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_work_activity_form" model="ir.ui.view">
+            <field name="name">Work Activity Form</field>
+            <field name="model">work.activity</field>
+            <field name="arch" type="xml">
+                <form string="Employee">
+                        <group>
+                            <field name="name"/>
+                            <field name="active"/>
+                        </group>
+                    <field name="work_activity_line_ids"/>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_work_activity_line_list">
+            <field name="name">Work Activity Line List</field>
+            <field name="model">work.activity.line</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="sub_activity"/>
+                    <field name="deadline"/>
+                    <field name="work_activity_id" invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_work_activity" model="ir.actions.act_window">
+            <field name="name">Work Activity</field>
+            <field name="res_model">work.activity</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_test_module" name="Test"/>
+        <menuitem id="menu_work_activity" name="Work Activity" parent="menu_test_module" action="action_work_activity"/>
+    </data>
+</odoo>

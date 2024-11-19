@@ -1,0 +1,30 @@
+<odoo>
+    <data>
+        <record id="view_employee_form" model="ir.ui.view">
+            <field name="name">employee.form</field>
+            <field name="model">company.employee</field>
+            <field name="arch" type="xml">
+                <form string="Employee">
+                    <sheet>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="partner_id" options="{'no_create': False}"/>
+                            <field name="phone"/>
+                            <field name="verified"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_employee" model="ir.actions.act_window">
+            <field name="name">Employees</field>
+            <field name="res_model">company.employee</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_root" name="Company"/>
+        <menuitem id="menu_employees" name="Employees" parent="menu_root" action="action_employee"/>
+    </data>
+</odoo>
