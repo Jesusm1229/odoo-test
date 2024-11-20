@@ -2,6 +2,8 @@
 import logging
 from datetime import timedelta
 
+from unicodedata import category
+
 from odoo import models, fields, api
 from odoo.api import readonly
 from odoo.exceptions import ValidationError
@@ -25,6 +27,20 @@ class Developer(models.Model):
                                       )
 
     task_ids = fields.One2many('manage.task', 'developer', string="Tasks")
+
+    #Cuando cambie el is_dev. Para buscar el category name vas a tech. Modelo res.partner y ves el campo name
+    @api.onchange('is_dev')
+    def _onchange_is_dev(self):
+        categories = self.env['res.partner.category'].search([('name', '=', 'Developer')])
+        if len(categories) > 0:
+            category = categories[0]
+        else:
+            category = self.env['res.partner.category'].create({'name': 'Developer'})
+    #si es developer se añade la categoría. Category es un campo many2many. El 4 es añadir y el 3 es quitar
+        self.category_id = [(4, category.id)] #if self.is_dev else [(3, category.id)]
+
+
+
 
 
 

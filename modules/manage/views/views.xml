@@ -30,7 +30,12 @@
            <!-- <field name="deadline"/>-->
             <field name="is_paused"/>
             <field name="sprint_id"/>
-            <field name="developer_id"/>
+<!--            se añade el filtro domain para que sólo muestre los developers-->
+            <field
+                    name="developer_id"
+                    domain="[('is_dev', '=', 'true')]"
+                    context="{'form_view_ref':'manage.devs_partner_form'}"
+            />
             <field name="technology_ids"/>
             </group>
         </form>
@@ -74,8 +79,8 @@
             <group>
               <group>
 <!--                campo is deve sólo para comprobar-->
-                <field name="is_dev"/>
-                <field name="technology_ids"></field>
+                <field name="is_dev" attrs="{'invisible': True}"/>
+                <field name="technology_ids"/>
               </group>
             </group>
           </page>
