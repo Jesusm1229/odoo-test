@@ -9,6 +9,20 @@ from odoo.tools.safe_eval import datetime
 
 _logger = logging.getLogger(__name__)
 
+class Developer(models.Model):
+    #herencia de clase. Cuando se usa el _inherit junto con el mismo _name del objeto se crea una extensión. Si el name cambia  se crea un objeto nuevo con su propia database y es ignorada por vistas existentes
+    # _name = 'res.partner'
+    _inherit = 'res.partner'
+
+    technology_ids = fields.Many2many('manage.technology',
+                                      relation= 'developer_tecnhologies',
+                                      column1='developer_id',
+                                      column2='technology_id',
+                                      string="Technologies"
+                                      )
+
+
+
 
 
 class Project(models.Model):
