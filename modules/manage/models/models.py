@@ -14,6 +14,9 @@ class Developer(models.Model):
     # _name = 'res.partner'
     _inherit = 'res.partner'
 
+    # crearemos si el usuario que se crea es developer o no
+    is_dev = fields.Boolean()
+
     technology_ids = fields.Many2many('manage.technology',
                                       relation= 'developer_tecnhologies',
                                       column1='developer_id',
@@ -21,7 +24,7 @@ class Developer(models.Model):
                                       string="Technologies"
                                       )
 
-
+    task_ids = fields.One2many('manage.task', 'developer', string="Tasks")
 
 
 
@@ -102,6 +105,8 @@ class Task(models.Model):
     #campo relacional no almacenado en DB
     project_id = fields.Many2one('manage.project', related='history_id.project_id', readonly=True, string="Project")
 
+    #añadiendo un campo many2one para el desarrollador. Muchas tareas pueden ser asignadas a un desarrollador
+    developer_id = fields.Many2one('res.partner', string="Developer")
 
     #get code of the task
     #@api.one
