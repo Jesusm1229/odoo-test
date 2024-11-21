@@ -23,7 +23,16 @@ Long description of module's purpose
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        # es importante el orden: primero el views y luego los propios
         'views/views.xml',
+        'views/project_view.xml',
+        'views/history_view.xml',
+        'views/sprint_view.xml',
+        'views/task.xml'
+        'views/bug_view.xml',
+        'views/improvement_view.xml',
+        'views/dev_view.xml',
+        'views/techonology_view.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode

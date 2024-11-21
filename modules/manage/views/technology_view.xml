@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+          <record model="ir.actions.act_window" id="manage.action_technology_window">
+      <field name="name">manage task window</field>
+      <field name="res_model">manage.technology</field>
+      <field name="view_mode">list,form</field>
+    </record>
+
+        <menuitem name="Technologies" id="manage.menu_technology_list" parent="manage.menu_1"
+              action="manage.action_technology_window"/>
+
+    </data>
+</odoo>

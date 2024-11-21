@@ -1,155 +1,10 @@
 <odoo>
   <data>
-    <!-- explicit list view definition -->
 
 
 
 
 
-     <record model="ir.ui.view" id="manage.sprint_form">
-      <field name="name">manage sprint Form</field>
-      <field name="model">manage.sprint</field>
-      <field name="arch" type="xml">
-        <form>
-          <group>
-            <field name="project_id"/>
-            <field name="name"/>
-            <field name="description"/>
-            <field name="duration"/>
-            <field name="start_date"/>
-            <field name="end_date"/>
-            <field name="task_ids"/>
-          </group>
-        </form>
-      </field>
-    </record>
-
-<!--    herencia importante-->
-    <!--     herencia de form. Si quieres sustituir el view de res_partner-->
-     <record model="ir.ui.view" id="manage.devs_partner_form">
-      <field name="name">manage project Form</field>
-      <field name="model">res.partner</field>
-       <!--     herencia de form. Si quieres heredar y sólo añadir el atributo del form -->
-<!--       tenemos que ir al formulario de los contactos. Darle al bug, y vsta de edición form-->
-       <field name="inherit_id" ref="base.view_partner_form"></field>
-<!--       Con el modo primario no modificamos el view-->
-       <field name="mode">primary</field>
-      <field name="arch" type="xml">
-<!--       Ubicamos la posición y la añadimos. No necesitamos el form porque lo susituiría-->
-
-        <xpath expr="//sheet/notebook/page[@name='internal_notes']" position="after">
-<!--          mostrar pagina sólo si default_is_dev no es true-->
-          <page name="devs" string="Devs" attrs="{'invisible': [('default_is_dev', '!=', True)]}">
-            <group>
-              <group>
-<!--                campo is deve sólo para comprobar-->
-                <field name="is_dev" attrs="{'invisible': True}"/>
-                <field name="technology_ids"/>
-              </group>
-            </group>
-          </page>
-
-        </xpath>
-      </field>
-    </record>
-
-
-
-    <record model="ir.ui.view" id="manage.project_form">
-      <field name="name">manage project Form</field>
-      <field name="model">manage.project</field>
-      <field name="arch" type="xml">
-        <form>
-          <group>
-            <field name="name"/>
-            <field name="description"/>
-            <field name="history_ids"/>
-            </group>
-        </form>
-      </field>
-    </record>
-
-    <record model="ir.ui.view" id="manage.history_form">
-      <field name="name">manage history Form</field>
-      <field name="model">manage.history</field>
-      <field name="arch" type="xml">
-        <form>
-          <group>
-            <field name="project_id"/>
-            <field name="name"/>
-            <field name="description"/>
-            <field name="task_ids"/>
-            <field name="technology_ids"/>
-          </group>
-        </form>
-      </field>
-    </record>
-
-    <!-- actions opening views on models -->
-
-    <record model="ir.actions.act_window" id="manage.action_developer_window">
-      <field name="name">manage developer window</field>
-<!--          mosca acá. Se usa el modelo res.partner heredado-->
-      <field name="res_model">res.partner</field>
-      <field name="view_mode">list,form</field>
-    </record>
-
-    <!-- HERENCIA.
-     Este view te indica en qué vista vas a cargar en cada momento según la secuencia-->
-    <record model="ir.actions.act_window.view" id="manage.action_developer_list">
-      <field name="sequence" eval="1"/>
-<!--      <field name="name">manage developer window</field>-->
-<!--          mosca acá. Se usa el modelo res.partner heredado-->
-      <field name="view_mode">list</field>
-<!--      hay que buscar la base en el view:list desde el debug en la vista-->
-      <field name="view_id" ref="base.view_partner_tree"/>
-      <field name="act_window_id" ref="manage.action_developer_window"/>
-    </record>
-
-
-    <record model="ir.actions.act_window.view" id="manage.action_developer_form">
-      <field name="sequence" eval="2"/>
-      <field name="view_mode">form</field>
-      <field name="view_id" ref="manage.devs_partner_form"/>
-      <field name="act_window_id" ref="manage.action_developer_window"/>
-    </record>
-
-
-
-<!--   Termina herencia -->
-
-
-    <record model="ir.actions.act_window" id="manage.action_project_window">
-      <field name="name">manage project window</field>
-      <field name="res_model">manage.project</field>
-      <field name="view_mode">list,form</field>
-<!--      desde acá añadimos un nuevo campo domain que es un filtro sólo mostrará si son desarrolladores-->
-      <field name="domain">[('is_dev', '=', 'true')]</field>
-<!--      context guarda un diccionario de cosas que se le pasa al cliente. Debe estar en formato JSON-->
-      <field name="context">[('default_is_dev':True)]</field>
-
-    </record>
-
-    <record model="ir.actions.act_window" id="manage.action_sprint_window">
-      <field name="name">manage sprint window</field>
-      <field name="res_model">manage.sprint</field>
-      <field name="view_mode">list,form</field>
-    </record>
-
-    <record model="ir.actions.act_window" id="manage.action_history_window">
-      <field name="name">manage history window</field>
-      <field name="res_model">manage.history</field>
-      <field name="view_mode">list,form</field>
-    </record>
-
-
-
-
-    <record model="ir.actions.act_window" id="manage.action_technology_window">
-      <field name="name">manage task window</field>
-      <field name="res_model">manage.technology</field>
-      <field name="view_mode">list,form</field>
-    </record>
 
 
 
@@ -162,22 +17,11 @@
     <menuitem name="Management" id="manage.menu_1" parent="manage.menu_root"/>
 
     <!-- actions -->
-    <menuitem name="Project" id="manage.menu_project_list" parent="manage.menu_1"
-              action="manage.action_project_window"/>
-
-    <menuitem name="History" id="manage.menu_history_list" parent="manage.menu_1"
-              action="manage.action_history_window"/>
 
 
 
-    <menuitem name="Sprint" id="manage.menu_sprint_list" parent="manage.menu_1"
-              action="manage.action_sprint_window"/>
 
-    <menuitem name="Technologies" id="manage.menu_technology_list" parent="manage.menu_1"
-              action="manage.action_technology_window"/>
 
-     <menuitem name="Developer" id="manage.menu_dev_list" parent="manage.menu_1"
-              action="manage.action_developer_window"/>
 
 
   </data>

@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="manage.project_form">
+            <field name="name">manage project Form</field>
+            <field name="model">manage.project</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                        <field name="history_ids"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="manage.action_project_window">
+            <field name="name">manage project window</field>
+            <field name="res_model">manage.project</field>
+            <field name="view_mode">list,form</field>
+            <!--      desde acá añadimos un nuevo campo domain que es un filtro sólo mostrará si son desarrolladores-->
+            <field name="domain">[('is_dev', '=', 'true')]</field>
+            <!--      context guarda un diccionario de cosas que se le pasa al cliente. Debe estar en formato JSON-->
+            <field name="context">[('default_is_dev':True)]</field>
+
+        </record>
+
+        <menuitem name="Project" id="manage.menu_project_list" parent="manage.menu_1"
+                  action="manage.action_project_window"/>
+    </data>
+</odoo>
