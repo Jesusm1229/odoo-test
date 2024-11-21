@@ -25,7 +25,7 @@
             </field>
         </record>
 
-        #Añadiendo elemento a vista pestaña
+<!--        Añadiendo elemento a vista pestaña-->
         <record id="nomina_action" model="ir.actions.act_window">
             <field name="name">Nomina</field>
             <field name="res_model">nomina.nomina</field>
