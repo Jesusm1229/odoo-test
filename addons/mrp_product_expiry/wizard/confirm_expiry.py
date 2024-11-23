@@ -16,13 +16,13 @@ class ConfirmExpiry(models.TransientModel):
             # Shows expired lots only if we are more than one expired lot.
             self.show_lots = len(self.lot_ids) > 1
             if self.show_lots:
-                # For multiple expired lots, they are listed in the wizard_test view.
+                # For multiple expired lots, they are listed in the wizard view.
                 self.description = _(
                     "You are going to use some expired components."
                     "\nDo you confirm you want to proceed?"
                 )
             else:
-                # For one expired lot, its name is written in the wizard_test message.
+                # For one expired lot, its name is written in the wizard message.
                 self.description = _(
                     "You are going to use the component %(product_name)s, %(lot_name)s which is expired."
                     "\nDo you confirm you want to proceed?",

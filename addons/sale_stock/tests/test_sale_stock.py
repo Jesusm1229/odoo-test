@@ -122,6 +122,16 @@ class TestSaleStock(TestSaleStockCommon, ValuationReconciliationTestCommon):
         and whatever other model there is in stock with "invoice on order" products
         """
         # let's cheat and put all our products to "invoice on order"
+        product_list = (
+                    self.company_data['product_order_no'],
+                    self.company_data['product_service_delivery'],
+                    self.company_data['product_service_order'],
+                    self.company_data['product_delivery_no'],
+                )
+
+        for product in product_list:
+            product.invoice_policy = 'order'
+
         self.so = self.env['sale.order'].create({
             'partner_id': self.partner_a.id,
             'partner_invoice_id': self.partner_a.id,
@@ -132,17 +142,10 @@ class TestSaleStock(TestSaleStockCommon, ValuationReconciliationTestCommon):
                 'product_uom_qty': 2,
                 'product_uom': p.uom_id.id,
                 'price_unit': p.list_price,
-                }) for p in (
-                    self.company_data['product_order_no'],
-                    self.company_data['product_service_delivery'],
-                    self.company_data['product_service_order'],
-                    self.company_data['product_delivery_no'],
-                )],
+                }) for p in product_list],
             'pricelist_id': self.company_data['default_pricelist'].id,
             'picking_policy': 'direct',
         })
-        for sol in self.so.order_line:
-            sol.product_id.invoice_policy = 'order'
         # confirm our standard so, check the picking
         self.so.order_line._compute_product_updatable()
         self.assertTrue(self.so.order_line.sorted()[0].product_updatable)
@@ -269,7 +272,7 @@ class TestSaleStock(TestSaleStockCommon, ValuationReconciliationTestCommon):
         # deliver them
         # One of the move is for a consumable product, thus is assigned. The second one is for a
         # storable product, thus is unavailable. Hitting `button_validate` will first ask to
-        # process all the reserved quantities and, if the user chose to process, a second wizard_test
+        # process all the reserved quantities and, if the user chose to process, a second wizard
         # will ask to create a backorder for the unavailable product.
         self.assertEqual(len(self.so.picking_ids), 1)
         res_dict = self.so.picking_ids.sorted()[0].button_validate()
@@ -1233,7 +1236,7 @@ class TestSaleStock(TestSaleStockCommon, ValuationReconciliationTestCommon):
         return_picking.button_validate()
 
     def test_return_for_exchange_negativ(self):
-        """test product added into the return wizard_test are excluded in case of return for exchange"""
+        """test product added into the return wizard are excluded in case of return for exchange"""
         sale_order = self._get_new_sale_order()
         sale_order.action_confirm()
         picking = sale_order.picking_ids
@@ -1926,7 +1929,7 @@ class TestSaleStock(TestSaleStockCommon, ValuationReconciliationTestCommon):
 
     def test_sol_reserved_qty_wizard_3_steps_delivery(self):
         """
-        Check that the reserved qty wizard_test related to a sol is computed from
+        Check that the reserved qty wizard related to a sol is computed from
         the pick move in 2+ step deliveries.
         """
         admin = self.env.ref('base.user_admin')

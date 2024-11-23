@@ -4,7 +4,7 @@ from odoo import Command, fields, models
 
 
 class HrDepartureWizard(models.TransientModel):
-    _inherit = 'hr.departure.wizard_test'
+    _inherit = 'hr.departure.wizard'
 
     unassign_equipment = fields.Boolean("Free Equiments", default=True, help="Unassign Employee from Equipments")
 

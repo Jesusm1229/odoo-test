@@ -116,9 +116,9 @@ class ResConfigConfigurable(models.TransientModel):
 
 
 class ResConfigSettings(models.TransientModel, ResConfigModuleInstallationMixin):
-    """ Base configuration wizard_test for application settings.  It provides support for setting
+    """ Base configuration wizard for application settings.  It provides support for setting
         default values, assigning groups to employee users, and installing modules.
-        To make such a 'settings' wizard_test, define a model like::
+        To make such a 'settings' wizard, define a model like::
 
             class MyConfigWizard(models.TransientModel):
                 _name = 'my.settings'
@@ -435,7 +435,7 @@ class ResConfigSettings(models.TransientModel, ResConfigModuleInstallationMixin)
         return {}
 
     def _compute_display_name(self):
-        """ Override display_name method to return an appropriate configuration wizard_test
+        """ Override display_name method to return an appropriate configuration wizard
         name, and not the generated name."""
         action = self.env['ir.actions.act_window'].search([('res_model', '=', self._name)], limit=1)
         self.display_name = action.name or self._name

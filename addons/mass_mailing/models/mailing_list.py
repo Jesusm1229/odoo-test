@@ -136,7 +136,7 @@ class MassMailingList(models.Model):
     # ------------------------------------------------------
 
     def action_open_import(self):
-        """Open the mailing list contact import wizard_test."""
+        """Open the mailing list contact import wizard."""
         action = self.env['ir.actions.actions']._for_xml_id('mass_mailing.mailing_contact_import_action')
         action['context'] = {
             **self.env.context,

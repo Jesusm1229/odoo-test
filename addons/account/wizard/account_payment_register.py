@@ -212,9 +212,7 @@ class AccountPaymentRegister(models.TransientModel):
         payment_values = batch_result['payment_values']
         foreign_currency_id = payment_values['currency_id']
         partner_bank_id = payment_values['partner_bank_id']
-        company = batch_result['lines'].company_id
-        if len(company) > 1:
-            company = company._accessible_branches()[:1]
+        company = min(batch_result['lines'].company_id, key=lambda c: len(c.parent_ids))
 
         currency_domain = [('currency_id', '=', foreign_currency_id)]
         partner_bank_domain = [('bank_account_id', '=', partner_bank_id)]
@@ -248,13 +246,13 @@ class AccountPaymentRegister(models.TransientModel):
     @api.model
     def _get_batch_available_partner_banks(self, batch_result, journal):
         payment_values = batch_result['payment_values']
-        company = batch_result['lines'].company_id._accessible_branches()[:1]
 
         # A specific bank account is set on the journal. The user must use this one.
         if payment_values['payment_type'] == 'inbound':
             # Receiving money on a bank account linked to the journal.
             return journal.bank_account_id
         else:
+            company = min(batch_result['lines'].company_id, key=lambda c: len(c.parent_ids))
             # Sending money to a bank account owned by a partner.
             return batch_result['lines'].partner_id.bank_ids.filtered(lambda x: x.company_id.id in (False, company.id))._origin
 
@@ -281,13 +279,13 @@ class AccountPaymentRegister(models.TransientModel):
     @api.model
     def _get_wizard_values_from_batch(self, batch_result):
         ''' Extract values from the batch passed as parameter (see '_compute_batches')
-        to be mounted in the wizard_test view.
+        to be mounted in the wizard view.
         :param batch_result:    A batch computed by '_compute_batches'.
         :return:                A dictionary containing valid fields
         '''
         payment_values = batch_result['payment_values']
         lines = batch_result['lines']
-        company = lines[0].company_id._accessible_branches()[:1]
+        company = min(lines.company_id, key=lambda c: len(c.parent_ids))
 
         source_amount = abs(sum(lines.mapped('amount_residual')))
         if payment_values['currency_id'] == company.currency_id.id:
@@ -322,7 +320,7 @@ class AccountPaymentRegister(models.TransientModel):
 
     @api.depends('line_ids')
     def _compute_batches(self):
-        ''' Group the account.move.line linked to the wizard_test together.
+        ''' Group the account.move.line linked to the wizard together.
         Lines are grouped if they share 'partner_id','account_id','currency_id' & 'partner_type' and if
         0 or 1 partner_bank_id can be determined for the group.
 
@@ -336,7 +334,7 @@ class AccountPaymentRegister(models.TransientModel):
             if len(lines.company_id.root_id) > 1:
                 raise UserError(_("You can't create payments for entries belonging to different companies."))
             if not lines:
-                raise UserError(_("You can't open the register payment wizard_test without at least one receivable/payable line."))
+                raise UserError(_("You can't open the register payment wizard without at least one receivable/payable line."))
 
             batches = defaultdict(lambda: {'lines': self.env['account.move.line']})
             banks_per_partner = defaultdict(lambda: {'inbound': set(), 'outbound': set()})
@@ -427,9 +425,9 @@ class AccountPaymentRegister(models.TransientModel):
 
                 wizard.can_edit_wizard = True
             else:
-                # == Multiple batches: The wizard_test is not editable  ==
+                # == Multiple batches: The wizard is not editable  ==
                 wizard.update({
-                    'company_id': wizard.batches[0]['lines'][0].company_id._accessible_branches()[:1].id,
+                    'company_id': min(wizard.batches, key=lambda batch: len(batch['lines'].company_id.parent_ids))['lines'].company_id.id,
                     'partner_id': False,
                     'partner_type': False,
                     'payment_type': wizard_values_from_batch['payment_type'],
@@ -668,7 +666,7 @@ class AccountPaymentRegister(models.TransientModel):
             lines |= value['line']
 
         return {
-            # default amount shown in the wizard_test (different from full for installments)
+            # default amount shown in the wizard (different from full for installments)
             'amount_by_default': abs(common + by_default),
             'full_amount': abs(common + by_default + full_amount),
             # for_difference is used to compute the difference for the Early Payment Discount
@@ -919,7 +917,7 @@ class AccountPaymentRegister(models.TransientModel):
                 lines = self.env['account.move.line'].browse(self._context.get('active_ids', []))
             else:
                 raise UserError(_(
-                    "The register payment wizard_test should only be called on account.move or account.move.line records."
+                    "The register payment wizard should only be called on account.move or account.move.line records."
                 ))
 
             if 'journal_id' in res and not self.env['account.journal'].browse(res['journal_id']).filtered_domain([
@@ -949,6 +947,8 @@ class AccountPaymentRegister(models.TransientModel):
                 raise UserError(_("You can't register a payment because there is nothing left to pay on the selected journal items."))
             if len(lines.company_id.root_id) > 1:
                 raise UserError(_("You can't create payments for entries belonging to different companies."))
+            if len(lines.company_id.filtered(lambda c: c.root_id not in lines.company_id)) > 1:
+                raise UserError(_("You can't create payments for entries belonging to different branches."))
             if len(set(available_lines.mapped('account_type'))) > 1:
                 raise UserError(_("You can't register payments for both inbound and outbound moves at the same time."))
 
@@ -1086,7 +1086,7 @@ class AccountPaymentRegister(models.TransientModel):
                             * to_reconcile: The journal items to perform the reconciliation.
                             * batch:        A python dict containing everything you want about the source journal items
                                             to which a payment will be created (see '_compute_batches').
-        :param edit_mode:   Is the wizard_test in edition mode.
+        :param edit_mode:   Is the wizard in edition mode.
         """
 
         payments = self.env['account.payment']\
@@ -1100,7 +1100,7 @@ class AccountPaymentRegister(models.TransientModel):
             # order to fully paid the source journal items.
             # For example, suppose a new currency B having a rate 100:1 regarding the company currency A.
             # If you try to pay 12.15A using 0.12B, the computed balance will be 12.00A for the payment instead of 12.15A.
-            if edit_mode:
+            if edit_mode and payment.move_id:
                 lines = vals['to_reconcile']
 
                 # Batches are made using the same currency so making 'lines.currency_id' is ok.
@@ -1147,7 +1147,7 @@ class AccountPaymentRegister(models.TransientModel):
                             * to_reconcile: The journal items to perform the reconciliation.
                             * batch:        A python dict containing everything you want about the source journal items
                                             to which a payment will be created (see '_compute_batches').
-        :param edit_mode:   Is the wizard_test in edition mode.
+        :param edit_mode:   Is the wizard in edition mode.
         """
         payments = self.env['account.payment']
         for vals in to_process:
@@ -1162,7 +1162,7 @@ class AccountPaymentRegister(models.TransientModel):
                             * to_reconcile: The journal items to perform the reconciliation.
                             * batch:        A python dict containing everything you want about the source journal items
                                             to which a payment will be created (see '_compute_batches').
-        :param edit_mode:   Is the wizard_test in edition mode.
+        :param edit_mode:   Is the wizard in edition mode.
         """
         domain = [
             ('parent_state', '=', 'posted'),

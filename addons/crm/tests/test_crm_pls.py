@@ -82,9 +82,9 @@ class TestCRMPLS(TransactionCase):
         return leads_with_tags
 
     def test_crm_lead_pls_update(self):
-        """ We test here that the wizard_test for updating probabilities from settings
+        """ We test here that the wizard for updating probabilities from settings
             is getting correct value from config params and after updating values
-            from the wizard_test, the config params are correctly updated
+            from the wizard, the config params are correctly updated
         """
         # Set the PLS config
         frequency_fields = self.env['crm.lead.scoring.frequency.field'].search([])
@@ -98,12 +98,12 @@ class TestCRMPLS(TransactionCase):
         fields_to_remove = frequency_fields.filtered(lambda f: f.field_id.name in ['source_id', 'lang_id'])
         fields_after_updation_str = ','.join((frequency_fields - fields_to_remove).mapped('field_id.name'))
 
-        # Check that wizard_test to update lead probabilities has correct value set by default
+        # Check that wizard to update lead probabilities has correct value set by default
         pls_update_wizard = Form(self.env['crm.lead.pls.update'])
         with pls_update_wizard:
             self.assertEqual(Date.to_string(pls_update_wizard.pls_start_date), pls_start_date_str, 'Correct date is taken from config')
             self.assertEqual(','.join([f.field_id.name for f in pls_update_wizard.pls_fields]), pls_fields_str, 'Correct fields are taken from config')
-            # Update the wizard_test values and check that config values and probabilities are updated accordingly
+            # Update the wizard values and check that config values and probabilities are updated accordingly
             pls_update_wizard.pls_start_date =  date_to_update
             for field in fields_to_remove:
                 pls_update_wizard.pls_fields.remove(field.id)

@@ -583,9 +583,14 @@ const isValidFieldValue = (record, fieldDef) => {
         case "many2one_reference": {
             return isValidId(value, fieldDef, record);
         }
-        case "properties":
-        case "properties_definition": {
+        case "properties": {
             return value === false || isObject(value);
+        }
+        case "properties_definition": {
+            return (
+                value === false ||
+                value.every((def) => typeof def.name === "string" && typeof def.type === "string")
+            );
         }
         case "reference": {
             if (value === false) {
@@ -1783,9 +1788,16 @@ export class Model extends Array {
         ({ ids: idOrIds, fields = [], load = "_classic_read" } = kwargs);
 
         const fieldNames = fields.length ? unique(["id", ...fields]) : Object.keys(this._fields);
+        return this._read_format(idOrIds, fieldNames, load);
+    }
+
+    _read_format(idOrIds, fnames, load) {
+        const kwargs = getKwArgs(arguments, "ids", "fnames", "load");
+        ({ ids: idOrIds, fnames = [], load = "_classic_read" } = kwargs);
+
         /** @type {ModelRecord[]} */
         const records = [];
-
+        fnames = unique(["id", ...fnames]);
         // Mapping of model records used in the current read call.
         const modelMap = {
             [this._name]: {},
@@ -1793,7 +1805,7 @@ export class Model extends Array {
         for (const record of this) {
             modelMap[this._name][record.id] = record;
         }
-        for (const fieldName of fieldNames) {
+        for (const fieldName of fnames) {
             const field = this._fields[fieldName];
             if (!field) {
                 continue; // the field doesn't exist on the model, so skip it
@@ -1828,7 +1840,7 @@ export class Model extends Array {
                 continue;
             }
             const result = { id: record.id };
-            for (const fieldName of fieldNames) {
+            for (const fieldName of fnames) {
                 const field = this._fields[fieldName];
                 if (!field) {
                     continue; // the field doesn't exist on the model, so skip it
@@ -1849,6 +1861,16 @@ export class Model extends Array {
                     }
                 } else if (isX2MField(field)) {
                     result[fieldName] = record[fieldName] || [];
+                } else if (field.type === "properties") {
+                    const container = this._getPropertyContainer(field, record);
+                    if (container) {
+                        result[fieldName] = container[field.definition_record_field].map((def) => ({
+                            ...def,
+                            value: record[fieldName][def.name] ?? false,
+                        }));
+                    } else {
+                        result[fieldName] = false;
+                    }
                 } else {
                     result[fieldName] = record[fieldName] !== undefined ? record[fieldName] : false;
                 }
@@ -2893,6 +2915,22 @@ export class Model extends Array {
     }
 
     /**
+     * @param {FieldDefinition} field
+     * @param {ModelRecord} record
+     */
+    _getPropertyContainer(field, record) {
+        const relationField = this._fields[field.definition_record];
+        if (relationField) {
+            const containerModel = getRelation(this._fields[field.definition_record]);
+            const containerId = record[field.definition_record];
+            if (containerId) {
+                return containerModel.browse(containerId)[0];
+            }
+        }
+        return null;
+    }
+
+    /**
      * @param {ViewType} viewType
      * @param {number | false} [viewId]
      */
@@ -3117,6 +3155,36 @@ export class Model extends Array {
                     record[fieldName] = value;
                 } else {
                     record[fieldName] = false;
+                }
+            } else if (field.type === "properties") {
+                const properties = value || [];
+                if (properties.some((p) => p.definition_changed || p.definition_deleted)) {
+                    // Property definition changed or deleted
+                    const container = this._getPropertyContainer(field, record);
+
+                    container[field.definition_record_field] = [];
+
+                    for (const property of properties) {
+                        const definition = { ...property };
+                        delete definition.definition_changed;
+                        delete definition.definition_deleted;
+                        delete definition.value;
+
+                        if (!property.definition_deleted) {
+                            container[field.definition_record_field].push(definition);
+                        }
+                    }
+                }
+
+                // Property values
+                record[fieldName] ||= {};
+                for (const property of properties) {
+                    if (property.definition_deleted) {
+                        delete record[fieldName][property.name];
+                    } else {
+                        record[fieldName][property.name] =
+                            property.value ?? property.default ?? false;
+                    }
                 }
             } else if (!isComputed(field)) {
                 record[fieldName] = value;

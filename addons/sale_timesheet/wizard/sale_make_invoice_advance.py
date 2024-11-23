@@ -31,7 +31,7 @@ class SaleAdvancePaymentInv(models.TransientModel):
     #=== BUSINESS METHODS ===#
 
     def _create_invoices(self, sale_orders):
-        """ Override method from sale/wizard_test/sale_make_invoice_advance.py
+        """ Override method from sale/wizard/sale_make_invoice_advance.py
 
             When the user want to invoice the timesheets to the SO
             up to a specific period then we need to recompute the

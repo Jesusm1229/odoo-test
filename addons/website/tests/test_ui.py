@@ -529,11 +529,14 @@ class TestUi(odoo.tests.HttpCase):
     def test_website_media_dialog_image_shape(self):
         self.start_tour("/", 'website_media_dialog_image_shape', login='admin')
 
+    def test_website_media_dialog_insert_media(self):
+        self.start_tour("/", "website_media_dialog_insert_media", login="admin")
+
     def test_website_text_font_size(self):
         self.start_tour('/@/', 'website_text_font_size', login='admin', timeout=300)
 
     def test_update_column_count(self):
-        self.start_tour(self.env['website'].get_client_action_url('/'), 'website_update_column_count', login="admin", step_delay=100)
+        self.start_tour(self.env['website'].get_client_action_url('/'), 'website_update_column_count', login="admin")
 
     def test_website_text_highlights(self):
         self.start_tour("/", 'text_highlights', login='admin')
@@ -580,6 +583,9 @@ class TestUi(odoo.tests.HttpCase):
         website.menu_id.child_id[1:].unlink()
 
         self.start_tour('/', 'website_no_dirty_page', login='admin')
+
+    def test_website_default_snippet_text(self):
+        self.start_tour('/', 'website_default_snippet_text', login='admin')
 
     def test_widget_lifecycle(self):
         self.env['ir.asset'].create({
@@ -674,3 +680,9 @@ class TestUi(odoo.tests.HttpCase):
 
         self.env['website.menu'].save(website.id, {'data': [parent_menu, child_menu]})
         self.start_tour(self.env['website'].get_client_action_url('/'), 'edit_menus_delete_parent', login='admin')
+
+    def test_snippet_carousel(self):
+        self.start_tour('/', 'snippet_carousel', login='admin')
+
+    def test_media_iframe_video(self):
+        self.start_tour("/", "website_media_iframe_video", login="admin")

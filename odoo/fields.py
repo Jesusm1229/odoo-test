@@ -1179,7 +1179,7 @@ class Field(MetaField('DummyField', (object,), {}), typing.Generic[T]):
     def create(self, record_values):
         """ Write the value of ``self`` on the given records, which have just
         been created.
-        result = self.env[´work.ac´]
+
         :param record_values: a list of pairs ``(record, value)``, where
             ``value`` is in the format of method :meth:`BaseModel.write`
         """
@@ -1490,6 +1490,11 @@ class Boolean(Field[bool]):
     def convert_to_column(self, value, record, values=None, validate=True):
         return bool(value)
 
+    def convert_to_column_update(self, value, record):
+        if self.company_dependent:
+            value = {k: bool(v) for k, v in value.items()}
+        return super().convert_to_column_update(value, record)
+
     def convert_to_cache(self, value, record, validate=True):
         return bool(value)
 
@@ -1513,6 +1518,11 @@ class Integer(Field[int]):
 
     def convert_to_column(self, value, record, values=None, validate=True):
         return int(value or 0)
+
+    def convert_to_column_update(self, value, record):
+        if self.company_dependent:
+            value = {k: int(v or 0) for k, v in value.items()}
+        return super().convert_to_column_update(value, record)
 
     def convert_to_cache(self, value, record, validate=True):
         if isinstance(value, dict):
@@ -1619,6 +1629,11 @@ class Float(Field[float]):
         if self.company_dependent:
             return value_float
         return value
+
+    def convert_to_column_update(self, value, record):
+        if self.company_dependent:
+            value = {k: float(v or 0.0) for k, v in value.items()}
+        return super().convert_to_column_update(value, record)
 
     def convert_to_cache(self, value, record, validate=True):
         # apply rounding here, otherwise value in cache may be wrong!
@@ -2067,6 +2082,8 @@ class Html(_String):
     :param bool sanitize_attributes: whether to sanitize attributes
         (only a white list of attributes is accepted, default: ``True``)
     :param bool sanitize_style: whether to sanitize style attributes (default: ``False``)
+    :param bool sanitize_conditional_comments: whether to kill conditional comments. (default: ``True``)
+    :param bool sanitize_output_method: whether to sanitize using html or xhtml (default: ``html``)
     :param bool strip_style: whether to strip style attributes
         (removed and therefore not sanitized, default: ``False``)
     :param bool strip_classes: whether to strip classes attributes (default: ``False``)
@@ -2080,14 +2097,32 @@ class Html(_String):
     sanitize_attributes = True          # whether to sanitize attributes (only a white list of attributes is accepted)
     sanitize_style = False              # whether to sanitize style attributes
     sanitize_form = True                # whether to sanitize forms
+    sanitize_conditional_comments = True  # whether to kill conditional comments. Otherwise keep them but with their content sanitized.
+    sanitize_output_method = 'html'     # whether to sanitize using html or xhtml
     strip_style = False                 # whether to strip style attributes (removed and therefore not sanitized)
     strip_classes = False               # whether to strip classes attributes
 
     def _get_attrs(self, model_class, name):
         # called by _setup_attrs(), working together with _String._setup_attrs()
         attrs = super()._get_attrs(model_class, name)
+        # Shortcut for common sanitize options
+        # Outgoing and incoming emails should not be sanitized with the same options.
+        # e.g. conditional comments: no need to keep conditional comments for incoming emails,
+        # we do not need this Microsoft Outlook client feature for emails displayed Odoo's web client.
+        # While we need to keep them in mail templates and mass mailings, because they could be rendered in Outlook.
+        if attrs.get('sanitize') == 'email_outgoing':
+            attrs['sanitize'] = True
+            attrs.update({key: value for key, value in {
+                'sanitize_tags': False,
+                'sanitize_attributes': False,
+                'sanitize_conditional_comments': False,
+                'sanitize_output_method': 'xml',
+            }.items() if key not in attrs})
         # Translated sanitized html fields must use html_translate or a callable.
-        if attrs.get('translate') is True and attrs.get('sanitize', True):
+        # `elif` intended, because HTML fields with translate=True and sanitize=False
+        # where not using `html_translate` before and they must remain without `html_translate`.
+        # Otherwise, breaks `--test-tags .test_render_field`, for instance.
+        elif attrs.get('translate') is True and attrs.get('sanitize', True):
             attrs['translate'] = html_translate
         return attrs
 
@@ -2125,6 +2160,8 @@ class Html(_String):
             'sanitize_attributes': self.sanitize_attributes,
             'sanitize_style': self.sanitize_style,
             'sanitize_form': self.sanitize_form,
+            'sanitize_conditional_comments': self.sanitize_conditional_comments,
+            'output_method': self.sanitize_output_method,
             'strip_style': self.strip_style,
             'strip_classes': self.strip_classes
         }

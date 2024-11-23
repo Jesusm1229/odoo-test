@@ -9,7 +9,7 @@
     'data': [
         'data/microsoft_calendar_data.xml',
         'security/ir.model.access.csv',
-        'wizard_test/reset_account_views.xml',
+        'wizard/reset_account_views.xml',
         'views/res_config_settings_views.xml',
         'views/res_users_views.xml',
         'views/microsoft_calendar_views.xml',
@@ -23,6 +23,7 @@
         ],
         'web.qunit_suite_tests': [
             'microsoft_calendar/static/tests/microsoft_calendar_mock_server.js',
+            'microsoft_calendar/static/tests/microsoft_calendar_tests.js',
         ],
         'web.qunit_mobile_suite_tests': [
             'microsoft_calendar/static/tests/microsoft_calendar_mock_server.js',

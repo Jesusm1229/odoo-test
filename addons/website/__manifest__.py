@@ -175,9 +175,9 @@
         'views/ir_model_views.xml',
         'views/res_partner_views.xml',
         'views/neutralize_views.xml',
-        'wizard_test/base_language_install_views.xml',
-        'wizard_test/blocked_third_party_domains.xml',
-        'wizard_test/website_robots.xml',
+        'wizard/base_language_install_views.xml',
+        'wizard/blocked_third_party_domains.xml',
+        'wizard/website_robots.xml',
         # Replaces a post_init_hook that should be run on upgrade too.
         'data/update_theme_images.xml',
     ],

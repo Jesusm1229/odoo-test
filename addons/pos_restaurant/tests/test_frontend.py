@@ -8,7 +8,7 @@ from odoo.addons.point_of_sale.tests.test_frontend import TestPointOfSaleHttpCom
 
 
 @odoo.tests.tagged('post_install', '-at_install')
-class TestFrontend(TestPointOfSaleHttpCommon):
+class TestFrontendCommon(TestPointOfSaleHttpCommon):
 
     @classmethod
     def setUpClass(cls):
@@ -210,6 +210,9 @@ class TestFrontend(TestPointOfSaleHttpCommon):
         pricelist = cls.env['product.pricelist'].create({'name': 'Restaurant Pricelist'})
         cls.pos_config.write({'pricelist_id': pricelist.id})
 
+
+class TestFrontend(TestFrontendCommon):
+
     def test_01_pos_restaurant(self):
         self.pos_user.write({
             'groups_id': [
@@ -269,6 +272,8 @@ class TestFrontend(TestPointOfSaleHttpCommon):
         self.start_pos_tour('SplitBillScreenTour2')
 
     def test_07_split_bill_screen(self):
+        # disable kitchen printer to avoid printing errors
+        self.pos_config.is_order_printer = False
         self.pos_config.with_user(self.pos_user).open_ui()
         self.start_pos_tour('SplitBillScreenTour3')
 
@@ -279,6 +284,7 @@ class TestFrontend(TestPointOfSaleHttpCommon):
     def test_09_combo_split_bill(self):
         setup_product_combo_items(self)
         self.office_combo.write({'lst_price': 40})
+        self.pos_config.is_order_printer = False
         self.pos_config.with_user(self.pos_user).open_ui()
         self.start_pos_tour('SplitBillScreenTour4ProductCombo')
 
@@ -305,3 +311,17 @@ class TestFrontend(TestPointOfSaleHttpCommon):
     def test_13_category_check(self):
         self.pos_config.with_user(self.pos_user).open_ui()
         self.start_pos_tour('CategLabelCheck')
+
+    def test_14_change_synced_order(self):
+        self.pos_config.with_user(self.pos_user).open_ui()
+        self.start_pos_tour('OrderChange')
+
+    def test_13_crm_team(self):
+        if self.env['ir.module.module']._get('pos_sale').state != 'installed':
+            self.skipTest("'pos_sale' module is required")
+        sale_team = self.env['crm.team'].search([], limit=1)
+        self.pos_config.crm_team_id = sale_team
+        self.pos_config.with_user(self.pos_user).open_ui()
+        self.start_pos_tour('CrmTeamTour')
+        order = self.env['pos.order'].search([], limit=1)
+        self.assertEqual(order.crm_team_id.id, sale_team.id)

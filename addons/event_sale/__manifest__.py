@@ -30,8 +30,8 @@ this event.
         'security/ir.model.access.csv',
         'security/ir_rule.xml',
         'security/event_security.xml',
-        'wizard_test/event_edit_registration.xml',
-        'wizard_test/event_configurator_views.xml',
+        'wizard/event_edit_registration.xml',
+        'wizard/event_configurator_views.xml',
     ],
     'demo': [
         'data/event_sale_demo.xml',

@@ -650,7 +650,7 @@ class TestReorderingRule(TransactionCase):
         customer_loc, _ = warehouse._get_partner_locations()
         mto_rule = self.env['stock.rule'].search(
             [('warehouse_id', '=', warehouse.id),
-             ('procure_method', '=', 'mts_else_mto'),
+             ('procure_method', '=', 'make_to_order'),
              ('location_dest_id', '=', customer_loc.id)
             ]
         )
@@ -1056,7 +1056,7 @@ class TestReorderingRule(TransactionCase):
         self.assertEqual(op.qty_to_order, 2, 'sale order is ignored')
 
     def test_reordering_rule_visibility_days_display(self):
-        """ Checks that the visibility days are properly shown on the info wizard_test & the orderpoint forecast.
+        """ Checks that the visibility days are properly shown on the info wizard & the orderpoint forecast.
         """
         today = dt.today()
         warehouse = self.env['stock.warehouse'].search([('company_id', '=', self.env.user.id)], limit=1)

@@ -6,8 +6,8 @@ from odoo.tools import SQL
 
 
 class AccountMergeWizard(models.TransientModel):
-    _name = 'account.merge.wizard_test'
-    _description = "Account merge wizard_test"
+    _name = 'account.merge.wizard'
+    _description = "Account merge wizard"
 
     account_ids = fields.Many2many('account.account')
     is_group_by_name = fields.Boolean(
@@ -16,7 +16,7 @@ class AccountMergeWizard(models.TransientModel):
         help="Tick this checkbox if you want accounts to be grouped by name for merging."
     )
     wizard_line_ids = fields.One2many(
-        comodel_name='account.merge.wizard_test.line',
+        comodel_name='account.merge.wizard.line',
         inverse_name='wizard_id',
         compute='_compute_wizard_line_ids',
         store=True,
@@ -93,7 +93,7 @@ class AccountMergeWizard(models.TransientModel):
             'name': _("Merge Accounts"),
             'view_id': self.env.ref('account.account_merge_wizard_form').id,
             'context': self.env.context,
-            'res_model': 'account.merge.wizard_test',
+            'res_model': 'account.merge.wizard',
             'res_id': self.id,
             'target': 'new',
             'view_mode': 'form',
@@ -159,7 +159,7 @@ class AccountMergeWizard(models.TransientModel):
 
         # Step 3: Update records in DB.
         # 3.1: Update foreign keys in DB
-        wiz = self.env['base.partner.merge.automatic.wizard_test'].new()
+        wiz = self.env['base.partner.merge.automatic.wizard'].new()
         wiz._update_foreign_keys_generic('account.account', accounts_to_remove, account_to_merge_into)
 
         # 3.2: Update Reference and Many2OneReference fields that reference account.account
@@ -212,12 +212,12 @@ class AccountMergeWizard(models.TransientModel):
 
 
 class AccountMergeWizardLine(models.TransientModel):
-    _name = 'account.merge.wizard_test.line'
-    _description = "Account merge wizard_test line"
+    _name = 'account.merge.wizard.line'
+    _description = "Account merge wizard line"
     _order = 'sequence, id'
 
     wizard_id = fields.Many2one(
-        comodel_name='account.merge.wizard_test',
+        comodel_name='account.merge.wizard',
         required=True,
         ondelete='cascade',
     )
@@ -263,7 +263,7 @@ class AccountMergeWizardLine(models.TransientModel):
 
     @api.depends('account_id', 'wizard_id.wizard_line_ids.is_selected', 'display_type')
     def _compute_info(self):
-        """ This re-computes the error message for each wizard_test line every time the user selects or deselects a wizard_test line.
+        """ This re-computes the error message for each wizard line every time the user selects or deselects a wizard line.
 
         In reality accounts will only affect the mergeability of other accounts in the same merge group.
         Therefore this method delegates the logic of determining whether an account can be merged to
@@ -272,14 +272,14 @@ class AccountMergeWizardLine(models.TransientModel):
         for wizard_line in self.filtered(lambda l: l.display_type == 'line_section'):
             wizard_line.info = wizard_line._get_group_name()
         for wizard_line_group in self.filtered(lambda l: l.display_type == 'account').grouped(lambda l: (l.wizard_id, l.grouping_key)).values():
-            # Reset the error messages for the wizard_test lines in the group to False, then
+            # Reset the error messages for the wizard lines in the group to False, then
             # re-compute them for the whole group.
             wizard_line_group.info = False
             wizard_line_group._apply_different_companies_constraint()
             wizard_line_group._apply_hashed_moves_constraint()
 
     def _get_group_name(self):
-        """ Return a human-readable name for a wizard_test line's group, based on its `account_id`, in the format:
+        """ Return a human-readable name for a wizard line's group, based on its `account_id`, in the format:
         '{Trade/Non-trade} Receivable {USD} {Reconcilable} {Deprecated}'
         """
         self.ensure_one()
@@ -308,12 +308,12 @@ class AccountMergeWizardLine(models.TransientModel):
         return grouping_key_name
 
     def _apply_different_companies_constraint(self):
-        """ Set `info` on wizard_test lines if an account cannot be merged
+        """ Set `info` on wizard lines if an account cannot be merged
             because it belongs to the same company as another account.
 
             If users want to do that, they should mass-edit the account on the journal items.
 
-            The wizard_test lines in `self` should have the same `grouping_key`.
+            The wizard lines in `self` should have the same `grouping_key`.
         """
         companies_seen = self.env['res.company']
         account_belonging_to_company = {}
@@ -331,13 +331,13 @@ class AccountMergeWizardLine(models.TransientModel):
                             account_belonging_to_company[company] = wizard_line.account_id
 
     def _apply_hashed_moves_constraint(self):
-        """ Set `info` on wizard_test lines if an account cannot be merged because it
+        """ Set `info` on wizard lines if an account cannot be merged because it
             has hashed entries.
 
             If there are hashed entries in an account, then the merge must preserve that account's ID.
             So we cannot merge two accounts that contain hashed entries.
 
-            The wizard_test lines in `self` should have the same `grouping_key`.
+            The wizard lines in `self` should have the same `grouping_key`.
         """
         account_to_merge_into = None
         for wizard_line in self:

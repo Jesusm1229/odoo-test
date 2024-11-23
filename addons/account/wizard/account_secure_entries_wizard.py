@@ -8,9 +8,9 @@ from odoo.tools import format_list
 
 class AccountSecureEntries(models.TransientModel):
     """
-    This wizard_test is used to secure journal entries (with a hash)
+    This wizard is used to secure journal entries (with a hash)
     """
-    _name = 'account.secure.entries.wizard_test'
+    _name = 'account.secure.entries.wizard'
     _description = 'Secure Journal Entries'
 
     company_id = fields.Many2one(

@@ -9,7 +9,7 @@
     'data': [
         'data.xml',
         'ir.model.access.csv',
-        'sale_order_view.xml'
+        'views.xml'
     ],
     'license': 'LGPL-3',
 }

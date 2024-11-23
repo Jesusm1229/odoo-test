@@ -858,7 +858,7 @@ class HrExpense(models.Model):
         self.ensure_one()
         splits = self.env['hr.expense.split'].create(self._get_split_values())
 
-        wizard = self.env['hr.expense.split.wizard_test'].create({
+        wizard = self.env['hr.expense.split.wizard'].create({
             'expense_split_line_ids': splits.ids,
             'expense_id': self.id,
         })
@@ -867,7 +867,7 @@ class HrExpense(models.Model):
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
             'views': [[False, "form"]],
-            'res_model': 'hr.expense.split.wizard_test',
+            'res_model': 'hr.expense.split.wizard',
             'res_id': wizard.id,
             'target': 'new',
             'context': self.env.context,
@@ -949,6 +949,7 @@ class HrExpense(models.Model):
             'partner_id': self.vendor_id.id,
             'currency_id': self.currency_id.id,
             'payment_method_line_id': payment_method_line.id,
+            'company_id': self.company_id.id,
         }
         move_vals = {
             **self.sheet_id._prepare_move_vals(),
@@ -985,8 +986,8 @@ class HrExpense(models.Model):
         if self.product_id:
             account = self.product_id.product_tmpl_id._get_product_accounts()['expense']
         else:
-            field = self.env['property.category']._fields['property_account_expense_categ_id']
-            account = field.get_company_dependent_fallback(self.env['property.category'])
+            field = self.env['product.category']._fields['property_account_expense_categ_id']
+            account = field.get_company_dependent_fallback(self.env['product.category'])
 
         if account:
             return account

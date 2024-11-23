@@ -199,7 +199,7 @@ class PasskeyTest(HttpCase):
             self.rpc('res.users.identitycheck', 'write', wizard_id, {'password': self.admin_user.login})
             action = self.rpc('res.users.identitycheck', 'run_check', wizard_id)['result']
 
-            # Create the passkey creation wizard_test and set a name for the key
+            # Create the passkey creation wizard and set a name for the key
             wizard_id = self.rpc(action['res_model'], 'create', {'name': 'test-yubikey'})['result']
 
             # Make the key with the webauthn response

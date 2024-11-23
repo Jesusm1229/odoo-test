@@ -21,13 +21,31 @@ class Developer(models.Model):
     is_dev = fields.Boolean()
 
     technology_ids = fields.Many2many('manage.technology',
-                                      relation='developer_tecnhologies',
+                                      relation='developer_technologies',
                                       column1='developer_id',
                                       column2='technology_id',
                                       string="Technologies"
                                       )
+    task_ids = fields.Many2many('manage.task',
+                                'developer_tasks_rel',
+                                'developer_id',
+                                'task_id',
+                                string="Tasks")
 
-    task_ids = fields.One2many('manage.task', 'developer', string="Tasks")
+    bug_ids = fields.Many2many('manage.bug',
+                               'developer_bugs_rel',
+                               'developer_id',
+                               'bug_id',
+                               string="Bugs")
+
+    improvement_ids = fields.Many2many('manage.improvement',
+                                        'developer_improvements_rel',
+                                        'developer_id',
+                                        'improvement_id',
+                                        string="Improvements")
+
+
+    #task_ids = fields.One2many('manage.task', 'developer_id', string="Tasks")
 
     # Cuando cambie el is_dev. Para buscar el category name vas a tech. Modelo res.partner y ves el campo name
     @api.onchange('is_dev')
@@ -50,6 +68,8 @@ class Project(models.Model):
 
     history_ids = fields.One2many('manage.history', 'project_id', string="Histories")
 
+
+#Fallo en el modelo historia desde la vista de PRODUCTOS. Si desde acá deseas agregar una tarea, no se puede. Acá entra NewId
 
 class History(models.Model):
     _name = 'manage.history'
@@ -89,12 +109,13 @@ class Task(models.Model):
     _name = 'manage.task'
     _description = 'Manage Task'
 
+    project_id = fields.Many2one('manage.project', related='history_id.project_id', readonly=True, string="Project")
     code = fields.Char(compute='_get_code', store=True)
-    name = fields.Char(string="Name", required=True)
+    name = fields.Char(string="Name", required=True, help="Introduce the name of the task")
     description = fields.Text(string="Description")
     # creation_date = fields.Date(string="Creation Date", default=fields.Date.today)
-    start_date = fields.Date(string="Start Date")
-    end_date = fields.Date(string="End Date")
+    start_date = fields.Datetime(string="Start Date")
+    end_date = fields.Datetime(string="End Date")
     is_paused = fields.Boolean(string="Is Paused", default=False)
 
     history_id = fields.Many2one('manage.history', ondelete='set null', string="History")
@@ -115,13 +136,13 @@ class Task(models.Model):
                                       string="Technologies")
 
     # campo relacional no almacenado en DB
-    project_id = fields.Many2one('manage.project', related='history_id.project_id', readonly=True, string="Project")
+    #project_id = fields.Many2one('manage.project', related='history_id.project_id', readonly=True, string="Project")
 
     # añadiendo un campo many2one para el desarrollador. Muchas tareas pueden ser asignadas a un desarrollador
-    # developer_id = fields.Many2one('res.partner', string="Developer")
+    #developer_id = fields.Many2one('res.partner', string="Developer")
 
     # cambiaremos el developer_id para permitir muchos developers
-    developer_ids = fields.Many2many('res.partner', string="Developers")
+    #developer_ids = fields.Many2many('res.partner', string="Developers")
 
     # get code of the task
     # @api.one
@@ -141,8 +162,16 @@ class Task(models.Model):
     def _get_sprint(self):  # a task collection
         for task in self:
             # searh sprints associated to the project.
-            sprints = self.env['manage.sprint'].search([('project_id', '=', task.history_id.project_id.id)])
-            # we need to check which sprint is opeened
+            #esto genera un error en la vista de PRODUCTOS porque el id no está gnerado todavía.
+            #Cuando no se ha generado Odoo devuelve un NewId
+            #sprints = self.env['manage.sprint'].search([('project_id', '=', task.history_id.project_id.id)])
+            #se revisa si la historia tiene un id generado, de lo contrario se usa el origin
+            if isinstance(task.history_id.project_id, models.NewId):
+                id_project = int(task.history_id.project_id.origin)
+            else:
+                id_project = task.history_id.project_id.id
+            sprints = self.env['manage.sprint'].search([('project_id', '=', id_project)])
+            # we need to check which sprint is opened
             found = False
             for sprint in sprints:
                 # checking if sprint is opened
@@ -153,12 +182,33 @@ class Task(models.Model):
                 task.sprint_id = False
                 raise ValidationError("No opened sprint found for the task")
 
+
     def _get_definition_date(self):
         return datetime.Datetime.now()
 
     # campo fecha de definicion. A diferencia de los campos computados, los default toman el valor una vez
     # definition_date = fields.Datetime(default=_get_definition_date(), string="Definition Date")
     definition_date = fields.Datetime(default=lambda self: fields.Datetime.now(), string="Definition Date")
+
+    # Función usada para traer el developer del contexto actual
+    def _get_default_dev(self):
+        dev = self.browse(self.env.context.get('current_developer'))
+        if dev:
+            return [dev.id]
+        else:
+            return []
+
+
+    developer_ids = fields.Many2many('res.partner',
+                                    relation='developers_tasks_rel',
+                                    column1='task_id',
+                                    column2='developer_id',
+                                    string="Developer",
+                                    default=_get_default_dev #es default porque se ejecuta una vez. El computado se ejecuta siempre
+                                    )
+
+
+
 
 
 # Modelo con herencia prototípica. Se crea una tabla que con los mismos atributos más los nuevos.

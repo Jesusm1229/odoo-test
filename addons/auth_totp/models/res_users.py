@@ -148,14 +148,14 @@ class Users(models.Model):
         secret = base64.b32encode(os.urandom(secret_bytes_count)).decode()
         # format secret in groups of 4 characters for readability
         secret = ' '.join(map(''.join, zip(*[iter(secret)]*4)))
-        w = self.env['auth_totp.wizard_test'].create({
+        w = self.env['auth_totp.wizard'].create({
             'user_id': self.id,
             'secret': secret,
         })
         return {
             'type': 'ir.actions.act_window',
             'target': 'new',
-            'res_model': 'auth_totp.wizard_test',
+            'res_model': 'auth_totp.wizard',
             'name': _("Two-Factor Authentication Activation"),
             'res_id': w.id,
             'views': [(False, 'form')],

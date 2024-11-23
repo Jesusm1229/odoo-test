@@ -61,7 +61,7 @@ class TestProjectSharingUi(HttpCase):
             'name': 'Test Project',
         })
 
-        self.env['project.share.wizard_test'].create({
+        self.env['project.share.wizard'].create({
             'res_model': 'project.project',
             'res_id': self.project_portal.id,
             'collaborator_ids': [
@@ -95,7 +95,7 @@ class TestProjectSharingUi(HttpCase):
             Since a problem to logout Mitchell Admin to log in as Georges user, this test is created
             to launch a tour with portal user.
         """
-        self.env['project.share.wizard_test'].create({
+        self.env['project.share.wizard'].create({
             'res_model': 'project.project',
             'res_id': self.project_portal.id,
             'collaborator_ids': [
@@ -112,7 +112,7 @@ class TestProjectSharingUi(HttpCase):
         self.start_tour("/my/projects", 'portal_project_sharing_tour', login='georges1')
 
     def test_03_project_sharing(self):
-        self.env['project.share.wizard_test'].create({
+        self.env['project.share.wizard'].create({
             'res_model': 'project.project',
             'res_id': self.project_portal.id,
             'collaborator_ids': [

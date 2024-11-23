@@ -78,7 +78,7 @@ class TestWarehouse(TestStockCommon):
         self.assertEqual(quant.location_id, stock_location)
 
     def test_inventory_wizard_as_user(self):
-        """ Using the "Update Quantity" wizard_test as stock user.
+        """ Using the "Update Quantity" wizard as stock user.
         """
         self.product_1.is_storable = True
         InventoryWizard = self.env['stock.change.product.qty'].with_user(self.user_stock_user)

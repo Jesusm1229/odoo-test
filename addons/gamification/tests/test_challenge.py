@@ -232,7 +232,7 @@ class test_challenge(TestGamificationCommon):
 class test_badge_wizard(TestGamificationCommon):
 
     def test_grant_badge(self):
-        wiz = self.env['gamification.badge.user.wizard_test'].create({
+        wiz = self.env['gamification.badge.user.wizard'].create({
             'user_id': self.env.user.id,
             'badge_id': self.badge_good_job.id,
         })

@@ -6,7 +6,7 @@ from odoo.tools import float_compare
 
 
 class L10nInWithholdWizard(models.TransientModel):
-    _name = 'l10n_in.withhold.wizard_test'
+    _name = 'l10n_in.withhold.wizard'
     _description = "Withhold Wizard"
     _check_company_auto = True
 
@@ -14,7 +14,7 @@ class L10nInWithholdWizard(models.TransientModel):
     def default_get(self, fields_list):
         result = super().default_get(fields_list)
         active_model = self._context.get('active_model')
-        active_ids = self._context.get('active_ids')
+        active_ids = self._context.get('active_ids', [])
         if len(active_ids) > 1:
             raise UserError(_("You can only create a withhold for only one record at a time."))
         if active_model not in ('account.move', 'account.payment') or not active_ids:
@@ -70,7 +70,7 @@ class L10nInWithholdWizard(models.TransientModel):
         compute='_compute_l10n_in_tds_tax_type'
     )
     withhold_line_ids = fields.One2many(
-        comodel_name='l10n_in.withhold.wizard_test.line',
+        comodel_name='l10n_in.withhold.wizard.line',
         inverse_name='withhold_id',
         string="TDS Lines",
         readonly=False,
@@ -143,7 +143,7 @@ class L10nInWithholdWizard(models.TransientModel):
                 'in_refund': 'in_refund_withhold',
             }[move_type]
         else:
-            withhold_type = 'in_withhold' if self.related_payment_id.payment_type == 'outbound' else 'out_withhold'
+            withhold_type = 'in_withhold' if self.related_payment_id.partner_type == 'supplier' else 'out_withhold'
         return withhold_type
 
     # ===== MOVE CREATION METHODS =====
@@ -244,13 +244,13 @@ class L10nInWithholdWizard(models.TransientModel):
 
 
 class L10nInWithholdWizardLine(models.TransientModel):
-    _name = 'l10n_in.withhold.wizard_test.line'
+    _name = 'l10n_in.withhold.wizard.line'
     _description = "Withhold Wizard Lines"
 
     base = fields.Monetary(string="Base")
     currency_id = fields.Many2one(related='withhold_id.currency_id')
     l10n_in_tds_tax_type = fields.Char(related='withhold_id.l10n_in_tds_tax_type')
-    withhold_id = fields.Many2one(comodel_name='l10n_in.withhold.wizard_test', required=True)
+    withhold_id = fields.Many2one(comodel_name='l10n_in.withhold.wizard', required=True)
     tax_id = fields.Many2one(
         comodel_name='account.tax',
         string="TDS Tax",
@@ -260,7 +260,6 @@ class L10nInWithholdWizardLine(models.TransientModel):
         string="TDS Amount",
         compute='_compute_amount',
         store=True,
-        readonly=False
     )
 
     #  ===== Constraints =====

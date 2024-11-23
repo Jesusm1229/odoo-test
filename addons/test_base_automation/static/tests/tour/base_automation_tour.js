@@ -151,6 +151,7 @@ registry.category("web_tour.tours").add("test_base_automation_on_tag_added", {
                 assertEqual(
                     JSON.stringify(options),
                     JSON.stringify({
+                        false: "",
                         on_stage_set: "Stage is set to",
                         on_user_set: "User is set",
                         on_tag_set: "Tag is added",
@@ -284,8 +285,8 @@ registry.category("web_tour.tours").add("test_base_automation_on_tag_added", {
 registry.category("web_tour.tours").add("test_open_automation_from_grouped_kanban", {
     steps: () => [
         {
-            trigger: ".o_kanban_view .o_kanban_config button.dropdown-toggle",
-            run: "click",
+            trigger: ".o_kanban_header:contains(test tag)",
+            run: "hover && click .o_kanban_view .o_kanban_config button.dropdown-toggle",
         },
         {
             trigger: ".dropdown-menu .o_column_automations",
@@ -478,9 +479,6 @@ registry.category("web_tour.tours").add("test_form_view_resequence_actions", {
         },
         {
             trigger: "body:not(:has(.modal-content))",
-        },
-        {
-            trigger: ".o_form_button_cancel",
         },
     ],
 });

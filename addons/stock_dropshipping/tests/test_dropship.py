@@ -41,9 +41,8 @@ class TestDropship(common.TransactionCase):
         })
 
     def test_change_qty(self):
-        # enable the dropship and MTO route on the product
-        mto_route = self.env.ref('stock.route_warehouse0_mto')
-        self.dropship_product.write({'route_ids': [(6, 0, [self.dropshipping_route.id, mto_route.id])]})
+        # enable the dropship route on the product
+        self.dropship_product.write({'route_ids': [(6, 0, [self.dropshipping_route.id])]})
 
         # sell one unit of dropship product
         so = self.env['sale.order'].create({
@@ -215,7 +214,7 @@ class TestDropship(common.TransactionCase):
 
     def test_sol_reserved_qty_wizard_dropship(self):
         """
-        Check that the reserved qty wizard_test related to a sol is computed from
+        Check that the reserved qty wizard related to a sol is computed from
         the PO if the product is dropshipped.
         """
         product = self.dropship_product

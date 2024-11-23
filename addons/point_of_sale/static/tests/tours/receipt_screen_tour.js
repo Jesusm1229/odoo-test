@@ -5,6 +5,7 @@ import * as Chrome from "@point_of_sale/../tests/tours/utils/chrome_util";
 import * as NumberPopup from "@point_of_sale/../tests/tours/utils/number_popup_util";
 import * as Order from "@point_of_sale/../tests/tours/utils/generic_components/order_widget_util";
 import * as Dialog from "@point_of_sale/../tests/tours/utils/dialog_util";
+import * as Numpad from "@point_of_sale/../tests/tours/utils/numpad_util";
 import { registry } from "@web/core/registry";
 import { inLeftSide } from "@point_of_sale/../tests/tours/utils/common";
 
@@ -15,7 +16,6 @@ registry.category("web_tour.tours").add("ReceiptScreenTour", {
             // press close button in receipt screen
             Chrome.startPoS(),
             ProductScreen.addOrderline("Letter Tray", "10", "5"),
-            ProductScreen.selectedOrderlineHas("Letter Tray", "10"),
             ProductScreen.clickPartnerButton(),
             ProductScreen.clickCustomer("Addison Olson"),
             ProductScreen.clickPayButton(),
@@ -27,6 +27,7 @@ registry.category("web_tour.tours").add("ReceiptScreenTour", {
             ReceiptScreen.receiptIsThere(),
             //receipt had expected delivery printed
             ReceiptScreen.shippingDateExists(),
+            ReceiptScreen.shippingDateIsToday(),
             // letter tray has 10% tax (search SRC)
             ReceiptScreen.totalAmountContains("55.0"),
             ReceiptScreen.clickNextOrder(),
@@ -54,7 +55,11 @@ registry.category("web_tour.tours").add("ReceiptScreenTour", {
             ProductScreen.addOrderline("Desk Pad", "6", "5"),
             ProductScreen.clickPayButton(),
             PaymentScreen.clickTipButton(),
-            NumberPopup.enterValue("1"),
+            {
+                content: "click numpad button: 1",
+                trigger: ".modal div.numpad button:contains(/^1/)",
+                run: "click",
+            },
             NumberPopup.isShown("1"),
             Dialog.confirm(),
             PaymentScreen.emptyPaymentlines("31.0"),
@@ -66,11 +71,33 @@ registry.category("web_tour.tours").add("ReceiptScreenTour", {
 
             // Test customer note in receipt
             ProductScreen.addOrderline("Desk Pad", "1", "5"),
-            ProductScreen.addCustomerNote("Test customer note"),
+            inLeftSide([
+                { ...ProductScreen.clickLine("Desk Pad")[0], isActive: ["mobile"] },
+                ...ProductScreen.addCustomerNote("Test customer note"),
+            ]),
             ProductScreen.clickPayButton(),
             PaymentScreen.clickPaymentMethod("Bank"),
             PaymentScreen.clickValidate(),
             Order.hasLine({ customerNote: "Test customer note" }),
+            ReceiptScreen.clickNextOrder(),
+
+            // Test discount and original price
+            ProductScreen.addOrderline("Desk Pad", "1", "20"),
+            inLeftSide([
+                { ...ProductScreen.clickLine("Desk Pad")[0], isActive: ["mobile"] },
+                Numpad.click("%"),
+                ...ProductScreen.selectedOrderlineHasDirect("Desk Pad", "1", "20"),
+                Numpad.click("5"),
+                ...ProductScreen.selectedOrderlineHasDirect("Desk Pad", "1", "19.0"),
+                Numpad.click("."),
+            ]),
+            ProductScreen.clickPayButton(),
+            PaymentScreen.clickPaymentMethod("Bank"),
+            PaymentScreen.clickValidate(),
+            ReceiptScreen.receiptIsThere(),
+            Order.hasLine({ productName: "Desk Pad", priceNoDiscount: "20" }),
+            ReceiptScreen.totalAmountContains("19.00"),
+            ReceiptScreen.clickNextOrder(),
         ].flat(),
 });
 
@@ -97,7 +124,7 @@ registry.category("web_tour.tours").add("OrderPaidInCash", {
             Chrome.startPoS(),
             Dialog.confirm("Open Register"),
             ProductScreen.addOrderline("Desk Pad", "5", "5"),
-            ProductScreen.selectedOrderlineHas("Desk Pad", "5"),
+            inLeftSide(ProductScreen.orderLineHas("Desk Pad", "5")),
             ProductScreen.clickPayButton(),
             PaymentScreen.clickPaymentMethod("Cash"),
             PaymentScreen.validateButtonIsHighlighted(true),

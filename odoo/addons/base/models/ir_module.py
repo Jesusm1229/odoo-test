@@ -166,6 +166,13 @@ class Module(models.Model):
 
     @api.depends('name', 'description')
     def _get_desc(self):
+        def _apply_description_images(doc):
+            html = lxml.html.document_fromstring(doc)
+            for element, _attribute, _link, _pos in html.iterlinks():
+                if element.get('src') and not '//' in element.get('src') and not 'static/' in element.get('src'):
+                    element.set('src', "/%s/static/description/%s" % (module.name, element.get('src')))
+            return tools.html_sanitize(lxml.html.tostring(html, encoding='unicode'))
+
         for module in self:
             if not module.name:
                 module.description_html = False
@@ -192,11 +199,7 @@ class Module(models.Model):
                                 f"is not utf-8)",
                                 category=DeprecationWarning,
                             )
-                    html = lxml.html.document_fromstring(doc)
-                    for element, attribute, link, pos in html.iterlinks():
-                        if element.get('src') and not '//' in element.get('src') and not 'static/' in element.get('src'):
-                            element.set('src', "/%s/static/description/%s" % (module.name, element.get('src')))
-                    module.description_html = tools.html_sanitize(lxml.html.tostring(html, encoding='unicode'))
+                    module.description_html = _apply_description_images(doc)
             except FileNotFoundError:
                 overrides = {
                     'embed_stylesheet': False,
@@ -206,7 +209,7 @@ class Module(models.Model):
                     'file_insertion_enabled': False,
                 }
                 output = publish_string(source=module.description if not module.application and module.description else '', settings_overrides=overrides, writer=MyWriter())
-                module.description_html = tools.html_sanitize(output)
+                module.description_html = _apply_description_images(output)
 
     @api.depends('name')
     def _get_latest_version(self):
@@ -645,7 +648,7 @@ class Module(models.Model):
 
     @assert_log_admin_access
     def button_uninstall_wizard(self):
-        """ Launch the wizard_test to uninstall the given module. """
+        """ Launch the wizard to uninstall the given module. """
         return {
             'type': 'ir.actions.act_window',
             'target': 'new',

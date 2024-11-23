@@ -44,7 +44,7 @@ class HrEmployee(models.Model):
                 employee.display_name = f'{employee.display_name} - {employee.company_id.name}'
 
     def action_unlink_wizard(self):
-        wizard = self.env['hr.employee.delete.wizard_test'].create({
+        wizard = self.env['hr.employee.delete.wizard'].create({
             'employee_ids': self.ids,
         })
         if not self.env.user.has_group('hr_timesheet.group_hr_timesheet_approver') and wizard.has_timesheet and not wizard.has_active_employee:
@@ -53,7 +53,7 @@ class HrEmployee(models.Model):
         return {
             'name': _('Confirmation'),
             'view_mode': 'form',
-            'res_model': 'hr.employee.delete.wizard_test',
+            'res_model': 'hr.employee.delete.wizard',
             'views': [(self.env.ref('hr_timesheet.hr_employee_delete_wizard_form').id, 'form')],
             'type': 'ir.actions.act_window',
             'res_id': wizard.id,

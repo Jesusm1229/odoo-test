@@ -5,7 +5,7 @@ from odoo import fields, models
 
 
 class CalendarProviderConfig(models.TransientModel):
-    _name = 'calendar.popover.delete.wizard_test'
+    _name = 'calendar.popover.delete.wizard'
     _description = 'Calendar Popover Delete Wizard'
 
 

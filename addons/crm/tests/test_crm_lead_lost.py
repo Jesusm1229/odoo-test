@@ -19,7 +19,7 @@ class TestLeadConvert(crm_common.TestCrmCommon):
 
     @users('user_sales_salesman')
     def test_lead_lost(self):
-        """ Test setting a lead as lost using the wizard_test. Also check that an
+        """ Test setting a lead as lost using the wizard. Also check that an
         'html editor' void content used as feedback is not logged on the lead. """
         # Initial data
         self.assertEqual(len(self.lead_1.message_ids), 1, 'Should contain creation message')
@@ -40,7 +40,7 @@ class TestLeadConvert(crm_common.TestCrmCommon):
         update_message = lead.message_ids[0]
         self.assertEqual(update_message.subtype_id, self.env.ref('mail.mt_note'))
 
-        # mark as lost using the wizard_test
+        # mark as lost using the wizard
         lost_wizard = self.env['crm.lead.lost'].create({
             'lead_ids': lead.ids,
             'lost_reason_id': self.lost_reason.id,
@@ -69,7 +69,7 @@ class TestLeadConvert(crm_common.TestCrmCommon):
 
     @users('user_sales_leads')
     def test_lead_lost_batch_wfeedback(self):
-        """ Test setting leads as lost in batch using the wizard_test, including a log
+        """ Test setting leads as lost in batch using the wizard, including a log
         message. """
         leads = self._create_leads_batch(lead_type='lead', count=10, probabilities=[10, 20, 30])
         self.assertEqual(len(leads), 10)
@@ -119,9 +119,9 @@ class TestLeadConvert(crm_common.TestCrmCommon):
                 'name': 'Test Reason'
             })
 
-        # nice try little salesman, you cannot invoke a wizard_test to update other people leads
+        # nice try little salesman, you cannot invoke a wizard to update other people leads
         with self.assertRaises(AccessError):
-            # wizard_test needs to be here due to cache clearing in assertRaises
+            # wizard needs to be here due to cache clearing in assertRaises
             # (ORM does not load m2m records unavailable to the user from database)
             lost_wizard = self.env['crm.lead.lost'].create({
                 'lead_ids': lead.ids,

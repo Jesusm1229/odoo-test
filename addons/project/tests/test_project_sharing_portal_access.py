@@ -20,7 +20,7 @@ class TestProjectSharingPortalAccess(TestProjectSharingCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env['project.share.wizard_test'].create({
+        cls.env['project.share.wizard'].create({
             'res_model': 'project.project',
             'res_id': cls.project_portal.id,
             'collaborator_ids': [
@@ -109,7 +109,7 @@ class TestProjectSharingPortalAccess(TestProjectSharingCommon):
             'user_ids': [],
         })
 
-        project_share_wizard_no_user = self.env['project.share.wizard_test'].create({
+        project_share_wizard_no_user = self.env['project.share.wizard'].create({
             'res_model': 'project.project',
             'res_id': self.project_portal.id,
             'collaborator_ids': [
@@ -120,7 +120,7 @@ class TestProjectSharingPortalAccess(TestProjectSharingCommon):
 
         project_share_wizard_no_user_action = project_share_wizard_no_user.action_share_record()
         self.assertEqual(project_share_wizard_no_user_action['type'], 'ir.actions.act_window', 'Sharing a project with partner without user should display a confimation dialog')
-        project_share_wizard_confirmation = self.env['project.share.wizard_test'].browse(project_share_wizard_no_user_action['res_id'])
+        project_share_wizard_confirmation = self.env['project.share.wizard'].browse(project_share_wizard_no_user_action['res_id'])
 
         project_share_wizard_confirmation.action_send_mail()
         mail_partner = self.env['mail.message'].search([('partner_ids', '=', partner_portal_no_user.id)], limit=1)

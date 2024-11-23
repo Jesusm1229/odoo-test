@@ -73,7 +73,7 @@ class TestProjectSharingCommon(TestProjectCommon):
         )
 
     def get_project_share_link(self):
-        self.env['project.share.wizard_test'].create({
+        self.env['project.share.wizard'].create({
             'res_model': 'project.project',
             'res_id': self.project_no_collabo.id,
             'collaborator_ids': [
@@ -93,13 +93,13 @@ class TestProjectSharing(TestProjectSharingCommon):
 
             Test Cases:
             ==========
-            1) Create the wizard_test record
+            1) Create the wizard record
             2) Check if no access rights are given to a portal user
             3) Add access rights to a portal user
         """
         self.project_portal.message_unsubscribe(partner_ids=self.user_portal.partner_id.ids)
-        project_share_form = Form(self.env['project.share.wizard_test'].with_context(active_model='project.project', active_id=self.project_portal.id))
-        self.assertFalse(project_share_form.collaborator_ids, 'No collaborator should be in the wizard_test.')
+        project_share_form = Form(self.env['project.share.wizard'].with_context(active_model='project.project', active_id=self.project_portal.id))
+        self.assertFalse(project_share_form.collaborator_ids, 'No collaborator should be in the wizard.')
         with self.assertRaises(AccessError, msg='The public user should not have any access to project sharing feature of the portal project.'):
             self.project_portal.with_user(self.user_portal)._check_project_sharing_access()
         with project_share_form.collaborator_ids.new() as collaborator_form:
@@ -107,7 +107,7 @@ class TestProjectSharing(TestProjectSharingCommon):
             collaborator_form.access_mode = 'edit'
         project_share_wizard = project_share_form.save()
         project_share_wizard.action_send_mail()
-        self.assertEqual(len(self.project_portal.collaborator_ids), 1, 'The access right added in project share wizard_test should be added in the project when the user confirm the access in the wizard_test.')
+        self.assertEqual(len(self.project_portal.collaborator_ids), 1, 'The access right added in project share wizard should be added in the project when the user confirm the access in the wizard.')
         self.assertDictEqual({
             'partner_id': self.project_portal.collaborator_ids.partner_id,
             'project_id': self.project_portal.collaborator_ids.project_id,
@@ -118,8 +118,8 @@ class TestProjectSharing(TestProjectSharingCommon):
             'limited_access': False,
         }, 'The access rights added should be the read access for the portal project for Chell Gladys.')
         self.assertTrue(self.project_portal.with_user(self.user_portal)._check_project_sharing_access(), 'The portal user should have read access to the portal project with project sharing feature.')
-        project_share_wizard = self.env['project.share.wizard_test'].with_context(active_model="project.project", active_id=self.project_portal.id).new({})
-        self.assertEqual(len(project_share_wizard.collaborator_ids), 1, 'The access right added in project share wizard_test should be added in the project when the user confirm the access in the wizard_test.')
+        project_share_wizard = self.env['project.share.wizard'].with_context(active_model="project.project", active_id=self.project_portal.id).new({})
+        self.assertEqual(len(project_share_wizard.collaborator_ids), 1, 'The access right added in project share wizard should be added in the project when the user confirm the access in the wizard.')
         self.assertDictEqual({
             'partner_id': project_share_wizard.collaborator_ids.partner_id,
             'access_mode': project_share_wizard.collaborator_ids.access_mode,
@@ -129,7 +129,7 @@ class TestProjectSharing(TestProjectSharingCommon):
         })
 
     def test_project_share_wizard_add_collaborator_with_limited_access(self):
-        ProjectShare = self.env['project.share.wizard_test'].with_context(active_model="project.project", active_id=self.project_portal.id)
+        ProjectShare = self.env['project.share.wizard'].with_context(active_model="project.project", active_id=self.project_portal.id)
         self.project_portal.write({
             'collaborator_ids': [
                 Command.create({'partner_id': self.partner_1.id}),
@@ -143,7 +143,7 @@ class TestProjectSharing(TestProjectSharingCommon):
             collaborator_form.access_mode = 'edit_limited'
         project_share_wizard = project_share_form.save()
         project_share_wizard.action_send_mail()
-        self.assertEqual(len(self.project_portal.collaborator_ids), 2, 'The access right added in project share wizard_test should be added in the project when the user confirm the access in the wizard_test.')
+        self.assertEqual(len(self.project_portal.collaborator_ids), 2, 'The access right added in project share wizard should be added in the project when the user confirm the access in the wizard.')
         self.assertEqual(self.project_portal.collaborator_ids.partner_id, self.user_portal.partner_id + self.partner_1)
         for collaborator in self.project_portal.collaborator_ids:
             collaborator_vals = {
@@ -166,7 +166,7 @@ class TestProjectSharing(TestProjectSharingCommon):
         self.assertTrue(self.project_portal.with_user(self.user_portal)._check_project_sharing_access(), 'The portal user should have read access to the portal project with project sharing feature.')
 
         project_share_wizard = ProjectShare.new({})
-        self.assertEqual(len(project_share_wizard.collaborator_ids), 2, 'The access right added in project share wizard_test should be added in the project when the user confirm the access in the wizard_test.')
+        self.assertEqual(len(project_share_wizard.collaborator_ids), 2, 'The access right added in project share wizard should be added in the project when the user confirm the access in the wizard.')
         for collaborator in project_share_wizard.collaborator_ids:
             collaborator_vals = {
                 'partner_id': collaborator.partner_id,
@@ -184,7 +184,7 @@ class TestProjectSharing(TestProjectSharingCommon):
                 })
 
     def test_project_share_wizard_remove_collaborators(self):
-        PortalShare = self.env['project.share.wizard_test'].with_context(active_model="project.project", active_id=self.project_portal.id)
+        PortalShare = self.env['project.share.wizard'].with_context(active_model="project.project", active_id=self.project_portal.id)
         self.project_portal.write({
             'collaborator_ids': [
                 Command.create({'partner_id': self.user_portal.partner_id.id}),
@@ -222,7 +222,7 @@ class TestProjectSharing(TestProjectSharingCommon):
         self.assertNotIn(self.partner_1, self.project_portal.message_partner_ids, "The readonly partner should still be a follower.")
 
     def test_project_share_wizard_alter_access_mode_collaborators(self):
-        ProjectShare = self.env['project.share.wizard_test'].with_context(active_model="project.project", active_id=self.project_portal.id)
+        ProjectShare = self.env['project.share.wizard'].with_context(active_model="project.project", active_id=self.project_portal.id)
         self.project_portal.write({
             'collaborator_ids': [
                 Command.create({'partner_id': self.user_portal.partner_id.id}),
@@ -375,7 +375,7 @@ class TestProjectSharing(TestProjectSharingCommon):
                 form.name = 'Test'
                 task = form.save()
 
-        project_share_wizard = self.env['project.share.wizard_test'].create({
+        project_share_wizard = self.env['project.share.wizard'].create({
             'res_model': 'project.project',
             'res_id': self.project_cows.id,
             'collaborator_ids': [
@@ -475,7 +475,7 @@ class TestProjectSharing(TestProjectSharingCommon):
             self.task_cow.with_user(self.user_portal).read(['portal_user_names'])
         self.assertEqual(len(self.task_cow.user_ids), 2, '2 users should be assigned in this task.')
 
-        project_share_wizard = self.env['project.share.wizard_test'].create({
+        project_share_wizard = self.env['project.share.wizard'].create({
             'res_model': 'project.project',
             'res_id': self.project_cows.id,
             'collaborator_ids': [

@@ -77,7 +77,7 @@ class ReportStockRule(models.AbstractModel):
 
     @api.model
     def _get_routes(self, data):
-        """ Extract the routes to display from the wizard_test's content.
+        """ Extract the routes to display from the wizard's content.
         """
         product = self.env['product.product'].browse(data['product_id'])
         warehouse_ids = self.env['stock.warehouse'].browse(data['warehouse_ids'])

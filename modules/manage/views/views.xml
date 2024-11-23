@@ -1,28 +1,81 @@
 <odoo>
-  <data>
+    <data>
+
+        <!--    herencia importante-->
+        <!--     herencia de form. Si quieres sustituir el view de res_partner-->
+        <record model="ir.ui.view" id="manage.devs_partner_form">
+            <field name="name">manage Devs Form</field>
+            <field name="model">res.partner</field>
+            <!--     herencia de form. Si quieres heredar y sólo añadir el atributo del form -->
+            <!--       tenemos que ir al formulario de los contactos. Darle al bug, y vsta de edición form-->
+            <field name="inherit_id" ref="base.view_partner_form"></field>
+            <!--       Con el modo primario no modificamos el view-->
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <!--       Ubicamos la posición y la añadimos. No necesitamos el form porque lo susituiría-->
+
+                <xpath expr="//sheet/notebook/page[@name='internal_notes']" position="after">
+                    <!--          mostrar pagina sólo si default_is_dev no es true-->
+                    <!--Cambiando attrs to show {[('default_is_dev', '!=', True)]}-->
+                    <page name="devs" string="Devs" show="not default_is_dev">
+                        <group>
+                            <group>
+                                <!--                campo is dev sólo para comprobar-->
+                                <field name="is_dev" show="True"/>
+                                <field name="technology_ids"/>
+<!--                                Adding context para mostrar el developer-->
+                                <field name="task_ids"
+                                       context="{'current_developer':'active_id'}"
+                                />
+                            </group>
+                        </group>
+                    </page>
+
+                </xpath>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+
+        <record model="ir.actions.act_window" id="manage.action_developer_window">
+            <field name="name">manage developer window</field>
+            <!--          mosca acá. Se usa el modelo res.partner heredado-->
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- HERENCIA.
+ Este view te indica en qué vista vas a cargar en cada momento según la secuencia-->
+        <record model="ir.actions.act_window.view" id="manage.action_developer_list">
+            <field name="sequence" eval="1"/>
+            <!--      <field name="name">manage developer window</field>-->
+            <!--          mosca acá. Se usa el modelo res.partner heredado-->
+            <field name="view_mode">list</field>
+            <!--      hay que buscar la base en el view:list desde el debug en la vista-->
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="act_window_id" ref="manage.action_developer_window"/>
+        </record>
 
 
+        <record model="ir.actions.act_window.view" id="manage.action_developer_form">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="manage.devs_partner_form"/>
+            <field name="act_window_id" ref="manage.action_developer_window"/>
+        </record>
 
 
+        <!-- Top menu item -->
+        <menuitem name="Manage" id="manage.menu_root"/>
+
+        <!-- menu categories -->
+
+        <menuitem name="Management" id="manage.menu_1" parent="manage.menu_root"/>
+
+        <!-- actions -->
+        <menuitem name="Developer" id="manage.menu_dev_list" parent="manage.menu_1"
+                  action="manage.action_developer_window"/>
 
 
-
-
-
-    <!-- Top menu item -->
-    <menuitem name="Manage" id="manage.menu_root"/>
-
-    <!-- menu categories -->
-
-    <menuitem name="Management" id="manage.menu_1" parent="manage.menu_root"/>
-
-    <!-- actions -->
-
-
-
-
-
-
-
-  </data>
+    </data>
 </odoo>

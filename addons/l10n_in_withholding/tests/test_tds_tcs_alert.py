@@ -106,7 +106,7 @@ class TestTdsTcsAlert(L10nInTestInvoicingCommon):
         return invoice
 
     def tds_wizard_entry(self, move, lines):
-        tds_wizard = self.env['l10n_in.withhold.wizard_test'].with_context(active_model='account.move', active_ids=move.ids).create({
+        tds_wizard = self.env['l10n_in.withhold.wizard'].with_context(active_model='account.move', active_ids=move.ids).create({
                 'journal_id': self.env['account.journal'].search([
                     ('company_id', '=', self.env.company.id),
                     ('type', '=', 'general')
@@ -114,7 +114,7 @@ class TestTdsTcsAlert(L10nInTestInvoicingCommon):
                 'date': move.invoice_date,
             })
         for tax, amount in lines:
-            self.env['l10n_in.withhold.wizard_test.line'].create({
+            self.env['l10n_in.withhold.wizard.line'].create({
                 'withhold_id': tds_wizard.id,
                 'tax_id': tax.id,
                 'base': amount

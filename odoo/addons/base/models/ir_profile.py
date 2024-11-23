@@ -95,7 +95,7 @@ class IrProfile(models.Model):
                     return {
                             'type': 'ir.actions.act_window',
                             'view_mode': 'form',
-                            'res_model': 'base.enable.profiling.wizard_test',
+                            'res_model': 'base.enable.profiling.wizard',
                             'target': 'new',
                             'views': [[False, 'form']],
                         }
@@ -124,7 +124,7 @@ class IrProfile(models.Model):
 
 
 class EnableProfilingWizard(models.TransientModel):
-    _name = 'base.enable.profiling.wizard_test'
+    _name = 'base.enable.profiling.wizard'
     _description = "Enable profiling for some time"
 
     duration = fields.Selection([

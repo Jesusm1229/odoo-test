@@ -13,14 +13,14 @@ class PeppolService(models.TransientModel):
     _order = 'document_name, id'
     _description = 'Peppol Service'
 
-    wizard_id = fields.Many2one(comodel_name='account_peppol.service.wizard_test')
+    wizard_id = fields.Many2one(comodel_name='account_peppol.service.wizard')
     document_identifier = fields.Char()
     document_name = fields.Char()
     enabled = fields.Boolean()
 
 
 class PeppolServiceConfig(models.TransientModel):
-    _name = 'account_peppol.service.wizard_test'
+    _name = 'account_peppol.service.wizard'
     _description = 'Peppol Services Wizard'
 
     edi_user_id = fields.Many2one(comodel_name='account_edi_proxy_client.user', string='EDI user')

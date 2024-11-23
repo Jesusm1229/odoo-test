@@ -378,7 +378,7 @@ class IrActionsActWindow(models.Model):
             # `flags` is not a real field of ir.actions.act_window but is used
             # to give the parameters to generate the action
             "flags",
-            # this is used by frontend, with the document layout wizard_test before send and print
+            # this is used by frontend, with the document layout wizard before send and print
             "close_on_report_download",
         }
 
@@ -1064,6 +1064,8 @@ class IrActionsServer(models.Model):
             elif action.update_field_id.ttype in ['many2one', 'integer']:
                 try:
                     expr = int(action.value)
+                    if expr == 0 and action.update_field_id.ttype == 'many2one':
+                        expr = False
                 except Exception:
                     pass
             elif action.update_field_id.ttype == 'float':
@@ -1147,7 +1149,7 @@ class IrActionsTodo(models.Model):
         return result
 
     def action_open(self):
-        """ Sets configuration wizard_test in TODO state"""
+        """ Sets configuration wizard in TODO state"""
         return self.write({'state': 'open'})
 
 

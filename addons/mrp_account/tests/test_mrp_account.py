@@ -7,8 +7,7 @@ from odoo.addons.mrp.tests.common import TestMrpCommon
 from odoo.addons.stock_account.tests.test_account_move import TestAccountMoveStockCommon
 from odoo.tests import Form, tagged
 from odoo.tests.common import new_test_user
-from odoo import fields
-from odoo import Command
+from odoo import fields, Command
 
 
 class TestMrpAccount(TestMrpCommon):
@@ -400,7 +399,7 @@ class TestMrpAccountMove(TestAccountMoveStockCommon):
         wizard.save().confirm()
         wip_entries2 = self.env['account.move'].search([('ref', 'ilike', 'WIP - ' + mo.name), ('id', 'not in', previous_wip_ids)])
         self.assertEqual(len(wip_entries2), 2, "Should be 2 journal entries: 1 for the WIP accounting + 1 for its reversal, for 1 MO")
-        self.assertTrue(mo2.name not in wip_entries2[0].ref, "Draft MO should be completely disregarded by wizard_test")
+        self.assertTrue(mo2.name not in wip_entries2[0].ref, "Draft MO should be completely disregarded by wizard")
         self.assertEqual(wip_entries2[0].wip_production_count, 1, "Only WIP MOs should be linked to entry")
         self.assertEqual(len(wip_entries2.line_ids), 6, "Should be 3 lines per journal entry: 1 for 'Component Value', 1 for '(WO) overhead', 1 for WIP")
         total_component_price = self.product_B.standard_price * sum(mo.move_raw_ids.mapped('quantity'))
@@ -443,7 +442,7 @@ class TestMrpAccountMove(TestAccountMoveStockCommon):
         wizard.save().confirm()
         wip_entries4 = self.env['account.move'].search([('ref', 'ilike', 'WIP - ' + mo.name), ('id', 'not in', previous_wip_ids)])
         self.assertEqual(len(wip_entries4), 2, "Should be 2 journal entries: 1 for the WIP accounting + 1 for its reversal, for 1 MO")
-        self.assertTrue(mo2.name not in wip_entries4[0].ref, "Done MO should be completely disregarded by wizard_test")
+        self.assertTrue(mo2.name not in wip_entries4[0].ref, "Done MO should be completely disregarded by wizard")
         self.assertEqual(wip_entries4[0].wip_production_count, 1, "Only WIP MOs should be linked to entry")
         self.assertEqual(len(wip_entries4.line_ids), 6, "Should be 3 lines per journal entry: 1 for 'Component Value', 1 for '(WO) overhead', 1 for WIP")
         total_component_price = self.product_B.standard_price * sum(mo.move_raw_ids.mapped('quantity'))
@@ -510,9 +509,13 @@ class TestMrpAccountMove(TestAccountMoveStockCommon):
 
         account_move = production.move_finished_ids.stock_valuation_layer_ids.account_move_id
         self.assertRecordValues(account_move.line_ids, [
-            {'credit': 9.99, 'debit': 0.00},  # Credit Line
+            {'credit': 10.0, 'debit': 0.00},  # Credit Line
             {'credit': 0.00, 'debit': 10.00},  # Debit Line
-            {'credit': 0.01, 'debit': 0.00},  # Labor Credit Line
+        ])
+        labour_move = workorder.time_ids.account_move_line_id.move_id
+        self.assertRecordValues(labour_move.line_ids, [
+            {'credit': 0.01, 'debit': 0.00},
+            {'credit': 0.00, 'debit': 0.01},
         ])
 
     def test_labor_cost_balancing_with_cost_share(self):
@@ -546,10 +549,14 @@ class TestMrpAccountMove(TestAccountMoveStockCommon):
         production._post_inventory()
         production.button_mark_done()
 
-        account_move = production.move_finished_ids.filtered(lambda fm: fm.product_id == self.product_A)\
+        account_move = production.move_finished_ids.filtered(lambda fm: fm.product_id == self.product_A) \
             .stock_valuation_layer_ids.account_move_id
         self.assertRecordValues(account_move.line_ids, [
-            {'credit': 9.99, 'debit': 0.00},  # Credit Line
+            {'credit': 10.0, 'debit': 0.00},  # Credit Line
             {'credit': 0.00, 'debit': 10.00},  # Debit Line
-            {'credit': 0.01, 'debit': 0.00},  # Labor Credit Line
+        ])
+        labour_move = workorder.time_ids.account_move_line_id.move_id
+        self.assertRecordValues(labour_move.line_ids, [
+            {'credit': 0.01, 'debit': 0.00},
+            {'credit': 0.00, 'debit': 0.01},
         ])

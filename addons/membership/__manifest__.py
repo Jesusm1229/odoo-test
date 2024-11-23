@@ -23,7 +23,7 @@ invoice and send propositions for membership renewal.
     'depends': ['account'],
     'data': [
         'security/ir.model.access.csv',
-        'wizard_test/membership_invoice_views.xml',
+        'wizard/membership_invoice_views.xml',
         'data/membership_data.xml',
         'views/product_views.xml',
         'views/partner_views.xml',

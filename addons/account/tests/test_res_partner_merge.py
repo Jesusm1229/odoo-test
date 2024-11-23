@@ -50,7 +50,7 @@ class TestMergePartner(AccountTestInvoicingCommon):
         })
 
     def test_merge_partners_with_bank_accounts_linked_to_payments(self):
-        wizard = self.env['base.partner.merge.automatic.wizard_test'].create({})
+        wizard = self.env['base.partner.merge.automatic.wizard'].create({})
         wizard._merge([self.partner1.id, self.partner2.id], self.partner1)
 
         self.assertFalse(self.partner2.exists(), "Source partner should be deleted after merge")
@@ -61,7 +61,7 @@ class TestMergePartner(AccountTestInvoicingCommon):
         self.assertEqual(self.payment2.partner_bank_id.partner_id, self.partner1, "Payment's bank account should belong to the destination partner")
 
     def test_merge_partners_with_duplicate_bank_accounts_linked_to_payments(self):
-        wizard = self.env['base.partner.merge.automatic.wizard_test'].create({})
+        wizard = self.env['base.partner.merge.automatic.wizard'].create({})
         wizard._merge([self.partner1.id, self.partner3.id], self.partner1)
 
         self.assertFalse(self.partner3.exists(), "Source partner should be deleted after merge")

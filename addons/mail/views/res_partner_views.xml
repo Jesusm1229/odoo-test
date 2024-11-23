@@ -94,7 +94,7 @@
             <field name="view_mode">kanban,list,form,activity</field>
         </record>
 
-        <!--  Replace the default mass-mailing wizard_test in base with the composition wizard_test -->
+        <!--  Replace the default mass-mailing wizard in base with the composition wizard -->
         <record id="action_partner_mass_mail" model="ir.actions.act_window">
             <field name="name">Send email</field>
             <field name="res_model">mail.compose.message</field>

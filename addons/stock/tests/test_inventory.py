@@ -387,7 +387,7 @@ class TestInventory(TransactionCase):
     def test_inventory_outdate_1(self):
         """ Checks that applying an inventory adjustment that is outdated due to
         its corresponding quant being modified after its inventory quantity is set
-        opens a wizard_test. The wizard_test should warn about the conflict and its value should be
+        opens a wizard. The wizard should warn about the conflict and its value should be
         corrected after user confirms the inventory quantity.
         """
         # Set initial quantity to 7
@@ -514,7 +514,7 @@ class TestInventory(TransactionCase):
             'reserved_quantity': 0,
         })
         inventory_quant.action_apply_inventory()
-        # Expect action apply do not return a wizard_test
+        # Expect action apply do not return a wizard
         self.assertEqual(inventory_quant.quantity, 5)
 
     def test_cyclic_inventory(self):

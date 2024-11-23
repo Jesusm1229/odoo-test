@@ -5,7 +5,7 @@ from odoo import api, models
 
 
 class MergePartnerAutomatic(models.TransientModel):
-    _inherit = 'base.partner.merge.automatic.wizard_test'
+    _inherit = 'base.partner.merge.automatic.wizard'
 
     @api.model
     def _update_foreign_keys(self, src_partners, dst_partner):

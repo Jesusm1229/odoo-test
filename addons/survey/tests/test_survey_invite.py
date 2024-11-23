@@ -33,7 +33,7 @@ class TestSurveyInvite(common.TestSurveyCommon, MailCommon):
 
     @users('survey_manager')
     def test_survey_invite_action(self):
-        # Check correctly configured survey returns an invite wizard_test action
+        # Check correctly configured survey returns an invite wizard action
         action = self.survey.action_send_survey()
         self.assertEqual(action['res_model'], 'survey.invite')
 

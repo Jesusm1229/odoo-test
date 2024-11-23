@@ -679,7 +679,7 @@ class TestAccountMoveInalterableHash(AccountTestInvoicingCommon):
 
     def test_wizard_hashes_all_journals(self):
         """
-        Test that the wizard_test hashes all journals.
+        Test that the wizard hashes all journals.
           * Regardless of the `restrict_mode_hash_table` setting on the journal.
           * Regardless of the lock date
         """
@@ -701,13 +701,13 @@ class TestAccountMoveInalterableHash(AccountTestInvoicingCommon):
         ])
         moves.action_post()
         self.company_data['company'].hard_lock_date = '2023-01-02'
-        wizard = self.env['account.secure.entries.wizard_test'].create({'hash_date': '2023-01-02'})
+        wizard = self.env['account.secure.entries.wizard'].create({'hash_date': '2023-01-02'})
         wizard.action_secure_entries()
         self.assertTrue(False not in moves.mapped('inalterable_hash'))
 
     def test_wizard_ignores_sequence_prefixes_with_unreconciled_entries(self):
         """
-        Test that the wizard_test does not try to hash sequence prefixes containing unreconciled bank statement lines.
+        Test that the wizard does not try to hash sequence prefixes containing unreconciled bank statement lines.
         But it should still hash the remaining sequence prefixes from the same journal.
         """
         # Create 2 reconciled moves from different sequences
@@ -724,7 +724,7 @@ class TestAccountMoveInalterableHash(AccountTestInvoicingCommon):
             'amount': 0.0,  # reconciled
         })
 
-        wizard = self.env['account.secure.entries.wizard_test'].create({'hash_date': '2017-01-01'})
+        wizard = self.env['account.secure.entries.wizard'].create({'hash_date': '2017-01-01'})
         reconciled_bank_statement_lines = reconciled_bank_statement_line_2016 | reconciled_bank_statement_line_2017
         self.assertFalse(wizard.unreconciled_bank_statement_line_ids)
         self.assertEqual(wizard.move_to_hash_ids, reconciled_bank_statement_lines.move_id)
@@ -737,16 +737,16 @@ class TestAccountMoveInalterableHash(AccountTestInvoicingCommon):
             'amount': 10.0,
         })
 
-        wizard = self.env['account.secure.entries.wizard_test'].create({'hash_date': '2017-01-01'})
+        wizard = self.env['account.secure.entries.wizard'].create({'hash_date': '2017-01-01'})
         self.assertEqual(wizard.unreconciled_bank_statement_line_ids, unreconciled_bank_statement_line_2017)
         self.assertEqual(wizard.move_to_hash_ids, reconciled_bank_statement_line_2016.move_id)
 
     def test_wizard_backwards_compatibility(self):
         """
-        The wizard_test was introduced in odoo 17.5 when the hash version was 4.
+        The wizard was introduced in odoo 17.5 when the hash version was 4.
         We check that:
           * We do not hash unhashed moves before the start of the hash sequence
-          * The wizard_test displays information about the date of the first unhashed move:
+          * The wizard displays information about the date of the first unhashed move:
             This excludes moves before the hard lock date.
         """
         # Let's simulate v3 where the hash was on post and not retroactive
@@ -780,7 +780,7 @@ class TestAccountMoveInalterableHash(AccountTestInvoicingCommon):
             self.assertFalse(move.inalterable_hash)
 
         # We cannot hash the moves_v3_pre_restrict_mode because the moves_v3_post_restrict_mode are hashed
-        wizard = self.env['account.secure.entries.wizard_test'].create({'hash_date': '2024-01-03'})
+        wizard = self.env['account.secure.entries.wizard'].create({'hash_date': '2024-01-03'})
         self.assertEqual(wizard.not_hashable_unlocked_move_ids, moves_v3_pre_restrict_mode)
         self.assertEqual(wizard.move_to_hash_ids, moves_v4)
 
@@ -797,7 +797,7 @@ class TestAccountMoveInalterableHash(AccountTestInvoicingCommon):
         self.assertEqual(wizard.max_hash_date, fields.Date.from_string("2023-12-31"))
         self.company_data['company'].hard_lock_date = "2024-01-01"
         # There is nothing to hash
-        wizard = self.env['account.secure.entries.wizard_test'].create({'hash_date': '2024-01-03'})
+        wizard = self.env['account.secure.entries.wizard'].create({'hash_date': '2024-01-03'})
         self.assertEqual(wizard.max_hash_date, fields.Date.from_string("2024-01-02"))
         self.assertFalse(wizard.not_hashable_unlocked_move_ids)
         self.assertEqual(wizard.move_to_hash_ids, moves_v4)

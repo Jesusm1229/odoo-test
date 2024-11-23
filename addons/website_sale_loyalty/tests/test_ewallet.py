@@ -47,7 +47,7 @@ class TestEwallet(HttpCase, WebsiteSaleCommon):
             pass
 
     def test_ewallet(self):
-        self.env['loyalty.generate.wizard_test'].create({
+        self.env['loyalty.generate.wizard'].create({
             'program_id': self.ewallet_program.id,
             'coupon_qty': 1,
             'points_granted': 10,

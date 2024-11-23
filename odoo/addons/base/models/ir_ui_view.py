@@ -410,14 +410,16 @@ actual arch.
                     ))
                     err.context = e.context
                     raise err.with_traceback(e.__traceback__) from None
-                elif err.__context__:
+                elif e.__context__:
                     err = ValidationError(_(
                         "Error while validating view (%(view)s):\n\n%(error)s", view=view.key or view.id, error=e.__context__,
                     ))
                     err.context = {'name': 'invalid view'}
                     raise err.with_traceback(e.__context__.__traceback__) from None
                 else:
-                    raise
+                    raise ValidationError(_(
+                        "Error while validating view (%(view)s):\n\n%(error)s", view=view.key or view.id, error=e,
+                    ))
 
         return True
 
@@ -1478,7 +1480,11 @@ actual arch.
     # Node validator
     #------------------------------------------------------
     def _validate_tag_form(self, node, name_manager, node_info):
-        pass
+        self._validate_tag_kanban(node, name_manager, node_info)
+
+    def _validate_tag_kanban(self, node, name_manager, node_info):
+        if node.xpath("//t[@t-name='kanban-box']"):
+            _logger.warning("'kanban-box' is deprecated, define a 'card' template instead")
 
     def _validate_tag_list(self, node, name_manager, node_info):
         # reuse form view validation
@@ -2284,8 +2290,8 @@ actual arch.
 
 
 class ResetViewArchWizard(models.TransientModel):
-    """ A wizard_test to compare and reset views architecture. """
-    _name = "reset.view.arch.wizard_test"
+    """ A wizard to compare and reset views architecture. """
+    _name = "reset.view.arch.wizard"
     _description = "Reset View Architecture Wizard"
 
     view_id = fields.Many2one('ir.ui.view', string='View')

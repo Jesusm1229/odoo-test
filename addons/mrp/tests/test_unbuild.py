@@ -888,7 +888,7 @@ class TestUnbuild(TestMrpCommon):
         - 4 x (consumable)
         - Create a MO with 4 final products to produce.
         - Confirm and validate, then unlock the mo and update the qty produced to 10
-        - open the wizard_test to unbuild > the quantity proposed should be 10
+        - open the wizard to unbuild > the quantity proposed should be 10
         - unbuild 4 units
         - the move lines should be created with the correct quantity
         """

@@ -18,7 +18,7 @@
             </field>
         </record>
 
-        <!-- change password wizard_test -->
+        <!-- change password wizard -->
         <record id="change_password_wizard_view" model="ir.ui.view">
             <field name="name">Change Password</field>
             <field name="model">change.password.wizard</field>

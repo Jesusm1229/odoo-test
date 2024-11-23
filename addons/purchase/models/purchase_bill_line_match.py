@@ -192,7 +192,7 @@ class PurchaseBillMatch(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': _("Add to Purchase Order"),
-            'res_model': 'bill.to.po.wizard_test',
+            'res_model': 'bill.to.po.wizard',
             'target': 'new',
             'views': [(self.env.ref('purchase.bill_to_po_wizard_form').id, 'form')],
             'context': context,

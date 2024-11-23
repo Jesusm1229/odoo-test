@@ -666,7 +666,7 @@ test("basic rendering", async () => {
     });
     await start();
     await contains(".o_menu_systray .dropdown-toggle:has(i[aria-label='Messages'])");
-    expect($('.o_menu_systray .dropdown-toggle:has(i[aria-label="Messages"])')[0]).not.toHaveClass(
+    expect('.o_menu_systray .dropdown-toggle:has(i[aria-label="Messages"]):first').not.toHaveClass(
         "show"
     );
     await contains(".o_menu_systray i[aria-label='Messages']");
@@ -684,7 +684,7 @@ test("basic rendering", async () => {
     await contains(".o-mail-MessagingMenu div.text-muted", { text: "No conversation yet..." });
     await click(".o_menu_systray .dropdown-toggle:has(i[aria-label='Messages'])");
     await contains(".o-dropdown--menu", { count: 0 });
-    expect($('.o_menu_systray .dropdown-toggle:has(i[aria-label="Messages"])')[0]).not.toHaveClass(
+    expect('.o_menu_systray .dropdown-toggle:has(i[aria-label="Messages"]):first').not.toHaveClass(
         "show"
     );
 });
@@ -1258,4 +1258,32 @@ test("keyboard navigation with quick search", async () => {
     await insertText(".o-mail-MessagingMenu input", "", { replace: true });
     await contains(".o-mail-NotificationItem", { count: 23 });
     await contains(".o-mail-NotificationItem.o-active", { count: 0 });
+});
+
+test("failure is removed from messaging menu when message is deleted", async () => {
+    const pyEnv = await startServer();
+    const recipientId = pyEnv["res.partner"].create({ name: "James" });
+    const messageId = pyEnv["mail.message"].create({
+        body: "Hello world!",
+        model: "res.partner",
+        partner_ids: [recipientId],
+        res_id: serverState.partnerId,
+    });
+    pyEnv["mail.notification"].create({
+        failure_type: "mail_email_invalid",
+        mail_message_id: messageId,
+        notification_status: "exception",
+        notification_type: "email",
+        res_partner_id: serverState.partnerId,
+    });
+    await start();
+    await click(".o_menu_systray i[aria-label='Messages']");
+    await contains(".o-mail-NotificationItem", {
+        contains: [
+            [".o-mail-NotificationItem-name", { text: "Contact" }],
+            [".o-mail-NotificationItem-text", { text: "An error occurred when sending an email" }],
+        ],
+    });
+    pyEnv["mail.message"].unlink([messageId]);
+    await contains(".o-mail-NotificationItem", { count: 0 });
 });

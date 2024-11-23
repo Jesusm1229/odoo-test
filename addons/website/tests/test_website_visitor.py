@@ -431,7 +431,7 @@ class WebsiteVisitorTests(WebsiteVisitorTestsCommon):
         self.assertEqual(visitor_admin.website_track_ids.url, '/admin')
 
         # Merge admin_duplicate partner (no user associated) in admin partner
-        self.env['base.partner.merge.automatic.wizard_test']._merge(
+        self.env['base.partner.merge.automatic.wizard']._merge(
             (self.partner_admin + self.partner_admin_duplicate).ids,
             self.partner_admin
         )
@@ -489,7 +489,7 @@ class WebsiteVisitorTests(WebsiteVisitorTestsCommon):
                         self.partner_admin_duplicate.id)
 
         # Merge admin_duplicate partner (no user associated) in admin partner
-        self.env['base.partner.merge.automatic.wizard_test']._merge(
+        self.env['base.partner.merge.automatic.wizard']._merge(
             (self.partner_admin + self.partner_admin_duplicate).ids,
             self.partner_admin
         )
@@ -625,10 +625,10 @@ class TestPortalWizardMultiWebsites(HttpCase):
         self.assertEqual(self.portal_user_all_websites.email_state, 'exist')
 
     def _create_portal_user(self, partner):
-        """ Return a portal wizard_test user from a partner
-        :param partner: the partner from which a portal wizard_test user has to be
+        """ Return a portal wizard user from a partner
+        :param partner: the partner from which a portal wizard user has to be
         created
         """
-        portal_wizard = self.env['portal.wizard_test'].with_context(
+        portal_wizard = self.env['portal.wizard'].with_context(
             active_ids=[partner.id]).create({})
         return portal_wizard.user_ids

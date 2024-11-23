@@ -137,7 +137,7 @@ class PosOrder(models.Model):
             line = line[2]
 
             if line.get('combo_line_ids'):
-                filtered_lines = list(filter(lambda l: l[2].get('id') and l[2].get('id') in line.get('combo_line_ids'), order_vals['lines']))
+                filtered_lines = list(filter(lambda l: l[0] in [0, 1] and l[2].get('id') and l[2].get('id') in line.get('combo_line_ids'), order_vals['lines']))
                 acc[line['uuid']] = [l[2]['uuid'] for l in filtered_lines]
 
             line['combo_line_ids'] = False
@@ -193,7 +193,7 @@ class PosOrder(models.Model):
         prec_acc = order.currency_id.decimal_places
 
         # Recompute amount paid because we don't trust the client
-        order.amount_paid = sum(order.payment_ids.mapped('amount'))
+        order.with_context(backend_recomputation=True).write({'amount_paid': sum(order.payment_ids.mapped('amount'))})
 
         if not draft and not float_is_zero(pos_order['amount_return'], prec_acc):
             cash_payment_method = pos_session.payment_method_ids.filtered('is_cash_count')[:1]
@@ -208,6 +208,7 @@ class PosOrder(models.Model):
                 'is_change': True,
             }
             order.add_payment(return_payment_vals)
+            order._compute_prices()
 
     def _prepare_tax_base_line_values(self):
         """ Convert pos order lines into dictionaries that would be used to compute taxes later.
@@ -437,10 +438,10 @@ class PosOrder(models.Model):
                 raise UserError(_("You can't: create a pos order from the backend interface, or unset the pricelist, or create a pos.order in a python test with Form tool, or edit the form view in studio if no PoS order exist"))
             currency = order.currency_id
             order.amount_paid = sum(payment.amount for payment in order.payment_ids)
-            order.amount_return = sum(payment.amount < 0 and payment.amount or 0 for payment in order.payment_ids)
+            order.amount_return = -sum(payment.amount < 0 and payment.amount or 0 for payment in order.payment_ids)
             order.amount_tax = currency.round(sum(self._amount_line_tax(line, order.fiscal_position_id) for line in order.lines))
             order.amount_total = order.amount_tax + currency.round(sum(line.price_subtotal for line in order.lines))
-            order.amount_difference = order.amount_paid - order.amount_total
+            order.amount_difference = currency.round(order.amount_paid - order.amount_total) or 0
 
     def _compute_batch_amount_all(self):
         """
@@ -510,8 +511,8 @@ class PosOrder(models.Model):
         res = super().write(vals)
         for order in self:
             if vals.get('payment_ids'):
-                order._compute_prices()
-                totally_paid_or_more = float_compare(order.amount_paid, order.amount_total, precision_rounding=order.currency_id.rounding)
+                order.with_context(backend_recomputation=True)._compute_prices()
+                totally_paid_or_more = float_compare(order.amount_paid, self._get_rounded_amount(order.amount_total), precision_rounding=order.currency_id.rounding)
                 if totally_paid_or_more < 0 and order.state in ['paid', 'done', 'invoiced']:
                     raise UserError(_('The paid amount is different from the total amount of the order.'))
                 elif totally_paid_or_more > 0 and order.state == 'paid':
@@ -663,7 +664,7 @@ class PosOrder(models.Model):
 
     def _create_invoice(self, move_vals):
         self.ensure_one()
-        new_move = self.env['account.move'].sudo().with_company(self.company_id).with_context(default_move_type=move_vals['move_type']).create(move_vals)
+        new_move = self.env['account.move'].sudo().with_company(self.company_id).with_context(default_move_type=move_vals['move_type'], linked_to_pos=True).create(move_vals)
         message = _("This invoice has been created from the point of sale session: %s",
             self._get_html_link())
 
@@ -818,6 +819,8 @@ class PosOrder(models.Model):
             balance = company_currency.round(amount_currency * rate)
             aml_vals_list_per_nature['product'].append({
                 'name': order_line.full_product_name,
+                'product_id': order_line.product_id.id,
+                'quantity': order_line.qty * sign,
                 'account_id': base_line_vals['account_id'].id,
                 'partner_id': base_line_vals['partner_id'].id,
                 'currency_id': base_line_vals['currency_id'].id,
@@ -1570,8 +1573,12 @@ class PosOrderLine(models.Model):
     @api.depends('price_subtotal', 'total_cost')
     def _compute_margin(self):
         for line in self:
-            line.margin = line.price_subtotal - line.total_cost
-            line.margin_percent = not float_is_zero(line.price_subtotal, precision_rounding=line.currency_id.rounding) and line.margin / line.price_subtotal or 0
+            if line.product_id.type == 'combo':
+                line.margin = 0
+                line.margin_percent = 0
+            else:
+                line.margin = line.price_subtotal - line.total_cost
+                line.margin_percent = not float_is_zero(line.price_subtotal, precision_rounding=line.currency_id.rounding) and line.margin / line.price_subtotal or 0
 
     def _prepare_tax_base_line_values(self):
         """ Convert pos order lines into dictionaries that would be used to compute taxes later.

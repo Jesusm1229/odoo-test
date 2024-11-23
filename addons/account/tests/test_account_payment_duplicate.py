@@ -139,7 +139,7 @@ class TestAccountPaymentDuplicateMoves(AccountTestInvoicingCommon):
         ])
 
     def test_register_payment_different_payment_types(self):
-        """ Test that payment wizard_test correctly calculates duplicate_payment_ids """
+        """ Test that payment wizard correctly calculates duplicate_payment_ids """
         payment_1 = self.env['account.payment.register'].with_context(active_model='account.move', active_ids=self.out_invoice_1.ids).create({'payment_date': self.payment_in.date})
         payment_2 = self.env['account.payment.register'].with_context(active_model='account.move', active_ids=self.in_invoice_1.ids).create({'payment_date': self.payment_out.date})
         existing_payment_in = self.payment_in

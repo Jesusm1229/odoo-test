@@ -1532,7 +1532,7 @@ class TestAccountMoveInInvoiceOnchanges(AccountTestInvoicingCommon):
 
     @freeze_time('2023-02-01')
     def test_in_invoice_payment_register_wizard(self):
-        # Test creating an account_move with an in_invoice_type and check payment register wizard_test values
+        # Test creating an account_move with an in_invoice_type and check payment register wizard values
         move = self.env['account.move'].create({
             'move_type': 'in_invoice',
             'partner_id': self.partner_a.id,
@@ -1901,7 +1901,7 @@ class TestAccountMoveInInvoiceOnchanges(AccountTestInvoicingCommon):
         })
         move.action_post()
 
-        wizard = self.env['account.automatic.entry.wizard_test'].with_context(
+        wizard = self.env['account.automatic.entry.wizard'].with_context(
             active_model='account.move.line',
             active_ids=move.invoice_line_ids.ids,
         ).create({
@@ -2424,7 +2424,8 @@ class TestAccountMoveInInvoiceOnchanges(AccountTestInvoicingCommon):
             ('out_receipt', 1000.0, [('out_refund', 1000.0)], 'reversed'),
             ('out_receipt', 1000.0, [('out_refund', 500.0), ('out_refund', 500.0)], 'reversed'),
             ('out_receipt', 1000.0, [('reverse', 1000.0)], 'reversed'),
-            ('out_refund', 1000.0, [('reverse', -1000.0)], 'reversed'),
+            ('out_refund', 1000.0, [('reverse', -1000.0)], 'paid'),
+            ('out_refund', 1000.0, [('entry', 1000.0)], 'reversed'),
             ('in_invoice', 1000.0, [('in_refund', 1000.0)], 'reversed'),
             ('in_invoice', 1000.0, [('in_refund', 500.0), ('in_refund', 500.0)], 'reversed'),
             ('in_invoice', 1000.0, [('in_refund', 500.0), ('entry', 500.0)], 'reversed'),
@@ -2432,7 +2433,8 @@ class TestAccountMoveInInvoiceOnchanges(AccountTestInvoicingCommon):
             ('in_receipt', 1000.0, [('in_refund', 1000.0)], 'reversed'),
             ('in_receipt', 1000.0, [('in_refund', 500.0), ('in_refund', 500.0)], 'reversed'),
             ('in_receipt', 1000.0, [('reverse', 1000.0)], 'reversed'),
-            ('in_refund', 1000.0, [('reverse', 1000.0)], 'reversed'),
+            ('in_refund', 1000.0, [('reverse', 1000.0)], 'paid'),
+            ('in_refund', 1000.0, [('entry', -1000.0)], 'reversed'),
             ('entry', 1000.0, [('entry', -1000.0)], 'not_paid'),
             ('entry', 1000.0, [('reverse', 1000.0)], 'not_paid'),
 

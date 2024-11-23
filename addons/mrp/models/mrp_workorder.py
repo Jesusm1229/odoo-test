@@ -152,25 +152,21 @@ class MrpWorkorder(models.Model):
 
     @api.depends('production_availability', 'blocked_by_workorder_ids.state')
     def _compute_state(self):
-        # Force to compute the production_availability right away.
-        # It is a trick to force that the state of workorder is computed at the end of the
-        # cyclic depends with the mo.state, mo.reservation_state and wo.state and avoid recursion error
-        self.mapped('production_availability')
         for workorder in self:
-            if workorder.state == 'pending':
-                if all([wo.state in ('done', 'cancel') for wo in workorder.blocked_by_workorder_ids]):
-                    workorder.state = 'ready' if workorder.production_availability == 'assigned' else 'waiting'
-                    continue
-            if workorder.state not in ('waiting', 'ready'):
+            if workorder.state not in ('pending', 'waiting', 'ready'):
                 continue
-            if not all([wo.state in ('done', 'cancel') for wo in workorder.blocked_by_workorder_ids]):
+            no_recursion_blocked_by_workorder_ids = workorder.blocked_by_workorder_ids.with_context(no_recursion=True)
+            if workorder.production_availability == 'assigned':
+                if all(wo.state in ('done', 'cancel') for wo in no_recursion_blocked_by_workorder_ids):
+                    workorder.state = 'ready'
+                else:
+                    workorder.state = 'pending'
+                continue
+            if self._context.get('no_recursion'):
+                continue
+            if no_recursion_blocked_by_workorder_ids and not all(wo.state in ('done', 'cancel') for wo in no_recursion_blocked_by_workorder_ids):
                 workorder.state = 'pending'
-                continue
-            if workorder.production_availability not in ('waiting', 'confirmed', 'assigned'):
-                continue
-            if workorder.production_availability == 'assigned' and workorder.state == 'waiting':
-                workorder.state = 'ready'
-            elif workorder.production_availability != 'assigned' and workorder.state == 'ready':
+            else:
                 workorder.state = 'waiting'
 
     @api.depends('production_id.date_start', 'date_start')
@@ -576,7 +572,7 @@ class MrpWorkorder(models.Model):
         total = 0
         for wo in self:
             if date:
-                duration = sum(wo.time_ids.filtered(lambda t: t.date_end <= date).mapped('duration'))
+                duration = sum(wo.time_ids.filtered(lambda t: t.date_end and t.date_end <= date).mapped('duration'))
             else:
                 duration = sum(wo.time_ids.mapped('duration'))
             total += (duration / 60.0) * wo.workcenter_id.costs_hour
@@ -834,7 +830,7 @@ class MrpWorkorder(models.Model):
     def _update_finished_move(self):
         """ Update the finished move & move lines in order to set the finished
         product lot on it as well as the produced quantity. This method get the
-        information either from the last workorder or from the Produce wizard_test."""
+        information either from the last workorder or from the Produce wizard."""
         production_move = self.production_id.move_finished_ids.filtered(
             lambda move: move.product_id == self.product_id and
             move.state not in ('done', 'cancel')

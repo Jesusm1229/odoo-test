@@ -7,7 +7,7 @@ class AccountMove(models.Model):
 
     def _compute_l10n_latam_document_type(self):
         """ Override for debit notes. This sets the same document type as the one on the origin. Cannot
-         override the defaults in the account.move.debit wizard_test because l10n_latam_invoice_document explicitly
+         override the defaults in the account.move.debit wizard because l10n_latam_invoice_document explicitly
          calls _compute_l10n_latam_document_type() after the debit note is created. """
         br_debit_notes = self.filtered(lambda m: m.state == "draft" and m.country_code == "BR" and m.debit_origin_id.l10n_latam_document_type_id)
         for move in br_debit_notes:

@@ -51,13 +51,17 @@ class AccountFiscalPosition(models.Model):
     zip_to = fields.Char(string='Zip Range To')
     # To be used in hiding the 'Federal States' field('attrs' in view side) when selected 'Country' has 0 states.
     states_count = fields.Integer(compute='_compute_states_count')
-    foreign_vat = fields.Char(string="Foreign Tax ID", help="The tax ID of your company in the region mapped by this fiscal position.")
+    foreign_vat = fields.Char(string="Foreign Tax ID", inverse="_inverse_foreign_vat", help="The tax ID of your company in the region mapped by this fiscal position.")
 
     # Technical field used to display a banner on top of foreign vat fiscal positions,
     # in order to ease the instantiation of foreign taxes when possible.
     foreign_vat_header_mode = fields.Selection(
         selection=[('templates_found', "Templates Found"), ('no_template', "No Template")],
         compute='_compute_foreign_vat_header_mode')
+
+    def _inverse_foreign_vat(self):
+        # Hook for extension
+        pass
 
     def _compute_states_count(self):
         for position in self:
@@ -189,7 +193,7 @@ class AccountFiscalPosition(models.Model):
         """ Hook for determining VAT validity with more complex VAT requirements """
         return bool(delivery.vat)
 
-    def _get_fpos_ranking_functions(self, partner, delivery_country=None, vat_required=None):
+    def _get_fpos_ranking_functions(self, partner):
         """Get comparison functions to rank fiscal positions.
 
         All functions are applied to the fiscal position and return a value.
@@ -201,20 +205,14 @@ class AccountFiscalPosition(models.Model):
 
         :param partner: the partner to consider for the ranking of the fiscal positions
         :type partner: :class:`res.partner`
-        :type delivery_country: :class: `res.country` needed as it could be different from the country of the partner
-        :type vat_required: bool needed as its value can be forced in some cases
         :return: a list of tuples with a name and the function to apply. The name is only
             used to facilitate extending the comparators.
         :rtype: list[tuple[str, function]
         """
-        if vat_required is None:
-            vat_required = self._get_vat_valid(partner, self.env.company)
-        if delivery_country is None:
-            delivery_country = partner.country_id
         return [
             ('vat_required', lambda fpos: (
                 not fpos.vat_required
-                or (vat_required and 2)
+                or (self._get_vat_valid(partner, self.env.company) and 2)
             )),
             ('company_id', lambda fpos: len(fpos.company_id.parent_ids)),
             ('zipcode', lambda fpos:(
@@ -227,11 +225,11 @@ class AccountFiscalPosition(models.Model):
             )),
             ('country_id', lambda fpos: (
                 not fpos.country_id
-                or (delivery_country == fpos.country_id and 2)
+                or (partner.country_id == fpos.country_id and 2)
             )),
             ('country_group', lambda fpos: (
                 not fpos.country_group_id
-                or (delivery_country in fpos.country_group_id.country_ids and 2)
+                or (partner.country_id in fpos.country_group_id.country_ids and 2)
             )),
             ('sequence', lambda fpos: -(fpos.sequence or 0.1)),  # do not filter out sequence=0, priority to lowest sequence in `max` method
         ]
@@ -245,38 +243,16 @@ class AccountFiscalPosition(models.Model):
         if not partner:
             return self.env['account.fiscal.position']
 
-        # If no "delivery" partner is specified, we assume it will be the "invoicing" partner.
-        if not delivery:
-            delivery = partner
-
         company = self.env.company
+        intra_eu = vat_exclusion = False
+        if company.vat and partner.vat:
+            eu_country_codes = set(self.env.ref('base.europe').country_ids.mapped('code'))
+            intra_eu = company.vat[:2] in eu_country_codes and partner.vat[:2] in eu_country_codes
+            vat_exclusion = company.vat[:2] == partner.vat[:2]
 
-        # The purpose of this part is to avoid making (lot of) extra queries by using ref on 'base.europe'
-        res_model, res_id = self.env['ir.model.data']._xmlid_to_res_model_res_id('base.europe')
-        eu_country_group = self.env[res_model].browse(res_id)
-        eu_country_codes = set(eu_country_group.country_ids.mapped('code'))
-
-        delivery_country = delivery.country_id
-
-        eu_vat_partner = partner.vat and partner.vat[:2] in eu_country_codes
-        eu_partner = partner.country_code in eu_country_codes
-        eu_delivery = delivery.country_code in eu_country_codes
-        domestic_delivery = delivery_country == company.country_id
-
-        vat_required = self._get_vat_valid(partner, company) or domestic_delivery
-
-        # If the delivery is within the EU, the partner does not have a valid EU VAT number and is not from the EU,
-        # then assign the company's country as the delivery country and force vat_required to True
-        # in order to get the domestic FP
-        if eu_delivery and not eu_vat_partner and not eu_partner:
-            delivery_country = company.country_id
-            vat_required = True
-
-        # If the delivery is to the same country as the company's country (domestic delivery),
-        # the partner has a valid EU VAT number but is not from the EU,
-        # we need to force vat_required to False in order to get the EU private FP
-        if domestic_delivery and eu_vat_partner and not eu_partner:
-            vat_required = False
+        # If company and partner have the same vat prefix (and are both within the EU), use invoicing
+        if not delivery or (intra_eu and vat_exclusion):
+            delivery = partner
 
         # partner manually set fiscal position always win
         manual_fiscal_position = (
@@ -289,7 +265,8 @@ class AccountFiscalPosition(models.Model):
         if not partner.country_id:
             return self.env['account.fiscal.position']
 
-        ranking_subfunctions = self._get_fpos_ranking_functions(delivery, delivery_country, vat_required)
+        # Search for a auto applied fiscal position matching the partner
+        ranking_subfunctions = self._get_fpos_ranking_functions(delivery)
         def ranking_function(fpos):
             return tuple(rank[1](fpos) for rank in ranking_subfunctions)
 
@@ -518,6 +495,10 @@ class ResPartner(models.Model):
             else:
                 partner.currency_id = self.env.company.currency_id
 
+    def _default_display_invoice_template_pdf_report_id(self):
+        available_templates_count = self.env['ir.actions.report'].search_count([('is_invoice_report', '=', True)], limit=2)
+        return available_templates_count > 1
+
     name = fields.Char(tracking=True)
     credit = fields.Monetary(compute='_credit_debit_get', search=_credit_search,
         string='Total Receivable', help="Total amount this customer owes you.",
@@ -595,14 +576,14 @@ class ResPartner(models.Model):
         inverse='_inverse_invoice_edi_format',
     )
     invoice_edi_format_store = fields.Char(company_dependent=True)
-    display_invoice_edi_format = fields.Boolean(compute='_compute_display_invoice_edi_format')
+    display_invoice_edi_format = fields.Boolean(default=lambda self: len(self._fields['invoice_edi_format'].selection), store=False)
     invoice_template_pdf_report_id = fields.Many2one(
         comodel_name='ir.actions.report',
         domain="[('is_invoice_report', '=', True)]",
         readonly=False,
         store=True,
     )
-    display_invoice_template_pdf_report_id = fields.Boolean(compute='_compute_display_invoice_template_pdf_report_id')
+    display_invoice_template_pdf_report_id = fields.Boolean(default=_default_display_invoice_template_pdf_report_id, store=False)
     # Computed fields to order the partners as suppliers/customers according to the
     # amount of their generated incoming/outgoing account moves
     supplier_rank = fields.Integer(default=0, copy=False)
@@ -654,13 +635,6 @@ class ResPartner(models.Model):
             domain = expression.AND([domain, [('company_id', 'in', (False, self.company_id.id))]])
         domain = expression.AND([domain, [('partner_id', '!=', self._origin.id)]])
         return self.env['res.partner.bank'].search(domain)
-
-    def _compute_display_invoice_edi_format(self):
-        self.display_invoice_edi_format = len(self._fields['invoice_edi_format'].selection)
-
-    def _compute_display_invoice_template_pdf_report_id(self):
-        available_templates_count = self.env['ir.actions.report'].search_count([('is_invoice_report', '=', True)], limit=2)
-        self.display_invoice_template_pdf_report_id = available_templates_count > 1
 
     @api.depends_context('company')
     def _compute_invoice_edi_format(self):

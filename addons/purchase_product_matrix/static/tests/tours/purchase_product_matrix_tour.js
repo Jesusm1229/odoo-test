@@ -38,6 +38,13 @@ registry.category("web_tour.tours").add('purchase_matrix_tour', {
         [...document.querySelectorAll(".o_matrix_input")].forEach((el) => el.value = 1);
     }
 }, {
+    trigger: '.o_matrix_input_table',
+    run: function () {
+        // left first cell at 0 to ensure the variant is not created
+        $('.o_matrix_input')[0].value = 0;
+        $('.o_matrix_input')[8].value = 0;
+    }
+}, {
     trigger: ".modal button:contains(Confirm)",
     run: 'click'
 }, {
@@ -46,7 +53,7 @@ registry.category("web_tour.tours").add('purchase_matrix_tour', {
 },
 // Open the matrix through the pencil button next to the product in line edit mode.
 {
-    trigger: ".o_form_status_indicator_buttons.invisible", // wait for save to be finished
+    trigger: ".o_form_status_indicator_buttons:not(:visible)", // wait for save to be finished
 },
 {
     trigger: '.o_field_pol_product_many2one',
@@ -59,7 +66,7 @@ registry.category("web_tour.tours").add('purchase_matrix_tour', {
     run: function () {
         // update some of the matrix values.
         [...document.querySelectorAll(".o_matrix_input")]
-            .slice(8, 16)
+            .slice(9, 16)
             .forEach((el) => (el.value = 4));
     } // set the qty to 4 for half of the matrix products.
 }, {
@@ -75,7 +82,7 @@ registry.category("web_tour.tours").add('purchase_matrix_tour', {
 },
 // Ensures the matrix is opened with the values, when adding the same product.
 {
-    trigger: '.o_form_status_indicator_buttons.invisible',
+    trigger: ".o_form_status_indicator_buttons:not(:visible)",
 },
 {
     trigger: 'a:contains("Add a product")',

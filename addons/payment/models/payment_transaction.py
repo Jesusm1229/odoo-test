@@ -243,10 +243,10 @@ class PaymentTransaction(models.Model):
         return action
 
     def action_capture(self):
-        """ Open the partial capture wizard_test if it is supported by the related providers, otherwise
+        """ Open the partial capture wizard if it is supported by the related providers, otherwise
         capture the transactions immediately.
 
-        :return: The action to open the partial capture wizard_test, if supported.
+        :return: The action to open the partial capture wizard, if supported.
         :rtype: action.act_window|None
         """
         payment_utils.check_rights_on_recordset(self)
@@ -256,7 +256,7 @@ class PaymentTransaction(models.Model):
                 'name': _("Capture"),
                 'type': 'ir.actions.act_window',
                 'view_mode': 'form',
-                'res_model': 'payment.capture.wizard_test',
+                'res_model': 'payment.capture.wizard',
                 'target': 'new',
                 'context': {
                     'active_model': 'payment.transaction',

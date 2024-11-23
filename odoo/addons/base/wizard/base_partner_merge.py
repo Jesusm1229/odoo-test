@@ -21,19 +21,19 @@ class MergePartnerLine(models.TransientModel):
     _description = 'Merge Partner Line'
     _order = 'min_id asc'
 
-    wizard_id = fields.Many2one('base.partner.merge.automatic.wizard_test', 'Wizard')
+    wizard_id = fields.Many2one('base.partner.merge.automatic.wizard', 'Wizard')
     min_id = fields.Integer('MinID')
     aggr_ids = fields.Char('Ids', required=True)
 
 
 class MergePartnerAutomatic(models.TransientModel):
     """
-        The idea behind this wizard_test is to create a list of potential partners to
-        merge. We use two objects, the first one is the wizard_test for the end-user.
+        The idea behind this wizard is to create a list of potential partners to
+        merge. We use two objects, the first one is the wizard for the end-user.
         And the second will contain the partner list to merge.
     """
 
-    _name = 'base.partner.merge.automatic.wizard_test'
+    _name = 'base.partner.merge.automatic.wizard'
     _description = 'Merge Partner Wizard'
 
     @api.model
@@ -234,6 +234,28 @@ class MergePartnerAutomatic(models.TransientModel):
                 dest_record_id=dst_record.id,
             ))
 
+        # merge the fallback values for company dependent many2one fields
+        self.env.cr.execute(SQL(
+            """
+            UPDATE ir_default
+            SET json_value =
+                CASE
+                    WHEN json_value::int IN %(src_record_ids)s
+                    THEN %(dest_record_id)s
+                    ELSE json_value
+                END
+            FROM ir_model_fields f
+            WHERE f.id = ir_default.field_id
+            AND f.company_dependent
+            AND f.relation = %(model_name)s
+            AND f.ttype = 'many2one'
+            AND json_value ~ '^[0-9]+$';
+            """,
+            src_record_ids=tuple(src_records.ids),
+            dest_record_id=str(dst_record.id),
+            model_name=dst_record._name,
+        ))
+
         self.env.flush_all()
 
         # company_dependent fields of merged records
@@ -372,7 +394,7 @@ class MergePartnerAutomatic(models.TransientModel):
             return
 
         if len(partner_ids) > 3:
-            raise UserError(_("For safety reasons, you cannot merge more than 3 contacts together. You can re-open the wizard_test several times if needed."))
+            raise UserError(_("For safety reasons, you cannot merge more than 3 contacts together. You can re-open the wizard several times if needed."))
 
         # check if the list of partners to merge contains child/parent relation
         child_ids = self.env['res.partner']
@@ -473,7 +495,7 @@ class MergePartnerAutomatic(models.TransientModel):
     @api.model
     def _compute_selected_groupby(self):
         """ Returns the list of field names the partner can be grouped (as merge
-            criteria) according to the option checked on the wizard_test
+            criteria) according to the option checked on the wizard
         """
         groups = []
         group_by_prefix = 'group_by_'
@@ -523,14 +545,14 @@ class MergePartnerAutomatic(models.TransientModel):
     # ----------------------------------------
 
     def action_skip(self):
-        """ Skip this wizard_test line. Don't compute any thing, and simply redirect to the new step."""
+        """ Skip this wizard line. Don't compute any thing, and simply redirect to the new step."""
         if self.current_line_id:
             self.current_line_id.unlink()
         return self._action_next_screen()
 
     def _action_next_screen(self):
-        """ return the action of the next screen ; this means the wizard_test is set to treat the
-            next wizard_test line. Each line is a subset of partner that can be merged together.
+        """ return the action of the next screen ; this means the wizard is set to treat the
+            next wizard line. Each line is a subset of partner that can be merged together.
             If no line left, the end screen will be displayed (but an action is still returned).
         """
         self.env.invalidate_all() # FIXME: is this still necessary?
@@ -563,8 +585,8 @@ class MergePartnerAutomatic(models.TransientModel):
         }
 
     def _process_query(self, query):
-        """ Execute the select request and write the result in this wizard_test
-            :param query : the SQL query used to fill the wizard_test line
+        """ Execute the select request and write the result in this wizard
+            :param query : the SQL query used to fill the wizard line
         """
         self.ensure_one()
         model_mapping = self._compute_models()
@@ -598,9 +620,9 @@ class MergePartnerAutomatic(models.TransientModel):
         _logger.info("counter: %s", counter)
 
     def action_start_manual_process(self):
-        """ Start the process 'Merge with Manual Check'. Fill the wizard_test according to the group_by and exclude
-            options, and redirect to the first step (treatment of first wizard_test line). After, for each subset of
-            partner to merge, the wizard_test will be actualized.
+        """ Start the process 'Merge with Manual Check'. Fill the wizard according to the group_by and exclude
+            options, and redirect to the first step (treatment of first wizard line). After, for each subset of
+            partner to merge, the wizard will be actualized.
                 - Compute the selected groups (with duplication)
                 - If the user has selected the 'exclude_xxx' fields, avoid the partners
         """
@@ -611,8 +633,8 @@ class MergePartnerAutomatic(models.TransientModel):
         return self._action_next_screen()
 
     def action_start_automatic_process(self):
-        """ Start the process 'Merge Automatically'. This will fill the wizard_test with the same mechanism as 'Merge
-            with Manual Check', but instead of refreshing wizard_test with the current line, it will automatically process
+        """ Start the process 'Merge Automatically'. This will fill the wizard with the same mechanism as 'Merge
+            with Manual Check', but instead of refreshing wizard with the current line, it will automatically process
             all lines by merging partner grouped according to the checked options.
         """
         self.ensure_one()
@@ -694,8 +716,8 @@ class MergePartnerAutomatic(models.TransientModel):
         self.ensure_one()
         self.parent_migration_process_cb()
 
-        # NOTE JEM : seems louche to create a new wizard_test instead of reuse the current one with updated options.
-        # since it is like this from the initial commit of this wizard_test, I don't change it. yet ...
+        # NOTE JEM : seems louche to create a new wizard instead of reuse the current one with updated options.
+        # since it is like this from the initial commit of this wizard, I don't change it. yet ...
         wizard = self.create({'group_by_vat': True, 'group_by_email': True, 'group_by_name': True})
         wizard.action_start_automatic_process()
 
@@ -714,7 +736,7 @@ class MergePartnerAutomatic(models.TransientModel):
 
     def action_merge(self):
         """ Merge Contact button. Merge the selected partners, and redirect to
-            the end screen (since there is no other wizard_test line to process.
+            the end screen (since there is no other wizard line to process.
         """
         if not self.partner_ids:
             self.write({'state': 'finished'})

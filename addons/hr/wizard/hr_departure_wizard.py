@@ -5,7 +5,7 @@ from odoo import fields, models
 
 
 class HrDepartureWizard(models.TransientModel):
-    _name = 'hr.departure.wizard_test'
+    _name = 'hr.departure.wizard'
     _description = 'Departure Wizard'
 
     def _get_employee_departure_date(self):

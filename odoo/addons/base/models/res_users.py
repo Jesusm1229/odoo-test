@@ -131,7 +131,7 @@ def check_identity(fn):
     """ Wrapped method should be an *action method* (called from a button
     type=object), and requires extra security to be executed. This decorator
     checks if the identity (password) has been checked in the last 10mn, and
-    pops up an identity check wizard_test if not.
+    pops up an identity check wizard if not.
 
     Prevents access outside of interactive contexts (aka with a request)
     """
@@ -514,10 +514,10 @@ class Users(models.Model):
                 # For example web client submits False values for all empty fields.
                 continue
             if user == self.env.user:
-                # To change their own password, users must use the client-specific change password wizard_test,
+                # To change their own password, users must use the client-specific change password wizard,
                 # so that the new password is immediately used for further RPC requests, otherwise the user
                 # will face unexpected 'Access Denied' exceptions.
-                raise UserError(_('Please use the change password wizard_test (in User Preferences or User menu) to change your own password.'))
+                raise UserError(_('Please use the change password wizard (in User Preferences or User menu) to change your own password.'))
             else:
                 user.password = user.new_password
 
@@ -593,13 +593,23 @@ class Users(models.Model):
         action_open_website = self.env.ref('base.action_open_website', raise_if_not_found=False)
         if action_open_website and any(user.action_id.id == action_open_website.id for user in self):
             raise ValidationError(_('The "App Switcher" action cannot be selected as home action.'))
-        # Prevent using reload actions.
         # We use sudo() because  "Access rights" admins can't read action models
         for user in self.sudo():
             if user.action_id.type == "ir.actions.client":
+                # Prevent using reload actions.
                 action = self.env["ir.actions.client"].browse(user.action_id.id)  # magic
                 if action.tag == "reload":
                     raise ValidationError(_('The "%s" action cannot be selected as home action.', action.name))
+
+            elif user.action_id.type == "ir.actions.act_window":
+                # Restrict actions that include 'active_id' in their context.
+                action = self.env["ir.actions.act_window"].browse(user.action_id.id)  # magic
+                if not action.context:
+                    continue
+                if "active_id" in action.context:
+                    raise ValidationError(
+                        _('The action "%s" cannot be set as the home action because it requires a record to be selected beforehand.', action.name)
+                    )
 
 
     @api.constrains('groups_id')
@@ -816,7 +826,8 @@ class Users(models.Model):
         domain = super()._search_display_name(operator, value)
         if operator in ('=', 'ilike') and value:
             name_domain = [('login', '=', value)]
-            domain = expression.OR([name_domain, domain])
+            if users := self.search(name_domain):
+                domain = [('id', 'in', users.ids)]
         return domain
 
     def copy_data(self, default=None):
@@ -859,7 +870,7 @@ class Users(models.Model):
         if lang not in langs:
             lang = request.best_lang if request else None
             if lang not in langs:
-                lang = self.env.user.company_id.partner_id.lang
+                lang = self.env.user.with_context(prefetch_fields=False).company_id.partner_id.lang
                 if lang not in langs:
                     lang = DEFAULT_LANG
                     if lang not in langs:
@@ -1037,7 +1048,7 @@ class Users(models.Model):
         if not old_passwd:
             raise AccessDenied()
 
-        # alternatively: use identitycheck wizard_test?
+        # alternatively: use identitycheck wizard?
         credential = {'login': self.env.user.login, 'password': old_passwd, 'type': 'password'}
         self._check_credentials(credential, {'interactive': True})
 
@@ -1179,7 +1190,7 @@ class Users(models.Model):
         the current request is in debug mode.
         """
         self.ensure_one()
-        if not (self.env.su or self == self.env.user or self._has_group('base.group_user')):
+        if not (self.env.su or self == self.env.user or self.env.user._has_group('base.group_user')):
             # this prevents RPC calls from non-internal users to retrieve
             # information about other users
             raise AccessError(_("You can ony call user.has_group() with your current user."))
@@ -2155,12 +2166,12 @@ class CheckIdentity(models.TransientModel):
         return method(*args, **kwargs)
 
 #----------------------------------------------------------
-# change password wizard_test
+# change password wizard
 #----------------------------------------------------------
 
 class ChangePasswordWizard(models.TransientModel):
-    """ A wizard_test to manage the change of users' passwords. """
-    _name = "change.password.wizard_test"
+    """ A wizard to manage the change of users' passwords. """
+    _name = "change.password.wizard"
     _description = "Change Password Wizard"
     _transient_max_hours = 0.2
 
@@ -2182,11 +2193,11 @@ class ChangePasswordWizard(models.TransientModel):
 
 
 class ChangePasswordUser(models.TransientModel):
-    """ A model to configure users in the change password wizard_test. """
+    """ A model to configure users in the change password wizard. """
     _name = 'change.password.user'
     _description = 'User, Change Password Wizard'
 
-    wizard_id = fields.Many2one('change.password.wizard_test', string='Wizard', required=True, ondelete='cascade')
+    wizard_id = fields.Many2one('change.password.wizard', string='Wizard', required=True, ondelete='cascade')
     user_id = fields.Many2one('res.users', string='User', required=True, ondelete='cascade')
     user_login = fields.Char(string='User Login', readonly=True)
     new_passwd = fields.Char(string='New Password', default='')
@@ -2200,7 +2211,7 @@ class ChangePasswordUser(models.TransientModel):
 
 class ChangePasswordOwn(models.TransientModel):
     _name = "change.password.own"
-    _description = "User, change own password wizard_test"
+    _description = "User, change own password wizard"
     _transient_max_hours = 0.1
 
     new_password = fields.Char(string="New Password")
@@ -2337,7 +2348,7 @@ class APIKeys(models.Model):
         raise AccessError(_("You can not remove API keys unless they're yours or you are a system user"))
 
     def _check_credentials(self, *, scope, key):
-        assert scope, "scope is required"
+        assert scope and key, "scope and key required"
         index = key[:INDEX_SIZE]
         self.env.cr.execute('''
             SELECT user_id, key
@@ -2352,7 +2363,7 @@ class APIKeys(models.Model):
         '''.format(self._table),
         [index, scope])
         for user_id, current_key in self.env.cr.fetchall():
-            if KEY_CRYPT_CONTEXT.verify(key, current_key):
+            if key and KEY_CRYPT_CONTEXT.verify(key, current_key):
                 return user_id
 
     def _check_expiration_date(self, date):
@@ -2362,10 +2373,10 @@ class APIKeys(models.Model):
         if self.env.is_system():
             return
         if not date:
-            raise UserError(_("The API key must have an expiration date"))
+            raise ValidationError(_("The API key must have an expiration date"))
         max_duration = max(group.api_key_duration for group in self.env.user.groups_id) or 1.0
         if date > datetime.datetime.now() + datetime.timedelta(days=max_duration):
-            raise UserError(_("You cannot exceed %(duration)s days.", duration=max_duration))
+            raise ValidationError(_("You cannot exceed %(duration)s days.", duration=max_duration))
 
     def _generate(self, scope, name, expiration_date):
         """Generates an api key.
@@ -2457,6 +2468,11 @@ class APIKeyDescription(models.TransientModel):
                 'message': error.args[0]
             }
             return {'warning': warning}
+
+    def create(self, vals_list):
+        res = super().create(vals_list)
+        self.env['res.users.apikeys']._check_expiration_date(res.expiration_date)
+        return res
 
     @check_identity
     def make_key(self):

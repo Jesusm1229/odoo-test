@@ -260,7 +260,7 @@ class TestPacking(TestPackingCommon):
 
     def test_put_in_pack_to_different_location(self):
         """ Hitting 'Put in pack' button while some move lines go to different
-            location should trigger a wizard_test. This wizard_test applies the same destination
+            location should trigger a wizard. This wizard applies the same destination
             location to all the move lines
         """
         shelf1_location = self.env['stock.location'].create({
@@ -890,7 +890,7 @@ class TestPacking(TestPackingCommon):
                 package_level.is_done = True
         action = picking.button_validate()
 
-        self.assertEqual(action, True, 'Should not open wizard_test')
+        self.assertEqual(action, True, 'Should not open wizard')
 
         for ml in picking.move_line_ids:
             self.assertEqual(ml.package_id, package, 'move_line.package')

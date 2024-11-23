@@ -268,7 +268,7 @@ class SurveyInvite(models.TransientModel):
         return self.env['mail.mail'].sudo().create(mail_values)
 
     def action_invite(self):
-        """ Process the wizard_test content and proceed with sending the related
+        """ Process the wizard content and proceed with sending the related
             email(s), rendering any template patterns on the fly if needed """
         self.ensure_one()
         Partner = self.env['res.partner']

@@ -80,7 +80,7 @@ class TestAccountEdiUblCii(AccountTestInvoicingCommon):
         })
         invoice.action_post()
 
-        print_wiz = self.env['account.move.send.wizard_test'].create({
+        print_wiz = self.env['account.move.send.wizard'].create({
             'move_id': invoice.id,
             'sending_methods': ['manual'],
         })

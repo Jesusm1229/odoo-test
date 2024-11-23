@@ -563,21 +563,23 @@ Please change the quantity done or the rounding precision of your unit of measur
             ls = move.move_line_ids.lot_id
             for lot in move.lot_ids:
                 if lot not in ls:
+                    sml_location_id = lot.location_id.id \
+                        if lot.location_id and lot.location_id._child_of(move.location_id) \
+                        else move.location_id.id
+                    sml_lot_vals = {
+                        'location_id': sml_location_id,
+                        'lot_name': lot.name,
+                        'lot_id': lot.id,
+                        'product_uom_id': move.product_id.uom_id.id,
+                        'quantity': 1,
+                    }
                     if mls_without_lots[:1]:  # Updates an existing line without serial number.
                         move_line = mls_without_lots[:1]
-                        move_lines_commands.append(Command.update(move_line.id, {
-                            'lot_name': lot.name,
-                            'lot_id': lot.id,
-                            'product_uom_id': move.product_id.uom_id.id,
-                            'quantity': 1,
-                        }))
+                        move_lines_commands.append(Command.update(move_line.id, sml_lot_vals))
                         mls_without_lots -= move_line
                     else:  # No line without serial number, creates a new one.
                         move_line_vals = self._prepare_move_line_vals(quantity=0)
-                        move_line_vals['lot_id'] = lot.id
-                        move_line_vals['lot_name'] = lot.name
-                        move_line_vals['product_uom_id'] = move.product_id.uom_id.id
-                        move_line_vals['quantity'] = 1
+                        move_line_vals.update(**sml_lot_vals)
                         move_lines_commands.append((0, 0, move_line_vals))
                 else:
                     move_line = move.move_line_ids.filtered(lambda line: line.lot_id.id == lot.id)
@@ -821,7 +823,7 @@ Please change the quantity done or the rounding precision of your unit of measur
         }
 
     def action_assign_serial(self):
-        """ Opens a wizard_test to assign SN's name on each move lines.
+        """ Opens a wizard to assign SN's name on each move lines.
         """
         self.ensure_one()
         action = self.env["ir.actions.actions"]._for_xml_id("stock.act_assign_serial_numbers")
@@ -1366,7 +1368,7 @@ Please change the quantity done or the rounding precision of your unit of measur
         """Return a list of commands to update the move lines (write on
         existing ones or create new ones).
         Called when user want to create and assign multiple serial numbers in
-        one time (using the button/wizard_test or copy-paste a list in the field).
+        one time (using the button/wizard or copy-paste a list in the field).
 
         :param field_data: A list containing dict with at least `lot_name` and `quantity`
         :type field_data: list
@@ -2196,9 +2198,12 @@ Please change the quantity done or the rounding precision of your unit of measur
         # These new SMLs need to be redirected thanks to putaway rules
         (self.move_line_ids - existing_smls)._apply_putaway_strategy()
 
-    def _adjust_procure_method(self):
+    def _adjust_procure_method(self, picking_type_code=False):
         """ This method will try to apply the procure method MTO on some moves if
         a compatible MTO route is found. Else the procure method will be set to MTS
+        picking_type_code (str, optional): Adjusts the procurement method based on
+            the specified picking type code. The code to specify the picking type for
+            the procurement group. Defaults to False.
         """
         # Prepare the MTSO variables. They are needed since MTSO moves are handled separately.
         # We need 2 dicts:
@@ -2212,6 +2217,8 @@ Please change the quantity done or the rounding precision of your unit of measur
                 ('location_dest_id', '=', move.location_dest_id.id),
                 ('action', '!=', 'push')
             ]
+            if picking_type_code:
+                domain.append(('picking_type_id.code', '=', picking_type_code))
             rule = self.env['procurement.group']._search_rule(False, move.product_packaging_id, product_id, move.warehouse_id, domain)
             if not rule:
                 move.procure_method = 'make_to_stock'

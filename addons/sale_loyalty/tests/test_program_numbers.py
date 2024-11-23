@@ -603,7 +603,7 @@ class TestSaleCouponProgramNumbers(TestSaleCouponNumbersCommon):
             'order_id': order.id,
         })
         self.assertEqual(order.amount_total, 165.0, "The order amount is not correct")
-        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.discount_coupon_program.id).create({
+        self.env['loyalty.generate.wizard'].with_context(active_id=self.discount_coupon_program.id).create({
             'coupon_qty': 1,
             'points_granted': 1,
         }).generate_coupons()
@@ -645,7 +645,7 @@ class TestSaleCouponProgramNumbers(TestSaleCouponNumbersCommon):
         },
         ])
 
-        self.env['loyalty.generate.wizard_test'].with_context(active_id=coupon_program.id).create({
+        self.env['loyalty.generate.wizard'].with_context(active_id=coupon_program.id).create({
             'coupon_qty': 1,
             'points_granted': 1,
         }).generate_coupons()
@@ -695,7 +695,7 @@ class TestSaleCouponProgramNumbers(TestSaleCouponNumbersCommon):
         self._auto_rewards(order, self.all_programs)
         self.assertEqual(order.amount_total, 65.0, "The promotion program should not be removed after recomputation")
 
-        self.env['loyalty.generate.wizard_test'].with_context(active_id=self.discount_coupon_program.id).create({
+        self.env['loyalty.generate.wizard'].with_context(active_id=self.discount_coupon_program.id).create({
             'coupon_qty': 1,
             'points_granted': 1,
         }).generate_coupons()
@@ -766,7 +766,7 @@ class TestSaleCouponProgramNumbers(TestSaleCouponNumbersCommon):
         self._apply_promo_code(order, 'test_10pc')
         self.assertEqual(order.amount_total, 283.5, "The promotion program should be correctly applied")
 
-        self.env['loyalty.generate.wizard_test'].with_context(active_id=coupon_program.id).create({
+        self.env['loyalty.generate.wizard'].with_context(active_id=coupon_program.id).create({
             'coupon_qty': 1,
             'points_granted': 1,
         }).generate_coupons()
@@ -853,7 +853,7 @@ class TestSaleCouponProgramNumbers(TestSaleCouponNumbersCommon):
         self._apply_promo_code(order, 'test_10pc')
         self.assertEqual(order.amount_total, 270.0, "The promotion program should be correctly applied")
 
-        self.env['loyalty.generate.wizard_test'].with_context(active_id=coupon_program.id).create({
+        self.env['loyalty.generate.wizard'].with_context(active_id=coupon_program.id).create({
             'coupon_qty': 1,
             'points_granted': 1,
         }).generate_coupons()
@@ -1184,7 +1184,7 @@ class TestSaleCouponProgramNumbers(TestSaleCouponNumbersCommon):
         self.assertEqual(order.amount_total, 700.0, 'The price must be 500.0 since the coupon is not yet applied')
 
         # generate and apply coupon
-        self.env['loyalty.generate.wizard_test'].with_context(active_id=coupon_program.id).create({
+        self.env['loyalty.generate.wizard'].with_context(active_id=coupon_program.id).create({
             'coupon_qty': 1,
             'points_granted': 1,
         }).generate_coupons()

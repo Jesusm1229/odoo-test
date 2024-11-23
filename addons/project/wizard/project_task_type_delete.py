@@ -6,7 +6,7 @@ from ast import literal_eval
 
 
 class ProjectTaskTypeDelete(models.TransientModel):
-    _name = 'project.task.type.delete.wizard_test'
+    _name = 'project.task.type.delete.wizard'
     _description = 'Project Task Stage Delete Wizard'
 
     project_ids = fields.Many2many('project.project', domain="['|', ('active', '=', False), ('active', '=', True)]", string='Projects', ondelete='cascade', export_string_translation=False)
@@ -31,7 +31,7 @@ class ProjectTaskTypeDelete(models.TransientModel):
         return {
             'name': _('Confirmation'),
             'view_mode': 'form',
-            'res_model': 'project.task.type.delete.wizard_test',
+            'res_model': 'project.task.type.delete.wizard',
             'views': [(self.env.ref('project.view_project_task_type_delete_confirmation_wizard').id, 'form')],
             'type': 'ir.actions.act_window',
             'res_id': self.id,

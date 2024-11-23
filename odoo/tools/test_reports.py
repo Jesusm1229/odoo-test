@@ -78,11 +78,11 @@ def try_report_action(cr, uid, action_id, active_model=None, active_ids=None,
         :param active_model:
         :param active_ids: call the action as if it had been launched
                 from that model+ids (tree/form view action)
-        :param wiz_data: a dictionary of values to use in the wizard_test, if needed.
+        :param wiz_data: a dictionary of values to use in the wizard, if needed.
                 They will override (or complete) the default values of the
-                wizard_test form.
+                wizard form.
         :param wiz_buttons: a list of button names, or button icon strings, which
-                should be preferred to press during the wizard_test.
+                should be preferred to press during the wizard.
                 Eg. 'OK' or 'fa-print'
         :param context:
         :param our_module: the name of the calling module (string), like 'account'

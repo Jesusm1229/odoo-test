@@ -3,7 +3,7 @@ from odoo.exceptions import UserError
 
 
 class RequestZATCAOtp(models.TransientModel):
-    _name = 'l10n_sa_edi.otp.wizard_test'
+    _name = 'l10n_sa_edi.otp.wizard'
     _description = 'Request ZATCA OTP'
 
     l10n_sa_renewal = fields.Boolean("PCSID Renewal",

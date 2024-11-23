@@ -309,7 +309,7 @@ class configmanager(object):
                          type="int")
         group.add_option("--transient-age-limit", dest="transient_age_limit", my_default=1.0,
                          help="Time limit (decimal value in hours) records created with a "
-                              "TransientModel (mostly wizard_test) are kept in the database. Default to 1 hour.",
+                              "TransientModel (mostly wizard) are kept in the database. Default to 1 hour.",
                          type="float")
         group.add_option("--max-cron-threads", dest="max_cron_threads", my_default=2,
                          help="Maximum number of threads processing concurrently cron jobs (default 2).",

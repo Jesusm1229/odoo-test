@@ -67,7 +67,7 @@ class TestAccruedSaleOrders(AccountTestInvoicingCommon):
         cls.sale_order.action_confirm()
         cls.account_expense = cls.company_data['default_account_expense']
         cls.account_revenue = cls.company_data['default_account_revenue']
-        cls.wizard = cls.env['account.accrued.orders.wizard_test'].with_context({
+        cls.wizard = cls.env['account.accrued.orders.wizard'].with_context({
             'active_model': 'sale.order',
             'active_ids': cls.sale_order.ids,
         }).create({

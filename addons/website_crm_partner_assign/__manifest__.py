@@ -31,7 +31,7 @@ The automatic assignment is figured from the weight of partner levels and the ge
         'data/res_partner_grade_data.xml',
         'security/ir.model.access.csv',
         'security/ir_rule.xml',
-        'wizard_test/crm_forward_to_partner_view.xml',
+        'wizard/crm_forward_to_partner_view.xml',
         'views/res_partner_views.xml',
         'views/res_partner_activation_views.xml',
         'views/res_partner_grade_views.xml',

@@ -11,14 +11,14 @@ from odoo.exceptions import UserError
 
 class Invite(models.TransientModel):
     """ Wizard to invite partners (or channels) and make them followers. """
-    _name = 'mail.wizard_test.invite'
-    _description = 'Invite wizard_test'
+    _name = 'mail.wizard.invite'
+    _description = 'Invite wizard'
 
     res_model = fields.Char('Related Document Model', required=True, help='Model of the followed resource')
     res_id = fields.Integer('Related Document ID', help='Id of the followed resource')
     partner_ids = fields.Many2many('res.partner', string='Recipients')
     message = fields.Html('Message')
-    notify = fields.Boolean('Notify Recipients', default=True)
+    notify = fields.Boolean('Notify Recipients', default=False)
 
     def add_followers(self):
         if not self.env.user.email:

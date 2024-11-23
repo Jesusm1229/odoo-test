@@ -28,7 +28,7 @@ class TestAccountFleet(AccountTestInvoicingCommon):
 
         context = {'active_model': 'account.move.line', 'active_ids': bill.invoice_line_ids.ids}
         expense_account = self.company_data['default_account_expense']
-        wizard = self.env['account.automatic.entry.wizard_test'].with_context(context).create({
+        wizard = self.env['account.automatic.entry.wizard'].with_context(context).create({
             'action': 'change_period',
             'date': '2021-09-10',
             'percentage': 60,

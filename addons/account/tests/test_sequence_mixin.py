@@ -479,7 +479,7 @@ class TestSequenceMixin(TestSequenceMixinCommon):
         copies[4].with_context(force_delete=True).unlink()
         copies[5].button_draft()
 
-        wizard = Form(self.env['account.resequence.wizard_test'].with_context(
+        wizard = Form(self.env['account.resequence.wizard'].with_context(
             active_ids=set(copies.ids) - set(copies[4].ids),
             active_model='account.move'),
         )
@@ -524,9 +524,9 @@ class TestSequenceMixin(TestSequenceMixinCommon):
             {'name': 'XMISC/2023-2024/00002', 'state': 'posted'},
         ))
 
-        # Call the resequence wizard_test and change the sequence to XMISC/22-23/00001
+        # Call the resequence wizard and change the sequence to XMISC/22-23/00001
         # By default the sequence order should be kept
-        resequence_wizard = Form(self.env['account.resequence.wizard_test'].with_context(active_ids=invoices.ids, active_model='account.move'))
+        resequence_wizard = Form(self.env['account.resequence.wizard'].with_context(active_ids=invoices.ids, active_model='account.move'))
         resequence_wizard.first_name = "XMISC/22-23/00001"
         new_values = json.loads(resequence_wizard.new_values)
         # Ensure consistencies of sequence displayed in the UI
@@ -631,7 +631,7 @@ class TestSequenceMixin(TestSequenceMixinCommon):
         mistake.with_context(force_delete=True).unlink()
         moves -= mistake
 
-        self.env['account.resequence.wizard_test'].create({
+        self.env['account.resequence.wizard'].create({
             'move_ids': moves.ids,
             'first_name': '2',
         }).resequence()
@@ -674,7 +674,7 @@ class TestSequenceMixin(TestSequenceMixinCommon):
             self.assertRecordValues(move.line_ids, [{'name': "Manual Payment"}] * len(move.line_ids))
 
     def test_resequence_payment_and_non_payment_without_payment_sequence(self):
-        """Resequence wizard_test could be open for different move type if the payment sequence is set to False on the journal."""
+        """Resequence wizard could be open for different move type if the payment sequence is set to False on the journal."""
         journal = self.company_data['default_journal_bank'].copy({'payment_sequence': False})
         bsl = self.env['account.bank.statement.line'].create({'name': 'test', 'amount': 100, 'journal_id': journal.id})
         payment = self.env['account.payment'].create({
@@ -685,7 +685,7 @@ class TestSequenceMixin(TestSequenceMixinCommon):
         })
 
         payment.action_post()
-        wizard = Form(self.env['account.resequence.wizard_test'].with_context(
+        wizard = Form(self.env['account.resequence.wizard'].with_context(
             active_ids=(payment.move_id + bsl.move_id).ids,
             active_model='account.move'),
         )

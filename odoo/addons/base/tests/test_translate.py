@@ -337,7 +337,7 @@ class TestLanguageInstall(TransactionCase):
         wizard = self.env['base.language.install'].create({'lang_ids': fr.ids})
         self.env.flush_all()
 
-        # running the wizard_test calls _load_module_terms() to load PO files
+        # running the wizard calls _load_module_terms() to load PO files
         loaded = []
 
         def _load_module_terms(self, modules, langs, overwrite=False, imported_module=False):

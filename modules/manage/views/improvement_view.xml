@@ -21,11 +21,11 @@
                         <field
                                 name="developer_ids"
                                 domain="[('is_dev', '=', 'true')]"
-                                context="{'form_view_ref':'manage.devs_partner_form'}"
+                                context="{'form_view_ref':'manage.devs_partner_form', 'default_is_dev': True}"
                         />
                         <field name="technology_ids"/>
                         <field name="history_linked"/>
-                        <field name="developer_ids"/>
+<!--                        <field name="developer_ids"/>-->
                     </group>
                 </form>
             </field>

@@ -24,8 +24,8 @@
         'views/mass_mailing_sms_templates_portal.xml',
         'views/utm_campaign_views.xml',
         'views/mailing_sms_menus.xml',
-        'wizard_test/sms_composer_views.xml',
-        'wizard_test/mailing_sms_test_views.xml',
+        'wizard/sms_composer_views.xml',
+        'wizard/mailing_sms_test_views.xml',
     ],
     'demo': [
         'demo/mailing_list_contact.xml',
@@ -34,6 +34,9 @@
         'demo/mailing_trace.xml',
     ],
     'assets': {
+        'web.assets_backend': [
+            'mass_mailing_sms/static/src/**',
+        ],
         'web.assets_tests': [
             'mass_mailing_sms/static/tests/tours/**/*',
         ],

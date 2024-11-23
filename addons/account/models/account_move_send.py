@@ -7,8 +7,8 @@ from odoo.exceptions import UserError
 
 class AccountMoveSend(models.AbstractModel):
     """ Shared class between the two sending wizards.
-    See 'account.move.send.batch.wizard_test' for multiple invoices sending wizard_test (async)
-    and 'account.move.send.wizard_test' for single invoice sending wizard_test (sync).
+    See 'account.move.send.batch.wizard' for multiple invoices sending wizard (async)
+    and 'account.move.send.wizard' for single invoice sending wizard (sync).
     """
     _name = 'account.move.send'
     _description = "Account Move Send"
@@ -218,6 +218,7 @@ class AccountMoveSend(models.AbstractModel):
                 'mimetype': attachment.mimetype,
                 'placeholder': False,
                 'mail_template_id': mail_template.id,
+                'protect_from_deletion': True,
             }
             for attachment in mail_template.attachment_ids
         ]
@@ -431,8 +432,9 @@ class AccountMoveSend(models.AbstractModel):
         # to 'mail_attachments_widget'.
         mail_attachments_widget = move_data.get('mail_attachments_widget')
         seen_attachment_ids = set()
+        to_exclude = {x['name'] for x in mail_attachments_widget if x.get('skip')}
         for attachment_data in self._get_invoice_extra_attachments_data(move) + mail_attachments_widget:
-            if attachment_data.get('skip'):
+            if attachment_data['name'] in to_exclude and not attachment_data.get('manual'):
                 continue
 
             try:

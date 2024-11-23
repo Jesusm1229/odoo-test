@@ -11,7 +11,7 @@
     'data': [
         'data/sms_data.xml',
         'views/res_config_settings_views.xml',
-        'wizard_test/confirm_stock_sms_views.xml',
+        'wizard/confirm_stock_sms_views.xml',
         'security/ir.model.access.csv',
         'security/sms_security.xml',
     ],

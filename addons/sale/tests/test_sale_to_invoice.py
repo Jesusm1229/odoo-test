@@ -591,7 +591,7 @@ class TestSaleToInvoice(TestSaleCommon):
 
     def test_multi_company_invoice(self):
         """Checks that the company of the invoices generated in a multi company environment using the
-           'sale.advance.payment.inv' wizard_test fit with the company of the SO and not with the current company.
+           'sale.advance.payment.inv' wizard fit with the company of the SO and not with the current company.
         """
         so_company_id = self.sale_order.company_id.id
         yet_another_company_id = self.company_data_2['company'].id
@@ -730,7 +730,7 @@ class TestSaleToInvoice(TestSaleCommon):
         so1.pricelist_id = usd_pricelist
         orders = so1 | so2 | so3
         orders.action_confirm()
-        # Create the invoicing wizard_test and invoice all of them at once
+        # Create the invoicing wizard and invoice all of them at once
         wiz = self.env['sale.advance.payment.inv'].with_context(active_ids=orders.ids, open_invoices=True).create({})
         res = wiz.create_invoices()
         # Check that exactly 2 invoices are generated

@@ -112,12 +112,12 @@ class AccountPayment(models.Model):
             self.payment_token_id = False
             return
 
-        self.payment_token_id = self.env['payment.token'].search([
+        self.payment_token_id = self.env['payment.token'].sudo().search([
             *self.env['payment.token']._check_company_domain(self.company_id),
             ('partner_id', '=', self.partner_id.id),
             ('provider_id.capture_manually', '=', False),
             ('provider_id', '=', self.payment_method_line_id.payment_provider_id.id),
-         ], limit=1)
+         ], limit=1)  # In sudo mode to read the provider fields.
 
     #=== ACTION METHODS ===#
 
@@ -156,7 +156,7 @@ class AccountPayment(models.Model):
             'name': _("Refund"),
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
-            'res_model': 'payment.refund.wizard_test',
+            'res_model': 'payment.refund.wizard',
             'target': 'new',
         }
 

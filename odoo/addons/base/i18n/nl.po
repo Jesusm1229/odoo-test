@@ -4,18 +4,18 @@
 # 
 # Translators:
 # Martin Trigaux, 2024
-# Wil Odoo, 2024
 # Jolien De Paepe, 2024
-# Erwin van der Ploeg <erwin@odooexperts.nl>, 2024
+# Wil Odoo, 2024
 # Manon Rondou, 2024
+# Erwin van der Ploeg <erwin@odooexperts.nl>, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-26 12:54+0000\n"
+"POT-Creation-Date: 2024-10-25 14:42+0000\n"
 "PO-Revision-Date: 2024-09-25 09:41+0000\n"
-"Last-Translator: Manon Rondou, 2024\n"
+"Last-Translator: Erwin van der Ploeg <erwin@odooexperts.nl>, 2024\n"
 "Language-Team: Dutch (https://app.transifex.com/odoo/teams/41243/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -69,7 +69,7 @@ msgstr ""
 "\n"
 "* Definieert het volgende grootboekschema:\n"
 "* Oostenrijks algemeen grootboekschema 2010\n"
-"* Definieert sjablonen voor BTW op verkopen en aankopen\n"
+"* Definieert sjablonen voor BTW op verkopen en inkopen\n"
 "* Definieert belastingsjablonen\n"
 "* Definieert fiscale posities voor de Oostenrijkse fiscale wetgeving\n"
 "* Definieert belastingrapportage U1 / U30\n"
@@ -687,7 +687,7 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-"* Voeg BTW-boekrapport toe dat wettelijk verplicht is in Argentinië en dat de BTW-detailinformatie bevat van verkopen of aankopen die in een bepaalde periode zijn gedaan.\n"
+"* Voeg BTW-boekrapport toe dat wettelijk verplicht is in Argentinië en dat de BTW-detailinformatie bevat van verkopen of inkopen die in een bepaalde periode zijn gedaan.\n"
 "* Voeg een BTW-overzichtsrapport toe dat wordt gebruikt om facturering te analyseren\n"
 "* Voeg Digital VAT Book-functionaliteit toe waarmee we TXT-bestanden kunnen genereren om in AFIP te importeren. Degenen die we implementeren zijn:\n"
 "\n"
@@ -779,7 +779,7 @@ msgid ""
 "and encourage users to configure their 2FA using an authenticator app.\n"
 msgstr ""
 "\n"
-"2FA per post\n"
+"2FA per e-mail\n"
 "===============\n"
 "Twee-factorenauthenticatie door een code naar de e-mailinbox van de gebruiker te sturen\n"
 "wanneer de 2FA met behulp van een authenticator-app niet is geconfigureerd.\n"
@@ -1343,6 +1343,9 @@ msgid ""
 "Accounting Data for Türkiye Payroll Rules\n"
 "==========================================\n"
 msgstr ""
+"\n"
+"Boekhoudkundige gegevens voor Türkiye Salarisregels\n"
+"==========================================\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_ae_hr_payroll_account
@@ -1772,7 +1775,7 @@ msgstr ""
 "\n"
 "        Rapporteert momenteel geen specifieke waarden voor:\n"
 "        - Contante basis voor boekingen met voorbelasting (MK)\n"
-"        - Op marges gebaseerde operaties (MR_T/MR_UZ)\n"
+"        - Op marges gebaseerde bewerkingen (MR_T/MR_UZ)\n"
 "        - Rekeningen voor landbouwproducten (VAT_RR)\n"
 "        - Bewerkingen via elektronische interfaces (IED)\n"
 "        - Facturen gedaan met KSef\n"
@@ -1912,7 +1915,15 @@ msgstr ""
 msgid ""
 "\n"
 "Accounting reports for Türkiye\n"
+"\n"
+"- Balance Sheet\n"
+"- Profit and Loss\n"
 msgstr ""
+"\n"
+"Boekhoudkundige rapporten voor Türkiye\n"
+"\n"
+"- Balans\n"
+"- Winst en verlies\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_uk_reports
@@ -2802,7 +2813,7 @@ msgstr ""
 "Vermogensbeheer\n"
 "=================\n"
 "Beheer activa die eigendom zijn van een bedrijf of een persoon.\n"
-"Houdt de afschrijvingen bij en maakt overeenkomstige journaalposten.\n"
+"Houdt de afschrijvingen bij en maakt overeenkomstige boekingen.\n"
 "\n"
 
 #. module: base
@@ -4079,7 +4090,7 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-"Maak rapportages voor Field Service\n"
+"Maak rapportages voor Buitendienst\n"
 "================================\n"
 "\n"
 
@@ -4144,7 +4155,7 @@ msgid ""
 "Create customizable quality worksheet for workorder.\n"
 msgstr ""
 "\n"
-"Creëer een aanpasbaar kwaliteitswerkblad voor werkorders.\n"
+"Maak een aanpasbaar kwaliteitswerkblad voor werkorders.\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_worksheet
@@ -4381,7 +4392,7 @@ msgid ""
 "Disallowed Expenses Fleet Data for Belgium\n"
 msgstr ""
 "\n"
-"Verworpen uitgaven Vlootgegevens voor België\n"
+"Niet-aftrekbare kosten voor wagenpark voor België\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_helpdesk_fsm_report
@@ -4738,6 +4749,17 @@ msgstr ""
 "Wij ondersteunen het verzenden en annuleren van klantfacturen.\n"
 
 #. module: base
+#: model:ir.module.module,description:base.module_l10n_nz_eft
+msgid ""
+"\n"
+"EFT Batch Payment\n"
+"=================\n"
+msgstr ""
+"\n"
+"EFT-batchbetaling\n"
+"=================\n"
+
+#. module: base
 #: model:ir.module.module,description:base.module_hw_escpos
 msgid ""
 "\n"
@@ -4959,8 +4981,8 @@ msgid ""
 msgstr ""
 "\n"
 "Elektronische voorraadrapportages\n"
-"    - PLE 12.1: Permanente inventaris in fysieke eenheden\n"
-"    - PLE 13.1: Permanente inventaris in fysieke eenheden\n"
+"    - PLE 12.1: Permanente voorraad in fysieke eenheden\n"
+"    - PLE 13.1: Permanente voorraad in fysieke eenheden\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_documents_l10n_be_hr_payroll
@@ -5087,7 +5109,7 @@ msgid ""
 "Expense documents will be automatically integrated to the Document app.\n"
 msgstr ""
 "\n"
-"Onkostendocumenten worden automatisch geïntegreerd in de Documenten-app.\n"
+"Decalratiedocumenten worden automatisch geïntegreerd in de Documenten-app.\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_ca_payment_cpa005
@@ -5166,7 +5188,7 @@ msgstr ""
 "\n"
 "Beheer van buitendienst\n"
 "=========================\n"
-"Deze module voegt de functies toe die nodig zijn voor modern Field Service-beheer.\n"
+"Deze module voegt de functies toe die nodig zijn voor modern Buitendienstbeheer.\n"
 "Het installeert de volgende apps:\n"
 "- Project\n"
 "- Urenstaat\n"
@@ -5184,7 +5206,7 @@ msgid ""
 "Filters the stock lines out of the reconciliation widget\n"
 msgstr ""
 "\n"
-"Filtert de voorraadregels uit de afstemmingswidget\n"
+"Filtert de voorraadregels uit de afletterwidget\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_fr_hr_payroll
@@ -5433,10 +5455,10 @@ msgid ""
 "* Partners example for the different responsibility types:\n"
 "\n"
 "  * ADHOC (IVA Responsable Inscripto)\n"
-"  * Consejo Municipal Rosario (IVA Sujeto Exento)\n"
+"  * Servicios Globales (IVA Sujeto Exento)\n"
 "  * Gritti (Monotributo)\n"
-"  * Cerro Castor. IVA Liberado in Zona Franca\n"
-"  * Expresso (Cliente del Exterior)\n"
+"  * Montana Sur. IVA Liberado in Zona Franca\n"
+"  * Barcelona food (Cliente del Exterior)\n"
 "  * Odoo (Proveedor del Exterior)\n"
 "\n"
 "Highlights:\n"
@@ -5474,63 +5496,63 @@ msgstr ""
 "Functioneel\n"
 "----------\n"
 "\n"
-"Deze module voegt boekhoudfuncties toe voor de Argentijnse lokalisatie, die de minimale configuratie vertegenwoordigen die een bedrijf nodig heeft om in Argentinië en onder de AFIP (Administración Federal de Ingresos Públicos) voorschriften en richtlijnen te werken.\n"
+"Deze module voegt boekhoudfuncties toe voor de Argentijnse lokalisatie, die de minimale configuratie vertegenwoordigen die nodig is voor een bedrijf om in Argentinië en onder de regelgeving en richtlijnen van de AFIP (Administración Federal de Ingresos Públicos) te opereren.\n"
 "\n"
 "Volg de volgende configuratiestappen voor Productie:\n"
 "\n"
-"1. Ga naar je bedrijf en configureer je BTW-nummer en AFIP-verantwoordelijkheidstype\n"
-"2. Ga naar Boekhouding / Instellingen en stel het grootboekschema in dat je wilt gebruiken.\n"
-"3. Maak je verkoopdagboek aan, rekening houdend met AFIP Kassa-info.\n"
+"1. Ga naar je bedrijf en configureer je BTW-nummer en AFIP Verantwoordelijkheidstype\n"
+"2. Ga naar Boekhouding / Instellingen en stel het rekeningstelsel in dat je wilt gebruiken.\n"
+"3. Maak je verkoopjournalen aan rekening houdend met AFIP POS info.\n"
 "\n"
-"Demogegevens voor testen:\n"
+"Demo-gegevens om te testen:\n"
 "\n"
-"* Er zijn 3 bedrijven gemaakt, één voor elk AFIP-verantwoordelijkheidstype met het respectieve grootboekschema geïnstalleerd. Kies het bedrijf dat je repareert om tests uit te voeren:\n"
+"* er zijn 3 bedrijven gemaakt, één voor elk AFIP-verantwoordelijkheidstype met het respectievelijke rekeningstelsel geïnstalleerd. Kies het bedrijf dat voor jou geschikt is om te testen:\n"
 "\n"
 "  * (AR) Verantwoordelijke Inscripto\n"
 "  * (AR) Exento\n"
 "  * (AR) Monotributo\n"
 "\n"
-"* Dagboekverkopen geconfigureerd voor voorgedrukte en Expo-facturen in alle bedrijven\n"
-"* Voorbeelden van facturen en andere documenten die al zijn gevalideerd in het bedrijf \"(AR) Responsable Inscripto\"\n"
-"* Relaties voorbeeld voor de verschillende soorten verantwoordelijkheid:\n"
+"* Journaal verkoop geconfigureerd voor Voorgeprinte en Expofacturen in alle bedrijven\n"
+"* Facturen en andere documentvoorbeelden al gevalideerd in \"(AR) Responsable Inscripto\" bedrijf\n"
+"* Partners voorbeeld voor de verschillende verantwoordelijkheids types:\n"
 "\n"
-"  * ADHOC (IVA Verantwoordelijk Inscripto)\n"
-"  * Consejo Gemeentelijk Rosario (IVA Sujeto Exento)\n"
+"  * ADHOC (IVA Responsable Inscripto)\n"
+"  * Servicios Globales (IVA Sujeto Exento)\n"
 "  * Gritti (Monotributo)\n"
-"  * Cerro Castor. IVA Liberado in Zona Franca\n"
-"  * Expresso (Cliente del Exterieur)\n"
-"  * Odoo (Proveedor del Exterieur)\n"
+"  * Montana Sur. IVA Liberado in Zona Franca\n"
+"  * Barcelona food (Buitenlandklant)\n"
+"  * Odoo (Bewerker van buiten)\n"
 "\n"
 "Hoogtepunten:\n"
 "\n"
-"* Grootboekschema wordt niet automatisch geïnstalleerd, elke CoA-sjabloon is afhankelijk van de AFIP-verantwoordelijkheid van het bedrijf. Je moet de CoA voor je behoeften installeren.\n"
-"* Er worden geen verkoopdagboeken gegenereerd bij het installeren van een CoA, je moet je dagboeken handmatig configureren.\n"
-"* Het documenttype wordt correct vooraf geselecteerd bij het maken van een factuur, afhankelijk van de fiscale verantwoordelijkheid van de uitgever en ontvanger van het document en het gerelateerde dagboek.\n"
-"* Er is een CBU-accounttype toegevoegd en ook CBU-validatie\n"
+"* Rekeningschema's worden niet automatisch geïnstalleerd, elk rekeningschema is afhankelijk van de AFIP-verantwoordelijkheid van het bedrijf, je moet de rekeningschema's voor jouw behoeften installeren.\n"
+"* Er worden geen verkoopjournalen gegenereerd wanneer je een CoA installeert, je moet je journalen handmatig configureren.\n"
+"* Het documenttype wordt vooraf geselecteerd bij het maken van een factuur, afhankelijk van de fiscale verantwoordelijkheid van de verstrekker en ontvanger van het document en het bijbehorende journaal.\n"
+"* Er is een CBU-rekeningstype toegevoegd en ook CBU-validatie\n"
 "\n"
 "\n"
 "Technisch\n"
 "---------\n"
 "\n"
-"Deze module voegt zowel modellen als velden toe die uiteindelijk zullen worden gebruikt voor de elektronische factuurmodule. Hier is een samenvatting van de belangrijkste kenmerken:\n"
+"Deze module voegt zowel modellen als velden toe die uiteindelijk gebruikt zullen worden voor de elektronische factuurmodule. Hier volgt een overzicht van de belangrijkste functies:\n"
 "\n"
 "Stamgegevens:\n"
 "\n"
-"* Grootboekschema: één voor elke AFIP-verantwoordelijkheid die verband houdt met een rechtspersoon:\n"
+"* Chart of Account: één voor elke AFIP-verantwoordelijkheid die gerelateerd is aan een juridische entiteit:\n"
 "\n"
-"  * Verantwoordelijke Inscripto (RI)\n"
+"  * Responsable Inscripto (RI)\n"
 "  * Exento (EX)\n"
-"  * Monotributo (mono)\n"
+"  * Monotributo (Mono)\n"
 "\n"
-"* Argentijnse belastingen en belastinggroepen voor rekeningen (BTW-belastingen met de bestaande aliquots en andere soorten)\n"
-"* AFIP-verantwoordelijkheidstypen\n"
-"* Fiscale Posities (om belastingen in kaart te brengen)\n"
-"* Typen juridische documenten in Argentinië\n"
-"* Identificatietypes geldig in Argentinië.\n"
-"* Land-AFIP-codes en Land-BTW-codes voor rechtspersonen, natuurlijke personen en anderen\n"
+"* Argentijnse Belastingen en Rekeningen Belastinggroepen (BTW-belastingen met de bestaande aliquots en andere typen)\n"
+"* AFIP Verantwoordelijkheidstypes\n"
+"* Fiscale posities (om belastingen in kaart te brengen)\n"
+"* Soorten juridische documenten in Argentinië\n"
+"* Identificatietypen die geldig zijn in Argentinië.\n"
+"* Land AFIP-codes en Land BTW-codes voor rechtspersonen, natuurlijke personen en anderen\n"
 "* Valuta AFIP-codes\n"
 "* Maateenheid AFIP-codes\n"
-"* Relaties: Consumidor Final en AFIP\n"
+"* Partners: Consumidor Final en AFIP\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_ec
@@ -5871,7 +5893,7 @@ msgstr ""
 "\n"
 "        Verkrijg het magazijnadres als de factuur is aangemaakt op basis van de inkooporder\n"
 "\n"
-"        Deze module wordt gebruikt om het magazijnadres te bekomen als de factuur is aangemaakt vanuit de inkooporder\n"
+"        Deze module wordt gebruikt om het magazijnadres te verkrijgen als de factuur is aangemaakt vanuit de inkooporder\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_in_sale_stock
@@ -5886,7 +5908,7 @@ msgstr ""
 "        Verkrijg het magazijnadres als de factuur is aangemaakt op basis van de verkooporder\n"
 "        In Indiaanse EDI sturen we verzendadresgegevens indien beschikbaar\n"
 "\n"
-"        Deze module wordt gebruikt om het magazijnadres te bekomen als de factuur is aangemaakt vanuit de verkooporder\n"
+"        Deze module wordt gebruikt om het magazijnadres te verkrijgen als de factuur is aangemaakt vanuit de verkooporder\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_hw_drivers
@@ -6565,7 +6587,7 @@ msgstr ""
 "\n"
 "Beheer van leningen\n"
 "=================\n"
-"Houdt leningen bij en maakt bijbehorende journaalposten.\n"
+"Houdt leningen bij en maakt bijbehorende boekingen.\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_lu_hr_payroll
@@ -6779,10 +6801,10 @@ msgid ""
 "This module also uses analytic accounting and is compatible with the invoice on timesheet module so that you are able to automatically re-invoice your customers' expenses if your work by project.\n"
 msgstr ""
 "\n"
-"Beheer onkosten door werknemers\n"
+"Beheer declaraties door werknemers\n"
 "============================\n"
 "\n"
-"Deze applicatie staat je toe om werknemers hun dagelijkse uitgaven te beheren. Het geeft je toegang tot je werknemers onkosten en geeft je het recht om deze aan te vullen en te bevestigen of de onkosten te weigeren. Na bevestiging wordt een factuur aangemaakt voor de werknemer.\n"
+"Deze applicatie staat je toe om werknemers hun dagelijkse uitgaven te beheren. Het geeft je toegang tot je werknemers declaraties en geeft je het recht om deze aan te vullen en te bevestigen of de declaraties te weigeren. Na bevestiging wordt een factuur aangemaakt voor de werknemer.\n"
 "De werknemer kan zijn eigen uitgaven coderen en de validatie flow boekt het automatisch in de boekhouding na bevestiging door de managers.\n"
 "\n"
 "\n"
@@ -7091,6 +7113,15 @@ msgstr ""
 ".. SAT: http://www.sat.gob.mx/\n"
 
 #. module: base
+#: model:ir.module.module,description:base.module_l10n_es_reports_2024
+msgid ""
+"\n"
+"Modelo 303: Extra fields regarding Rectificación\n"
+msgstr ""
+"\n"
+"Modelo 303: Extra velden met betrekking tot Rectificación\n"
+
+#. module: base
 #: model:ir.module.module,description:base.module_hr_recruitment_integration_skills_monster
 msgid ""
 "\n"
@@ -7288,7 +7319,7 @@ msgstr ""
 "Module voor het importeren van SIE 5-standaardbestanden.\n"
 "\n"
 "Het huidige bereik van de module maakt de initialisatie van de boekhouding mogelijk door rekeningsaldi te importeren,\n"
-"relaties (Klanten & Leveranciers) en journaalposten (journaalgegevens moeten aanwezig zijn in het bestand).\n"
+"relaties (Klanten & Leveranciers) en boekingen (journaalgegevens moeten aanwezig zijn in het bestand).\n"
 "\n"
 "Het importeert geen analyse-, activa- en \"accountkoppelings\" -gegevens.\n"
 "\n"
@@ -7696,7 +7727,7 @@ msgid ""
 "Notify that a matching sale order exists in the reconciliation widget.\n"
 msgstr ""
 "\n"
-"Geef aan dat er een overeenkomende verkooporder bestaat in de afstemmingswidget.\n"
+"Geef aan dat er een overeenkomende verkooporder bestaat in de afletterwidget.\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_sa
@@ -7910,7 +7941,7 @@ msgstr ""
 "    * De cheque van de leverancier terugkrijgen (weigering of retour)\n"
 "    * De cheque overbrengen van het ene naar het andere chequeboekje (de ene winkel naar de andere)\n"
 "\n"
-"  * Deze operaties kunnen met meerdere cheques tegelijk worden uitgevoerd\n"
+"  * Deze bewerkingen kunnen met meerdere cheques tegelijk worden uitgevoerd\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_mrp_workorder_plm
@@ -8608,19 +8639,23 @@ msgid ""
 "    * Defines tax templates\n"
 "    * Defines fiscal positions for spanish fiscal legislation\n"
 "    * Defines tax reports mod 111, 115 and 303\n"
+"\n"
+"5.3: Update taxes starting Q4 2024 according to BOE-A-2024-12944 (Royal Decree 4/2024) https://www.boe.es/buscar/act.php?id=BOE-A-2024-12944\n"
 msgstr ""
 "\n"
-"Spaanse grootboekschema (PGCE 2008).\n"
+"Spaanse rekeningschema's (PGCE 2008).\n"
 "========================================\n"
 "\n"
-"* Definieert de volgende grootboekrekening sjablonen:\n"
-"  * Algemeen Spaans boekhoudingsschema 2008\n"
-"  * Algemeen Spaans boekhoudingsschema 2008 voor kleine en middelgrote bedrijven\n"
-"  * Algemeen Spaans boekhoudingsschema 2008 voor associaties\n"
-"* Definieert sjablonen voor verkoop en inkoop BTW\n"
-"* Definieert BTW rubriek sjablonen\n"
-"* Definieert fiscale posities voor spaanse fiscale wetgeving\n"
-"* Definieert fiscale rapportages 111, 115 en 303\n"
+"    * Definieert de volgende sjablonen voor rekeningstelsels:\n"
+"        * Spaans algemeen rekeningstelsel 2008\n"
+"        * Spaans algemeen rekeningstelsel 2008 voor kleine en middelgrote ondernemingen\n"
+"        * Spaans algemeen rekeningstelsel 2008 voor verenigingen\n"
+"    * Definieert sjablonen voor verkoop en aankoop BTW\n"
+"    * Definieert belastingsjablonen\n"
+"    * Definieert fiscale posities voor Spaanse fiscale wetgeving\n"
+"    * Definieert belastingrapporten mod 111, 115 en 303\n"
+"\n"
+"5.3: Belastingen bijwerken vanaf Q4 2024 volgens BOE-A-2024-12944 (Koninklijk Besluit 4/2024) https://www.boe.es/buscar/act.php?id=BOE-A-2024-12944\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_sale_renting
@@ -8680,6 +8715,15 @@ msgstr ""
 "Deze module staat de gebruiker toe om alle website formulieren te tonen gekoppeld aan een specifiek\n"
 "model. Je kunt vervolgens een nieuw website formulier aanmaken of een bestaande wijzigen.\n"
 "\n"
+
+#. module: base
+#: model:ir.module.module,description:base.module_l10n_in_withholding_payment
+msgid ""
+"\n"
+"Support for Indian TDS (Tax Deducted at Source) for Payment.\n"
+msgstr ""
+"\n"
+"Ondersteuning voor Indiase TDS (Tax Deducted at Source) voor betaling.\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_in_withholding
@@ -8838,6 +8882,15 @@ msgstr ""
 "Het Oostenrijkse standaardauditbestand voor belastingen (SAF-T) is een standaardbestandsformaat voor het exporteren van verschillende soorten boekhoudkundige transactiegegevens met behulp van het XML-formaat.\n"
 
 #. module: base
+#: model:ir.module.module,description:base.module_l10n_anz_ubl_pint
+msgid ""
+"\n"
+"The UBL PINT e-invoicing format for Australia & New Zealand is based on the Peppol International (PINT) model for Billing.\n"
+msgstr ""
+"\n"
+"Het UBL PINT e-factureringsformaat voor Australië & Nieuw-Zeeland is gebaseerd op het Peppol International (PINT) model voor facturering.\n"
+
+#. module: base
 #: model:ir.module.module,description:base.module_l10n_jp_ubl_pint
 msgid ""
 "\n"
@@ -8854,6 +8907,15 @@ msgid ""
 msgstr ""
 "\n"
 "Het UBL PINT e-factureringsformaat voor Maleisië is gebaseerd op het Peppol International (PINT)-model voor facturering.\n"
+
+#. module: base
+#: model:ir.module.module,description:base.module_l10n_sg_ubl_pint
+msgid ""
+"\n"
+"The UBL PINT e-invoicing format for Singapore is based on the Peppol International (PINT) model for Billing.\n"
+msgstr ""
+"\n"
+"Het UBL PINT e-factureringsformaat voor Singapore is gebaseerd op het Peppol International (PINT) model voor facturering.\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_repair
@@ -9420,6 +9482,25 @@ msgstr ""
 "en de Lempira-valuta."
 
 #. module: base
+#: model:ir.module.module,description:base.module_l10n_iq
+msgid ""
+"\n"
+"This is the base module to manage the accounting chart for Iraq in Odoo.\n"
+"==============================================================================\n"
+"Iraq accounting basic charts and localization.\n"
+"Activates:\n"
+"- Chart of accounts\n"
+"- Taxes\n"
+msgstr ""
+"\n"
+"Dit is de basismodule om het boekhoudschema voor Irak te beheren in Odoo.\n"
+"==============================================================================\n"
+"Irak boekhoudkundige basisgrafieken en lokalisatie.\n"
+"Activeert:\n"
+"- Rekeningschema\n"
+"- Belastingen\n"
+
+#. module: base
 #: model:ir.module.module,description:base.module_l10n_jo
 msgid ""
 "\n"
@@ -9561,6 +9642,33 @@ msgstr ""
 "\n"
 "Dit is de basismodule om het boekhoudschema voor Taiwan in Odoo te beheren.\n"
 "================================================== ============================\n"
+
+#. module: base
+#: model:ir.module.module,description:base.module_l10n_tr
+msgid ""
+"\n"
+"This is the base module to manage the accounting chart for Türkiye in Odoo\n"
+"==========================================================================\n"
+"\n"
+"Türkiye accounting basic charts and localizations\n"
+"-------------------------------------------------\n"
+"Activates:\n"
+"\n"
+"- Chart of Accounts\n"
+"- Taxes\n"
+"- Tax Report\n"
+msgstr ""
+"\n"
+"Dit is de basismodule om het boekhoudschema voor Türkiye in Odoo te beheren\n"
+"==========================================================================\n"
+"\n"
+"Boekhoudkundige basisgrafieken en lokalisaties voor Türkiye\n"
+"-------------------------------------------------\n"
+"Wordt geactiveerd:\n"
+"\n"
+"- Rekeningschema\n"
+"- Belastingen\n"
+"- Belastingrapport\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_mu_account
@@ -9990,7 +10098,7 @@ msgid ""
 "This shortcut allows you to generate a rental order based on the selected case.\n"
 msgstr ""
 "\n"
-"Deze module voegt een snelkoppeling toe voor één of meerdere opportunitycases in het CRM.\n"
+"Deze module voegt een snelkoppeling toe voor één of meerdere verkoopkansen in het CRM.\n"
 "================================================= =========================\n"
 "\n"
 "Met deze snelkoppeling kun je een huurorder genereren op basis van de geselecteerde zaak.\n"
@@ -11316,6 +11424,24 @@ msgstr ""
 "       Speciale dank aan Plementus <info@plementus.com> voor hun hulp bij het ontwikkelen van deze module.\n"
 
 #. module: base
+#: model:ir.module.module,description:base.module_pos_urban_piper_swiggy
+msgid ""
+"\n"
+"This module integrates with UrbanPiper to receive and manage orders from Swiggy.\n"
+msgstr ""
+"\n"
+"Deze module integreert met UrbanPiper om bestellingen van Swiggy te ontvangen en te beheren.\n"
+
+#. module: base
+#: model:ir.module.module,description:base.module_pos_urban_piper_ubereats
+msgid ""
+"\n"
+"This module integrates with UrbanPiper to receive and manage orders from Uber Eats.\n"
+msgstr ""
+"\n"
+"Deze module integreert met UrbanPiper om bestellingen van Uber Eats te ontvangen en beheren.\n"
+
+#. module: base
 #: model:ir.module.module,description:base.module_pos_urban_piper_zomato
 msgid ""
 "\n"
@@ -11443,7 +11569,7 @@ msgstr ""
 "aanbestedingen, goedkeuring van contracten, enz.\n"
 "\n"
 "Volgens de configuratie van het goedkeuringstype, een verzoek\n"
-"creëert volgende activiteiten voor de gerelateerde goedkeurders.\n"
+"maakt volgende activiteiten voor de gerelateerde goedkeurders.\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_account_check_printing
@@ -11686,6 +11812,19 @@ msgstr ""
 "automatische leadgeneratie, volledige online ondersteuning, ...\n"
 
 #. module: base
+#: model:ir.module.module,description:base.module_test_event_full_enterprise
+msgid ""
+"\n"
+"This module will test the main event flows of Odoo, both frontend and backend.\n"
+"It installs sale capabilities, front-end flow, eCommerce, questions and\n"
+"automatic lead generation, full Online support, sms and whatsapp support, ...\n"
+msgstr ""
+"\n"
+"Deze module test de belangrijkste evenementstromen van Odoo, zowel frontend als backend.\n"
+"Het installeert verkoopmogelijkheden, frontend flow, eCommerce, vragen en\n"
+"automatische leadgeneratie, volledige online ondersteuning, sms- en whatsapp-ondersteuning, ...\n"
+
+#. module: base
 #: model:ir.module.module,description:base.module_test_main_flows
 msgid ""
 "\n"
@@ -11791,27 +11930,6 @@ msgstr ""
 "zijn.\n"
 
 #. module: base
-#: model:ir.module.module,description:base.module_l10n_tr_hr_payroll
-msgid ""
-"\n"
-"Türkiye Payroll and Tax Rules\n"
-"============================\n"
-msgstr ""
-
-#. module: base
-#: model:ir.module.module,description:base.module_l10n_tr
-msgid ""
-"\n"
-"Turkish charts of accounts\n"
-"========================================\n"
-"    * Defines the default chart of accounts\n"
-"    * Defines the default taxes\n"
-"    * Defines default tax report\n"
-"\n"
-"This was done in collaboration with Broadmax Partner in Türkiye.\n"
-msgstr ""
-
-#. module: base
 #: model:ir.module.module,description:base.module_auth_totp
 msgid ""
 "\n"
@@ -11841,6 +11959,23 @@ msgstr ""
 "Opmerking: logischerwijs voorkomt twee factoren wachtwoordgebaseerde RPC-toegang voor gebruikers\n"
 "waar het is ingeschakeld. Om RPC-scripts te kunnen uitvoeren, moet de gebruiker\n"
 "kunnen API keys instellen om hun hoofdwachtwoord te vervangen.\n"
+
+#. module: base
+#: model:ir.module.module,description:base.module_l10n_tr_hr_payroll
+msgid ""
+"\n"
+"Türkiye Payroll and Tax Rules\n"
+"=============================\n"
+"- Social Security Premium/Insurance calculations for employment and unemployment\n"
+"- Income tax calculations\n"
+"- Stamp tax deductions\n"
+msgstr ""
+"\n"
+"Türkiye Loonlijst en Belastingregels\n"
+"=============================\n"
+"- Berekeningen sociale premies/verzekeringen voor werk en werkloosheid\n"
+"- Berekeningen inkomstenbelasting\n"
+"- Postzegelbelasting aftrek\n"
 
 #. module: base
 #: model:ir.module.module,description:base.module_l10n_ua
@@ -12443,6 +12578,58 @@ msgstr "&amp; Afsluiten"
 #. module: base
 #. odoo-python
 #: code:addons/base/models/ir_fields.py:0
+msgid ""
+"'%(value)s' does not seem to be a valid Property value for field "
+"'%%(field)s'. Each property need at least 'name', 'type' and 'string' "
+"attribute."
+msgstr ""
+"'%(value)s' lijkt geen geldige Property-waarde te zijn voor veld "
+"'%%(field)s'. Elke eigenschap heeft ten minste het attribuut 'name', 'type' "
+"en 'string' nodig."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_fields.py:0
+msgid ""
+"'%(value)s' does not seem to be a valid Selection value for "
+"'%(label_property)s' (subfield of '%%(field)s' field)."
+msgstr ""
+"'%(value)s' lijkt geen geldige selectiewaarde te zijn voor "
+"'%(label_property)s' (subveld van '%%(veld)s' veld)."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_fields.py:0
+msgid ""
+"'%(value)s' does not seem to be a valid Tag value for '%(label_property)s' "
+"(subfield of '%%(field)s' field)."
+msgstr ""
+"'%(value)s' lijkt geen geldige Tag-waarde te zijn voor '%(label_property)s' "
+"(subveld van '%%(veld)s' veld)."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_fields.py:0
+msgid ""
+"'%(value)s' does not seem to be an float for field '%(label_property)s' "
+"property (subfield of '%%(field)s' field)."
+msgstr ""
+"'%(value)s' lijkt geen vlotter te zijn voor veld '%(label_property)s' "
+"eigenschap (subveld van '%%(veld)s' veld)."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_fields.py:0
+msgid ""
+"'%(value)s' does not seem to be an integer for field '%(label_property)s' "
+"property (subfield of '%%(field)s' field)."
+msgstr ""
+"'%(value)s' lijkt geen geheel getal te zijn voor veld '%(label_property)s' "
+"eigenschap (subveld van '%%(veld)s' veld)."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_fields.py:0
 msgid "'%s' does not seem to be a number for field '%%(field)s'"
 msgstr "'%s' lijkt geen nummer te zijn voor veld '%%(field)s'"
 
@@ -12643,7 +12830,7 @@ msgstr "2FA Uitnodigingsmail"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_auth_totp_mail_enforce
 msgid "2FA by mail"
-msgstr "2FA per post"
+msgstr "2FA per e-mail"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_lang_form
@@ -13176,6 +13363,13 @@ msgid ""
 msgstr ""
 "<strong>Voer je wachtwoord in om te bevestigen dat je de eigenaar bent van "
 "dit account</strong>"
+
+#. module: base
+#: model_terms:ir.ui.view,arch_db:base.res_users_identitycheck_view_form
+msgid ""
+"<strong>Please confirm your identity by entering your password</strong>"
+msgstr ""
+"<strong>Bevestig je identiteit door je wachtwoord in te voeren</strong>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.report_irmodeloverview
@@ -13889,7 +14083,7 @@ msgstr "Importeren bankrenkeningnummers"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_account_accountant_batch_payment
 msgid "Account Batch Payment Reconciliation"
-msgstr "Reconciliatie van rekeningbatchbetalingen"
+msgstr "Afletteren van batchbetalingen"
 
 #. module: base
 #: model:ir.module.category,name:base.module_category_accounting_localizations_account_charts
@@ -15285,14 +15479,13 @@ msgstr ""
 #: model:ir.module.module,summary:base.module_account_accountant_batch_payment
 msgid "Allows using Reconciliation with the Batch Payment feature."
 msgstr ""
-"Maakt het gebruik van afstemming met de functie Batchbetaling mogelijk."
+"Maakt het gebruik van afletteren met de functie batchbetaling mogelijk."
 
 #. module: base
 #: model:ir.module.module,summary:base.module_account_accountant_check_printing
 msgid "Allows using Reconciliation with the account check printing."
 msgstr ""
-"Maakt het gebruik van afstemming mogelijk met de functie accountcheck "
-"afdrukken."
+"Maakt het gebruik van afletteren mogelijk met de functie cheque afdrukken."
 
 #. module: base
 #: model:ir.module.module,summary:base.module_website_delivery_sendcloud
@@ -17338,6 +17531,11 @@ msgid "Australia"
 msgstr "Australië"
 
 #. module: base
+#: model:ir.module.module,shortdesc:base.module_l10n_anz_ubl_pint
+msgid "Australia & New Zealand - UBL PINT"
+msgstr "Australië & Nieuw-Zeeland - UBL PINT"
+
+#. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_au
 msgid "Australia - Accounting"
 msgstr "Australië - Boekhouding"
@@ -18172,7 +18370,7 @@ msgstr "België - Boekhoudverslagen - SMS"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_be_disallowed_expenses
 msgid "Belgium - Disallowed Expenses Data"
-msgstr "België - Gegevens over verworpen uitgaven"
+msgstr "België - Gegevens over niet-aftrekbare kosten"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_be_account_disallowed_expenses_fleet
@@ -18520,6 +18718,12 @@ msgid "Bridge between Stock and Accounting"
 msgstr "Koppelmodule tussen voorraad en boekhouding"
 
 #. module: base
+#: model:ir.module.module,description:base.module_sale_subscription_timesheet
+msgid "Bridge created to add computation of timesheet to subscription"
+msgstr ""
+"Brug gemaakt om berekening van urenbriefje toe te voegen aan abonnement"
+
+#. module: base
 #: model:ir.module.module,description:base.module_project_account_asset
 msgid ""
 "Bridge created to add the number of assets linked to an AA to a project form"
@@ -18542,8 +18746,8 @@ msgid ""
 "Bridge created to add the number of expenses linked to an AA to a project "
 "form"
 msgstr ""
-"Brug gemaakt om het aantal onkosten gekoppeld aan een AA toe te voegen aan "
-"een projectformulier"
+"Brug gemaakt om het aantal declaraties gekoppeld aan een AA toe te voegen "
+"aan een projectformulier"
 
 #. module: base
 #: model:ir.module.module,description:base.module_project_sale_subscription
@@ -20682,8 +20886,8 @@ msgstr "Maak nieuwe lead met het /lead commando in het kanaal"
 #: model:ir.module.module,summary:base.module_hr_work_entry_contract_planning_attendance
 msgid "Create work entries from attendances based on employee's planning"
 msgstr ""
-"Creëer werkboekingen op basis van aanwezigheid op basis van de planning van "
-"de medewerker"
+"Maak werkboekingen op basis van aanwezigheid op basis van de planning van de"
+" medewerker"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_hr_work_entry_contract_attendance
@@ -21909,12 +22113,12 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_account_disallowed_expenses
 msgid "Disallowed Expenses"
-msgstr "Verworpen uitgaven"
+msgstr "Niet-aftrekbare kosten"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_account_disallowed_expenses_fleet
 msgid "Disallowed Expenses on Fleets"
-msgstr "Verworpen uitgaven wagenpark"
+msgstr "Niet-aftrekbare kosten wagenpark"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_base_module_uninstall
@@ -22198,7 +22402,7 @@ msgstr "Documenten - contracten"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_documents_hr_expense
 msgid "Documents - Expense"
-msgstr "Documenten - Onkosten"
+msgstr "Documenten - Declaraties"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_documents_fsm
@@ -22516,6 +22720,11 @@ msgstr "EDI voor Peru"
 #: model:ir.model.fields.selection,name:base.selection__res_partner__tz__eet
 msgid "EET"
 msgstr "EET"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_l10n_nz_eft
+msgid "EFT Batch Payment"
+msgstr "EFT-batchbetaling"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_hw_escpos
@@ -23701,6 +23910,11 @@ msgid "Event Social"
 msgstr "Evenement sociaal"
 
 #. module: base
+#: model:ir.module.module,shortdesc:base.module_test_event_full_enterprise
+msgid "Event Test (all modules)"
+msgstr "Gebeurtenistest (alle modules)"
+
+#. module: base
 #: model:ir.module.module,summary:base.module_website_event_exhibitor
 msgid "Event: manage sponsors and exhibitors"
 msgstr "Evenement: beheer sponsors en standhouders"
@@ -23978,6 +24192,11 @@ msgstr ""
 #: model:ir.module.module,summary:base.module_l10n_ca_payment_cpa005
 msgid "Export payments as CPA 005 AFT files"
 msgstr "Betalingen exporteren als CPA 005 AFT-bestanden"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_l10n_nz_eft
+msgid "Export payments as EFT files"
+msgstr "Betalingen exporteren als EFT-bestanden"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_l10n_us_payment_nacha
@@ -24323,7 +24542,7 @@ msgstr "Buitendienstreparatie"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_industry_fsm_report
 msgid "Field Service Reports"
-msgstr "Field Service Rapport"
+msgstr "Buitendienstrapport"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_industry_fsm_sale_report
@@ -27036,6 +27255,11 @@ msgid "Indian - Stock Report(GST)"
 msgstr "India - Voorraadrapportages (GST)"
 
 #. module: base
+#: model:ir.module.module,shortdesc:base.module_l10n_in_withholding_payment
+msgid "Indian - TDS For Payment"
+msgstr "Indiaas - TDS voor betaling"
+
+#. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_in_reports_tds_tcs
 msgid "Indian - TDS TCS Reports"
 msgstr "Indiaas - TDS TCS-rapporten"
@@ -27814,6 +28038,11 @@ msgstr "Iran"
 #: model:res.country,name:base.iq
 msgid "Iraq"
 msgstr "Irak"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_l10n_iq
+msgid "Iraq - Accounting"
+msgstr "Irak - Boekhouding"
 
 #. module: base
 #: model:res.country,name:base.ie
@@ -29078,6 +29307,7 @@ msgid "Locale Code"
 msgstr "Code landinstellingen"
 
 #. module: base
+#: model:ir.module.category,name:base.module_category_accounting_localization
 #: model:ir.module.category,name:base.module_category_accounting_localizations
 #: model:ir.module.category,name:base.module_category_localization
 #: model_terms:ir.ui.view,arch_db:base.view_users_form
@@ -29632,12 +29862,12 @@ msgstr "Certificaat beheren"
 #: model:ir.module.module,description:base.module_account_disallowed_expenses
 #: model:ir.module.module,summary:base.module_account_disallowed_expenses
 msgid "Manage disallowed expenses"
-msgstr "Beheer verworpen uitgaven"
+msgstr "Beheer niet-aftrekbare kosten"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_account_disallowed_expenses_fleet
 msgid "Manage disallowed expenses with fleets"
-msgstr "Beheer verworpen uitgaven met wagenparken"
+msgstr "Beheer niet-aftrekbare kosten met wagenparken"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_mrp_plm
@@ -32179,7 +32409,7 @@ msgstr ""
 "Zorg voor een nauwkeurige planning van je productiemiddelen dankzij de volledige integratie\n"
 "met verkoop- en inkoop-apps. De boekhoudintegratie maakt realtime mogelijk\n"
 "boekhoudkundige waardering en diepere rapportage over kosten en opbrengsten op je\n"
-"productie operaties.\n"
+"productie bewerkingen.\n"
 "\n"
 
 #. module: base
@@ -32754,7 +32984,7 @@ msgstr ""
 "backorders, terugbetalingen, productontvangst en kwaliteitscontrole. Kies de juiste\n"
 "controle methode volgens je behoefte.\n"
 "\n"
-"Beheer leveranciersrekeningen zonder moeite. Kies de juiste methode volgens:\n"
+"Beheer leveranciersfacturen zonder moeite. Kies de juiste methode volgens:\n"
 "je behoefte: maak vooraf conceptfacturen op basis van inkooporders, op producten\n"
 "ontvangsten, handmatig facturen aanmaken en regels importeren vanuit inkooporders,\n"
 "enzovoort.\n"
@@ -34344,6 +34574,16 @@ msgstr "Kassa Six"
 #: model:ir.module.module,shortdesc:base.module_pos_stripe
 msgid "POS Stripe"
 msgstr "Kassa Stripe"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_pos_urban_piper_swiggy
+msgid "POS UrbanPiper - Swiggy"
+msgstr "POS UrbanPiper - Swiggy"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_pos_urban_piper_ubereats
+msgid "POS UrbanPiper - Uber Eats"
+msgstr "POS UrbanPiper - Uber Eats"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_pos_urban_piper_zomato
@@ -35981,7 +36221,7 @@ msgstr ""
 "---------------------------------\n"
 "\n"
 "Projecten worden automatisch geïntegreerd met klantcontracten, zodat je:\n"
-"factureren op basis van tijd en materialen en eenvoudig timesheets opnemen.\n"
+"factureren op basis van tijd en materialen en eenvoudig urenstaten opnemen.\n"
 "\n"
 "Problemen volgen\n"
 "------------\n"
@@ -36015,6 +36255,11 @@ msgstr "Projectinkoop"
 #: model:ir.module.module,shortdesc:base.module_project_sale_subscription
 msgid "Project Sales Subscription"
 msgstr "Abonnement voor projectverkoop"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_sale_subscription_timesheet
+msgid "Project Sales Subscription Timesheet"
+msgstr "Project Verkoop Abonnement Timesheet"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_project_stock
@@ -36073,6 +36318,7 @@ msgstr "Project Loonadministratie"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_project_sale_subscription
+#: model:ir.module.module,summary:base.module_sale_subscription_timesheet
 msgid "Project sales subscriptions"
 msgstr "Abonnementen op projectverkoop"
 
@@ -38830,6 +39076,11 @@ msgid "Singapore - Accounting Reports"
 msgstr "Singapore - Boekhoudkundige rapportages"
 
 #. module: base
+#: model:ir.module.module,shortdesc:base.module_l10n_sg_ubl_pint
+msgid "Singapore - UBL PINT"
+msgstr "Singapore - UBL PINT"
+
+#. module: base
 #: model:res.country,name:base.sx
 msgid "Sint Maarten (Dutch part)"
 msgstr "Sint Maarten (Nederlands deel)"
@@ -39098,6 +39349,11 @@ msgstr "Spanje - Boekhouding (PGCE 2008)"
 #: model:ir.module.module,shortdesc:base.module_l10n_es_reports
 msgid "Spain - Accounting (PGCE 2008) Reports"
 msgstr "Spanje - Boekhoudkundige rapportages (PGCE 2008)"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_l10n_es_reports_2024
+msgid "Spain - Accounting Reports (2024 Update)"
+msgstr "Spanje - Boekhoudkundige rapporten (Update 2024)"
 
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_l10n_es_sale_amazon
@@ -39472,12 +39728,12 @@ msgstr "Provincie / Staat"
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_country_state__code
 msgid "State Code"
-msgstr "Code staat/provincie"
+msgstr "Code provincie/staat"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_country_state__name
 msgid "State Name"
-msgstr "Naam staat/provincie"
+msgstr "Naam provincie/staat"
 
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_country__state_required
@@ -39612,7 +39868,7 @@ msgstr "Bewaar verlofdocumenten van werknemers in de Document-app"
 #. module: base
 #: model:ir.module.module,summary:base.module_documents_hr_expense
 msgid "Store expense documents in the Document app"
-msgstr "Sla onkosten-documenten op in de Documenten-app"
+msgstr "Sla declaratie-documenten op in de Documenten-app"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_documents_l10n_ch_hr_payroll
@@ -40406,13 +40662,13 @@ msgstr "Thailand - Boekhoudkundige rapporten"
 #. odoo-python
 #: code:addons/base/models/res_users.py:0
 msgid "The \"%s\" action cannot be selected as home action."
-msgstr "De actie \"%s\" kan niet als home-actie worden geselecteerd."
+msgstr "De actie \"%s\" kan niet als startactie worden geselecteerd."
 
 #. module: base
 #. odoo-python
 #: code:addons/base/models/res_users.py:0
 msgid "The \"App Switcher\" action cannot be selected as home action."
-msgstr "De \"App Switcher\" actie kan niet geselecteerd worden als home actie."
+msgstr "De 'App Switcher'-actie kan niet als startactie geselecteerd worden."
 
 #. module: base
 #. odoo-python
@@ -40443,6 +40699,16 @@ msgstr "De duur van de API-sleutel klopt niet."
 #: code:addons/base/models/res_users.py:0
 msgid "The API key must have an expiration date"
 msgstr "De API-sleutel moet een vervaldatum hebben"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/res_users.py:0
+msgid ""
+"The action \"%s\" cannot be set as the home action because it requires a "
+"record to be selected beforehand."
+msgstr ""
+"De actie \"%s\" kan niet als startactie worden ingesteld omdat hiervoor "
+"eerst een record moet worden geselecteerd."
 
 #. module: base
 #: model:ir.model.fields,help:base.field_res_bank__country_code
@@ -42371,29 +42637,8 @@ msgstr "Tunesië - Boekhoudkundige rapporten"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__res_partner__tz__turkey
-#: model:res.country,name:base.tr
-msgid "Türkiye"
-msgstr ""
-
-#. module: base
-#: model:ir.module.module,shortdesc:base.module_l10n_tr
-msgid "Türkiye - Accounting"
-msgstr ""
-
-#. module: base
-#: model:ir.module.module,shortdesc:base.module_l10n_tr_reports
-msgid "Türkiye - Accounting Reports"
-msgstr ""
-
-#. module: base
-#: model:ir.module.module,shortdesc:base.module_l10n_tr_hr_payroll
-msgid "Türkiye - Payroll"
-msgstr ""
-
-#. module: base
-#: model:ir.module.module,shortdesc:base.module_l10n_tr_hr_payroll_account
-msgid "Türkiye - Payroll with Accounting"
-msgstr ""
+msgid "Turkey"
+msgstr "Turkije"
 
 #. module: base
 #: model:res.country,name:base.tm
@@ -42489,6 +42734,31 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:base.report_irmodeloverview
 msgid "Type:"
 msgstr "Soort:"
+
+#. module: base
+#: model:res.country,name:base.tr
+msgid "Türkiye"
+msgstr "Turkjije"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_l10n_tr
+msgid "Türkiye - Accounting"
+msgstr "Turkije - Boekhouding"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_l10n_tr_reports
+msgid "Türkiye - Accounting Reports"
+msgstr "Turkije - Boekhoudkundige rapportages"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_l10n_tr_hr_payroll
+msgid "Türkiye - Payroll"
+msgstr "Türkiye - Salarisadministratie"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_l10n_tr_hr_payroll_account
+msgid "Türkiye - Payroll with Accounting"
+msgstr "Türkiye - Salarisadministratie met boekhouding"
 
 #. module: base
 #: model:res.partner.industry,full_name:base.res_partner_industry_U
@@ -42728,8 +42998,12 @@ msgstr ""
 #. module: base
 #. odoo-python
 #: code:addons/base/models/ir_fields.py:0
-msgid "Unable to import field type '%s'  "
-msgstr "Kon het veld van het soort '%s' niet importeren  "
+msgid ""
+"Unable to import'%%(field)s' Properties field as a whole, target individual "
+"property instead."
+msgstr ""
+"Kan'%%(veld)s' niet importeren Eigenschappenveld als geheel, richt in plaats"
+" daarvan op individuele eigenschap."
 
 #. module: base
 #. odoo-python
@@ -42973,6 +43247,16 @@ msgstr "Onbekende modelnaam '%s' in gerelateerd model"
 #: code:addons/base/models/ir_fields.py:0
 msgid "Unknown sub-field “%s”"
 msgstr "Onbekend subveld “%s”"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_fields.py:0
+msgid ""
+"Unknown value '%(value)s' for boolean '%(label_property)s' property "
+"(subfield of '%%(field)s' field)."
+msgstr ""
+"Onbekende waarde '%(value)s' voor booleaanse '%(label_property)s' eigenschap"
+" (subveld van '%%(veld)s' veld)."
 
 #. module: base
 #. odoo-python
@@ -44194,9 +44478,9 @@ msgid ""
 "When dealing with multiple actions, the execution order is based on the "
 "sequence. Low number means high priority."
 msgstr ""
-"Wanneer je meerdere acties heeft zal de volgorde van uitvoering bepaald "
-"worden aan de hand van de sequentie. Een laag nummer betekent een hoge "
-"prioriteit."
+"Wanneer je meerdere acties heeft, zal de volgorde van uitvoering bepaald "
+"worden aan de hand van het volgordenummer. Een laag nummer betekent een hoge"
+" prioriteit."
 
 #. module: base
 #: model:ir.model.fields,help:base.field_ir_mail_server__sequence
@@ -44226,8 +44510,8 @@ msgid ""
 "When re-invoicing the expense on the SO, set the cost to the total untaxed "
 "amount of the expense."
 msgstr ""
-"Wanneer je de declaratie opnieuw factureert op de SO, stel je de kosten in "
-"op het totale onbelaste bedrag van de onkosten."
+"Wanneer je de declaratie opnieuw factureert op de verkooporder, stel je de "
+"kosten in op het totale onbelaste bedrag van de declaratie."
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.sequence_view
@@ -44458,8 +44742,8 @@ msgid ""
 "XML Export of the Journal Entries for the Mexican Tax Authorities for a "
 "compulsory audit."
 msgstr ""
-"XML-export van de journaalposten voor de Mexicaanse belastingdienst voor een"
-" verplichte audit."
+"XML-export van de boekingen voor de Mexicaanse belastingdienst voor een "
+"verplichte audit."
 
 #. module: base
 #: model:res.currency,currency_subunit_label:base.VND
@@ -44834,7 +45118,7 @@ msgid ""
 msgstr ""
 "Je hebt onvoldoende rechten om toegang te krijgen tot de velden \"%(fields)s\" op %(document_kind)s (%(document_model)s). Neem contact op met je systeembeheerder.\n"
 "\n"
-"Operatie: %(operation)s"
+"Bewerking: %(operation)s"
 
 #. module: base
 #. odoo-python

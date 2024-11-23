@@ -21,7 +21,7 @@ class TestAutoPostBills(AccountTestInvoicingCommon):
             return self.company_data['default_journal_purchase'].with_context(disable_abnormal_invoice_detection=False)._create_document_from_attachment(attachment.id)
 
     def assert_wizard(self, post_result, expected_nb_bills):
-        self.assertEqual(post_result.get('res_model'), 'account.autopost.bills.wizard_test')
+        self.assertEqual(post_result.get('res_model'), 'account.autopost.bills.wizard')
         wizard = self.env[post_result.get('res_model')].browse(post_result.get('res_id'))
         self.assertEqual(wizard.nb_unmodified_bills, expected_nb_bills)
         return wizard

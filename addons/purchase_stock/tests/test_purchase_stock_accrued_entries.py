@@ -55,7 +55,7 @@ class TestAccruedPurchaseStock(AccountTestInvoicingCommon):
         pick.button_validate()
         pick.move_ids.write({'date': fields.Date.to_date('2020-01-06')})
 
-        wizard = self.env['account.accrued.orders.wizard_test'].with_context({
+        wizard = self.env['account.accrued.orders.wizard'].with_context({
             'active_model': 'purchase.order',
             'active_ids': self.purchase_order.ids,
         }).create({
@@ -112,7 +112,7 @@ class TestAccruedPurchaseStock(AccountTestInvoicingCommon):
         move.invoice_date = fields.Date.to_date('2020-01-08')
         move.action_post()
 
-        wizard = self.env['account.accrued.orders.wizard_test'].with_context({
+        wizard = self.env['account.accrued.orders.wizard'].with_context({
             'active_model': 'purchase.order',
             'active_ids': self.purchase_order.ids,
         }).create({

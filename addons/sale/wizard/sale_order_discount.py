@@ -93,7 +93,7 @@ class SaleOrderDiscount(models.TransientModel):
         return discount_product
 
     def _create_discount_lines(self):
-        """Create SOline(s) according to wizard_test configuration"""
+        """Create SOline(s) according to wizard configuration"""
         self.ensure_one()
         discount_product = self._get_discount_product()
 

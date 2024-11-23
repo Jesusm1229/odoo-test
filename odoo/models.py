@@ -1569,7 +1569,7 @@ class BaseModel(metaclass=MetaModel):
             xid = record.get('id', False)
             # dbid
             dbid = False
-            if '.id' in record:
+            if record.get('.id'):
                 try:
                     dbid = int(record['.id'])
                 except ValueError:
@@ -2590,7 +2590,7 @@ class BaseModel(metaclass=MetaModel):
                         if granularity == 'week':
                             year, week = date_utils.weeknumber(
                                 babel.Locale.parse(locale),
-                                range_start,
+                                value,  # provide date or datetime without UTC conversion
                             )
                             label = f"W{week} {year:04}"
 
@@ -2947,17 +2947,20 @@ class BaseModel(metaclass=MetaModel):
             return SQL("COALESCE(%s)", SQL(", ").join(sql_field_langs))
 
         if field.company_dependent:
-            fallback = field.get_company_dependent_fallback(self)
-            fallback = field.convert_to_column(field.convert_to_write(fallback, self), self)
             sql_field = SQL(
-                "COALESCE(%(column)s->%(company_id)s,to_jsonb(%(fallback)s::%(column_type)s))",
+                "%(column)s->%(company_id)s",
                 column=sql_field,
                 company_id=str(self.env.company.id),
-                fallback=fallback,
-                column_type=SQL(field._column_type[1]),
             )
-            if field.type in ('boolean', 'integer', 'float', 'monetary'):
-                return SQL('(%s)::%s', sql_field, SQL(field._column_type[1]))
+            fallback = field.get_company_dependent_fallback(self)
+            fallback = field.convert_to_column(field.convert_to_write(fallback, self), self)
+            if fallback not in (None, 0):  # 0, 0.0, False, None
+                sql_field = SQL(
+                    'COALESCE(%(field)s, to_jsonb(%(fallback)s::%(column_type)s))',
+                    field=sql_field,
+                    fallback=fallback,
+                    column_type=SQL(field._column_type[1]),
+                )
             # here the specified value for a company might be NULL e.g. '{"1": null}'::jsonb
             # the result of current sql_field might be 'null'::jsonb
             # ('null'::jsonb)::text == 'null'
@@ -3207,7 +3210,7 @@ class BaseModel(metaclass=MetaModel):
         ):
             sql = SQL("(%s OR %s IS NULL)", sql, sql_field)
 
-        if not need_wildcard and is_number_field and not field.company_dependent:
+        if not need_wildcard and is_number_field:
             cmp_value = field.convert_to_record(field.convert_to_cache(value, self), self)
             if (
                 operator == '>=' and cmp_value <= 0

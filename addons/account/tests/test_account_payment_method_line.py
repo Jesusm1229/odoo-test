@@ -59,9 +59,9 @@ class TestAccountPaymentMethodLine(AccountTestInvoicingCommon):
     def test_move_register_payment_wizard(self):
         """
             This test will do a basic flow where we do a register payment from an invoice by using the register payment
-            wizard_test. If we have a payment method set on the partner, the preferred payment method will be the one from
-            the partner and so the wizard_test will have the payment method line from the partner. However, we can modify the
-            preferred payment line on the move and so the payment method line and journal of the wizard_test will be changed.
+            wizard. If we have a payment method set on the partner, the preferred payment method will be the one from
+            the partner and so the wizard will have the payment method line from the partner. However, we can modify the
+            preferred payment line on the move and so the payment method line and journal of the wizard will be changed.
         """
         # The preferred payment method will be the one set on the partner
         self.assertRegisterPayment(
@@ -85,7 +85,7 @@ class TestAccountPaymentMethodLine(AccountTestInvoicingCommon):
 
     def test_multiple_moves_register_payment(self):
         """
-            This will test the register payment wizard_test when selecting multiple move with different partner to see if the
+            This will test the register payment wizard when selecting multiple move with different partner to see if the
             payment method lines are set correctly.
         """
         # Test with two moves with same payment method lines and same partners

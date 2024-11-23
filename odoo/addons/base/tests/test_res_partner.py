@@ -5,6 +5,7 @@ from contextlib import contextmanager
 from unittest.mock import patch
 
 from odoo import Command
+from odoo.addons.base.models.ir_mail_server import extract_rfc2822_addresses
 from odoo.addons.base.models.res_partner import Partner
 from odoo.addons.base.tests.common import TransactionCaseWithUserDemo
 from odoo.exceptions import AccessError, RedirectWarning, UserError, ValidationError
@@ -115,15 +116,33 @@ class TestPartner(TransactionCaseWithUserDemo):
                     'Name_create should take first found email'
                 )
 
-        # check name updates
-        for source, exp_email_formatted in [
-            ('Vlad the Impaler', '"Vlad the Impaler" <vlad.the.impaler@example.com>'),
-            ('Balázs', '"Balázs" <vlad.the.impaler@example.com>'),
-            ('Balázs <email.in.name@example.com>', '"Balázs <email.in.name@example.com>" <vlad.the.impaler@example.com>'),
+        # check name updates and extract_rfc2822_addresses
+        for source, exp_email_formatted, exp_addr in [
+            (
+                'Vlad the Impaler',
+                '"Vlad the Impaler" <vlad.the.impaler@example.com>',
+                ['vlad.the.impaler@example.com']
+            ), (
+                'Balázs', '"Balázs" <vlad.the.impaler@example.com>',
+                ['vlad.the.impaler@example.com']
+            ),
+            # check with '@' in name
+            (
+                'Bike@Home', '"Bike@Home" <vlad.the.impaler@example.com>',
+                ['Bike@Home', 'vlad.the.impaler@example.com']
+            ), (
+                'Bike @ Home@Home', '"Bike @ Home@Home" <vlad.the.impaler@example.com>',
+                ['Home@Home', 'vlad.the.impaler@example.com']
+            ), (
+                'Balázs <email.in.name@example.com>',
+                '"Balázs <email.in.name@example.com>" <vlad.the.impaler@example.com>',
+                ['email.in.name@example.com', 'vlad.the.impaler@example.com']
+            ),
         ]:
             with self.subTest(source=source):
                 new_partner.write({'name': source})
                 self.assertEqual(new_partner.email_formatted, exp_email_formatted)
+                self.assertEqual(extract_rfc2822_addresses(new_partner.email_formatted), exp_addr)
 
         # check email updates
         new_partner.write({'name': 'Balázs'})
@@ -282,11 +301,11 @@ class TestPartner(TransactionCaseWithUserDemo):
         self.assertEqual(set(i[0] for i in ns_res), set(test_user.partner_id.ids))
 
     def test_partner_merge_wizard_dst_partner_id(self):
-        """ Check that dst_partner_id in merge wizard_test displays id along with partner name """
+        """ Check that dst_partner_id in merge wizard displays id along with partner name """
         test_partner = self.env['res.partner'].create({'name': 'Radu the Handsome'})
         expected_partner_name = '%s (%s)' % (test_partner.name, test_partner.id)
 
-        partner_merge_wizard = self.env['base.partner.merge.automatic.wizard_test'].with_context(
+        partner_merge_wizard = self.env['base.partner.merge.automatic.wizard'].with_context(
             {'partner_show_db_id': True, 'default_dst_partner_id': test_partner}).new()
         self.assertEqual(
             partner_merge_wizard.dst_partner_id.display_name, expected_partner_name,

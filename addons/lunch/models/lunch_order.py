@@ -245,7 +245,7 @@ class LunchOrder(models.Model):
     def add_to_cart(self):
         """
             This method currently does nothing, we currently need it in order to
-            be able to reuse this model in place of a wizard_test
+            be able to reuse this model in place of a wizard
         """
         # YTI FIXME: Find a way to drop this.
         return True

@@ -36,7 +36,7 @@ class TestBIR2307Generation(TestPhCommon):
         """ Test the report """
         wizard_action = self.invoice.action_open_l10n_ph_2307_wizard()
         context = wizard_action['context']
-        wizard = self.env['l10n_ph_2307.wizard_test'].with_context(context).create({})
+        wizard = self.env['l10n_ph_2307.wizard'].with_context(context).create({})
         wizard.action_generate()
 
         bir_2307 = base64.b64decode(wizard.xls_file)

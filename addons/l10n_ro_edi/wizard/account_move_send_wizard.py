@@ -2,7 +2,7 @@ from odoo import _, models
 
 
 class AccountMoveSendWizard(models.TransientModel):
-    _inherit = 'account.move.send.wizard_test'
+    _inherit = 'account.move.send.wizard'
 
     def _compute_extra_edi_checkboxes(self):
         super()._compute_extra_edi_checkboxes()

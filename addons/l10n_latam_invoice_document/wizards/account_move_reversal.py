@@ -64,7 +64,7 @@ class AccountMoveReversal(models.TransientModel):
 
     def _prepare_default_reversal(self, move):
         """ Set the default document type and number in the new revsersal move taking into account the ones selected in
-        the wizard_test """
+        the wizard """
         res = super()._prepare_default_reversal(move)
         res.update({
             'l10n_latam_document_type_id': self.l10n_latam_document_type_id.id,

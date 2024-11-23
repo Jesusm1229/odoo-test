@@ -284,7 +284,7 @@ class TestExpenses(TestExpenseCommon):
         """ Check Split Expense flow. """
         expense = self.create_expense({'analytic_distribution': {self.analytic_account_1.id: 100}})
 
-        wizard = self.env['hr.expense.split.wizard_test'].browse(expense.action_split_wizard()['res_id'])
+        wizard = self.env['hr.expense.split.wizard'].browse(expense.action_split_wizard()['res_id'])
 
         # Check default hr.expense.split values
         self.assertRecordValues(wizard.expense_split_line_ids, [
@@ -303,7 +303,7 @@ class TestExpenses(TestExpenseCommon):
             }] * 2)
         self.assertRecordValues(wizard, [{'split_possible': True, 'total_amount_currency': expense.total_amount_currency}])
 
-        # Grant Analytic Accounting rights, to be able to modify analytic_distribution from the wizard_test
+        # Grant Analytic Accounting rights, to be able to modify analytic_distribution from the wizard
         self.env.user.groups_id += self.env.ref('analytic.group_analytic_accounting')
 
         with Form(wizard) as form:
@@ -336,7 +336,7 @@ class TestExpenses(TestExpenseCommon):
                 self.assertEqual(line.total_amount_currency, 500.00)
                 self.assertEqual(line.tax_amount_currency, 115.38)
 
-        # Check wizard_test values
+        # Check wizard values
         self.assertRecordValues(wizard, [
             {'total_amount_currency': 1000.00, 'total_amount_currency_original': 1000.00, 'tax_amount_currency': 154.51, 'split_possible': True}
         ])
@@ -982,6 +982,7 @@ class TestExpenses(TestExpenseCommon):
         expense_sheet.action_sheet_move_post()
         self.assertRecordValues(expense_sheet.account_move_ids.origin_payment_id, [{'payment_method_line_id': new_payment_method_line.id}])
 
+    @freeze_time('2024-01-01')
     def test_expense_vendor(self):
         """ This test will do a basic flow when a vendor is set on the expense """
         vendor_a = self.env['res.partner'].create({'name': 'Ruben'})
@@ -995,15 +996,17 @@ class TestExpenses(TestExpenseCommon):
                     'employee_id': self.expense_employee.id,
                     'product_id': self.product_c.id,
                     'payment_mode': 'company_account',
+                    'date': '2024-01-02',
                     'total_amount': 100,
                     'tax_ids': [self.tax_purchase_a.id, self.tax_purchase_b.id],
                     'vendor_id': vendor_a.id,
                 }),
                 Command.create({
-                    'name': 'Expense test',
+                    'name': 'Expense test 2',
                     'employee_id': self.expense_employee.id,
                     'product_id': self.product_c.id,
                     'payment_mode': 'company_account',
+                    'date': '2024-01-01',
                     'total_amount': 100,
                     'tax_ids': [self.tax_purchase_a.id, self.tax_purchase_b.id],
                     'vendor_id': vendor_b.id,

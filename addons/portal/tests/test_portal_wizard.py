@@ -40,20 +40,20 @@ class TestPortalWizard(MailCommon):
         )
 
     def test_portal_wizard_acl(self):
-        portal_wizard = self.env['portal.wizard_test'].with_context(active_ids=[self.partner.id]).create({})
+        portal_wizard = self.env['portal.wizard'].with_context(active_ids=[self.partner.id]).create({})
 
-        with self.assertRaises(AccessError, msg='Standard users should not be able to open the portal wizard_test'):
-            self.env['portal.wizard_test'].with_context(active_ids=[self.partner.id]).with_user(self.user_employee).create({})
+        with self.assertRaises(AccessError, msg='Standard users should not be able to open the portal wizard'):
+            self.env['portal.wizard'].with_context(active_ids=[self.partner.id]).with_user(self.user_employee).create({})
 
-        with self.assertRaises(AccessError, msg='Standard users should not be able to open the portal wizard_test'):
+        with self.assertRaises(AccessError, msg='Standard users should not be able to open the portal wizard'):
             portal_wizard.with_user(self.user_employee).welcome_message
 
-        with self.assertRaises(AccessError, msg='Standard users should not be able to open the portal wizard_test'):
+        with self.assertRaises(AccessError, msg='Standard users should not be able to open the portal wizard'):
             portal_wizard.user_ids.with_user(self.user_employee).email
 
     @users('admin')
     def test_portal_wizard_partner(self):
-        portal_wizard = self.env['portal.wizard_test'].with_context(active_ids=[self.partner.id]).create({})
+        portal_wizard = self.env['portal.wizard'].with_context(active_ids=[self.partner.id]).create({})
 
         self.assertEqual(len(portal_wizard.user_ids), 1)
 
@@ -82,7 +82,7 @@ class TestPortalWizard(MailCommon):
         """
         group_public = self.env.ref('base.group_public')
         public_partner = self.public_user.partner_id
-        portal_wizard = self.env['portal.wizard_test'].with_context(active_ids=[public_partner.id]).create({})
+        portal_wizard = self.env['portal.wizard'].with_context(active_ids=[public_partner.id]).create({})
 
         self.assertEqual(len(portal_wizard.user_ids), 1)
         portal_user = portal_wizard.user_ids
@@ -116,9 +116,9 @@ class TestPortalWizard(MailCommon):
 
     @users('admin')
     def test_portal_wizard_internal_user(self):
-        """Internal user can not be managed from this wizard_test."""
+        """Internal user can not be managed from this wizard."""
         internal_partner = self.internal_user.partner_id
-        portal_wizard = self.env['portal.wizard_test'].with_context(active_ids=[internal_partner.id]).create({})
+        portal_wizard = self.env['portal.wizard'].with_context(active_ids=[internal_partner.id]).create({})
 
         self.assertEqual(len(portal_wizard.user_ids), 1)
         portal_user = portal_wizard.user_ids
@@ -135,7 +135,7 @@ class TestPortalWizard(MailCommon):
 
     @users('admin')
     def test_portal_wizard_error(self):
-        portal_wizard = self.env['portal.wizard_test'].with_context(active_ids=[self.portal_user.partner_id.id]).create({})
+        portal_wizard = self.env['portal.wizard'].with_context(active_ids=[self.portal_user.partner_id.id]).create({})
 
         self.assertEqual(len(portal_wizard.user_ids), 1)
         portal_user = portal_wizard.user_ids
@@ -152,7 +152,7 @@ class TestPortalWizard(MailCommon):
             portal_user._assert_user_email_uniqueness()
         self.assertEqual(portal_user.email_state, 'ko', msg='Must detect wrong email format.')
 
-        portal_wizard = self.env['portal.wizard_test'].with_context(active_ids=[self.internal_user.partner_id.id]).create({})
+        portal_wizard = self.env['portal.wizard'].with_context(active_ids=[self.internal_user.partner_id.id]).create({})
         portal_user = portal_wizard.user_ids
         with self.assertRaises(UserError, msg='Must not be able to change internal user group.'):
             portal_user.action_revoke_access()
@@ -167,7 +167,7 @@ class TestPortalWizard(MailCommon):
             'company_id': company_2.id,
         })
 
-        portal_wizard = self.env['portal.wizard_test'].with_context(active_ids=[partner_company_2.id]).create({})
+        portal_wizard = self.env['portal.wizard'].with_context(active_ids=[partner_company_2.id]).create({})
         portal_user = portal_wizard.user_ids
 
         portal_user.with_company(company_1).action_grant_access()

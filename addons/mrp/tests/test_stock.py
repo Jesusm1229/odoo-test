@@ -207,7 +207,7 @@ class TestWarehouseMrp(common.TestMrpCommon):
     def test_putaway_after_manufacturing_3(self):
         """ This test checks a tracked manufactured product will go to location
         defined in putaway strategy when the production is recorded with
-        product.produce wizard_test.
+        product.produce wizard.
         """
         self.laptop.tracking = 'serial'
         mo_laptop = self.new_mo_laptop()

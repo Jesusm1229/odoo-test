@@ -6,7 +6,7 @@ from odoo import api, fields, models, _, exceptions
 
 class grant_badge_wizard(models.TransientModel):
     """ Wizard allowing to grant a badge to a user"""
-    _name = 'gamification.badge.user.wizard_test'
+    _name = 'gamification.badge.user.wizard'
     _description = 'Gamification User Badge Wizard'
 
     user_id = fields.Many2one("res.users", string='User', required=True)

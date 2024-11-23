@@ -6,12 +6,12 @@ from odoo.exceptions import UserError
 
 class AccountDebitNote(models.TransientModel):
     """
-    Add Debit Note wizard_test: when you want to correct an invoice with a positive amount.
+    Add Debit Note wizard: when you want to correct an invoice with a positive amount.
     Opposite of a Credit Note, but different from a regular invoice as you need the link to the original invoice.
     In some cases, also used to cancel Credit Notes
     """
     _name = 'account.debit.note'
-    _description = 'Add Debit Note wizard_test'
+    _description = 'Add Debit Note wizard'
 
     move_ids = fields.Many2many('account.move', 'account_move_debit_move', 'debit_id', 'move_id',
                                 domain=[('state', '=', 'posted')])

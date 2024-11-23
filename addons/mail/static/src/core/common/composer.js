@@ -29,7 +29,7 @@ import { _t } from "@web/core/l10n/translation";
 import { useService } from "@web/core/utils/hooks";
 import { FileUploader } from "@web/views/fields/file_handler";
 import { escape, sprintf } from "@web/core/utils/strings";
-import { isMobileOS } from "@web/core/browser/feature_detection";
+import { isDisplayStandalone, isIOS, isMobileOS } from "@web/core/browser/feature_detection";
 
 const EDIT_CLICK_TYPE = {
     CANCEL: "cancel",
@@ -87,8 +87,13 @@ export class Composer extends Component {
     setup() {
         super.setup();
         this.isMobileOS = isMobileOS();
-        this.SEND_KEYBIND_TO_SEND = markup(
-            _t("<samp>%(send_keybind)s</samp><i> to send</i>", { send_keybind: this.sendKeybind })
+        this.isIosPwa = isIOS() && isDisplayStandalone();
+        this.OR_PRESS_SEND_KEYBIND = markup(
+            _t("or press %(send_keybind)s", {
+                send_keybind: this.sendKeybinds
+                    .map((key) => `<samp>${escape(key)}</samp>`)
+                    .join(" + "),
+            })
         );
         this.store = useState(useService("mail.store"));
         this.attachmentUploader = useAttachmentUploader(
@@ -290,8 +295,8 @@ export class Composer extends Component {
         return this.props.type === "note" ? _t("Log") : _t("Send");
     }
 
-    get sendKeybind() {
-        return this.props.mode === "extended" ? _t("CTRL-Enter") : _t("Enter");
+    get sendKeybinds() {
+        return this.props.mode === "extended" ? [_t("CTRL"), _t("Enter")] : [_t("Enter")];
     }
 
     get showComposerAvatar() {
@@ -563,7 +568,9 @@ export class Composer extends Component {
                     this.notifySendFromMailbox();
                 }
                 if (accidentalDiscard) {
-                    const editor = document.querySelector(".o_mail_composer_form_view .note-editable");
+                    const editor = document.querySelector(
+                        ".o_mail_composer_form_view .note-editable"
+                    );
                     const editorIsEmpty = !editor || !editor.innerText.replace(/^\s*$/gm, "");
                     if (!editorIsEmpty) {
                         this.saveContent();
@@ -715,6 +722,16 @@ export class Composer extends Component {
         const composer = toRaw(this.props.composer);
         composer.isFocused = true;
         composer.thread?.markAsRead();
+    }
+
+    onFocusout(ev) {
+        if (
+            [EDIT_CLICK_TYPE.CANCEL, EDIT_CLICK_TYPE.SAVE].includes(ev.relatedTarget?.dataset?.type)
+        ) {
+            // Edit or Save most likely clicked: early return as to not re-render (which prevents click)
+            return;
+        }
+        this.props.composer.isFocused = false;
     }
 
     saveContent() {

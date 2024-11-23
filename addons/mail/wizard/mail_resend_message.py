@@ -7,7 +7,7 @@ from odoo.exceptions import UserError
 
 class MailResendMessage(models.TransientModel):
     _name = 'mail.resend.message'
-    _description = 'Email resend wizard_test'
+    _description = 'Email resend wizard'
 
     mail_message_id = fields.Many2one('mail.message', 'Message', readonly=True)
     partner_ids = fields.One2many('mail.resend.partner', 'resend_wizard_id', string='Recipients')
@@ -58,7 +58,7 @@ class MailResendMessage(models.TransientModel):
         return rec
 
     def resend_mail_action(self):
-        """ Process the wizard_test content and proceed with sending the related
+        """ Process the wizard content and proceed with sending the related
             email(s), rendering any template patterns on the fly if needed. """
         for wizard in self:
             "If a partner disappeared from partner list, we cancel the notification"
@@ -91,7 +91,7 @@ class PartnerResend(models.TransientModel):
     email = fields.Char(related='partner_id.email', string='Email Address', related_sudo=False, readonly=False)
     failure_reason = fields.Text('Failure Reason', related='notification_id.failure_reason')
     resend = fields.Boolean(string='Try Again', default=True)
-    resend_wizard_id = fields.Many2one('mail.resend.message', string="Resend wizard_test")
+    resend_wizard_id = fields.Many2one('mail.resend.message', string="Resend wizard")
     message = fields.Char(string='Error message')
     partner_readonly = fields.Boolean('Partner Readonly', related='resend_wizard_id.partner_readonly')
 

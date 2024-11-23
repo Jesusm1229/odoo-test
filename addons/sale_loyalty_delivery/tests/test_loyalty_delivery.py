@@ -50,7 +50,7 @@ class TestLoyaltyDeliveryCost(common.TransactionCase):
                 'discount_applicability': 'order',
             })]
         })
-        self.env['loyalty.generate.wizard_test'].with_context(active_id=program_gift_card.id).create({
+        self.env['loyalty.generate.wizard'].with_context(active_id=program_gift_card.id).create({
             'coupon_qty': 1,
             'points_granted': 200,
         }).generate_coupons()
@@ -92,7 +92,7 @@ class TestLoyaltyDeliveryCost(common.TransactionCase):
                 'required_points': 1,
             })],
         })
-        self.env['loyalty.generate.wizard_test'].with_context(active_id=program_ewallet.id).create({
+        self.env['loyalty.generate.wizard'].with_context(active_id=program_ewallet.id).create({
             'coupon_qty': 1,
             'points_granted': 200,
         }).generate_coupons()

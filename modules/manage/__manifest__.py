@@ -28,11 +28,11 @@ Long description of module's purpose
         'views/project_view.xml',
         'views/history_view.xml',
         'views/sprint_view.xml',
-        'views/task.xml'
+        'views/task_view.xml',
         'views/bug_view.xml',
         'views/improvement_view.xml',
-        'views/dev_view.xml',
-        'views/techonology_view.xml',
+        #'views/dev_view.xml',
+        'views/technology_view.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode

@@ -11,7 +11,7 @@ Technical module.
     """,
     'depends': ['mrp', 'product_expiry'],
     'data': [
-        'wizard_test/confirm_expiry_view.xml',
+        'wizard/confirm_expiry_view.xml',
     ],
     'installable': True,
     'auto_install': True,

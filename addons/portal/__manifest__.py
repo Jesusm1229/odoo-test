@@ -22,8 +22,8 @@ a dependency towards website editing and customization capabilities.""",
         'views/mail_templates_public.xml',
         'views/portal_templates.xml',
         'views/res_config_settings_views.xml',
-        'wizard_test/portal_share_views.xml',
-        'wizard_test/portal_wizard_views.xml',
+        'wizard/portal_share_views.xml',
+        'wizard/portal_wizard_views.xml',
     ],
     'assets': {
         'web._assets_primary_variables': [

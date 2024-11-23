@@ -52,7 +52,7 @@ class TestAccruedStockSaleOrders(AccountTestInvoicingCommon):
         pick.button_validate()
         pick.move_ids.write({'date': fields.Date.to_date('2020-01-06')})
 
-        wizard = self.env['account.accrued.orders.wizard_test'].with_context({
+        wizard = self.env['account.accrued.orders.wizard'].with_context({
             'active_model': 'sale.order',
             'active_ids': self.sale_order.ids,
         }).create({
@@ -109,7 +109,7 @@ class TestAccruedStockSaleOrders(AccountTestInvoicingCommon):
         inv.invoice_date = fields.Date.to_date('2020-01-08')
         inv.action_post()
 
-        wizard = self.env['account.accrued.orders.wizard_test'].with_context({
+        wizard = self.env['account.accrued.orders.wizard'].with_context({
             'active_model': 'sale.order',
             'active_ids': self.sale_order.ids,
         }).create({

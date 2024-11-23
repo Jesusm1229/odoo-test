@@ -38,8 +38,8 @@ Preferences
         'data/mail_templates.xml',
         'data/sale_stock_data.xml',
 
-        'wizard_test/stock_rules_report_views.xml',
-        'wizard_test/sale_order_cancel_views.xml',
+        'wizard/stock_rules_report_views.xml',
+        'wizard/sale_order_cancel_views.xml',
     ],
     'demo': ['data/sale_order_demo.xml'],
     'installable': True,

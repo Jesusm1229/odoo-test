@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-26 08:54+0000\n"
+"POT-Creation-Date: 2024-10-25 07:48+0000\n"
 "PO-Revision-Date: 2024-09-25 09:41+0000\n"
 "Last-Translator: Malaz Abuidris <msea@odoo.com>, 2024\n"
 "Language-Team: Arabic (https://app.transifex.com/odoo/teams/41243/ar/)\n"
@@ -1500,16 +1500,14 @@ msgstr "لم يتم إنشاء حركة نقدية بعد"
 #. module: lunch
 #. odoo-javascript
 #: code:addons/lunch/static/src/views/no_content_helper.xml:0
-#, python-format
 msgid "No location found"
-msgstr ""
+msgstr "لم يتم العثور على موقع "
 
 #. module: lunch
 #. odoo-javascript
 #: code:addons/lunch/static/src/components/lunch_dashboard.xml:0
-#, python-format
 msgid "No lunch location available."
-msgstr ""
+msgstr "لا يوجد مكان متاح لتناول الغداء. "
 
 #. module: lunch
 #: model_terms:ir.actions.act_window,help:lunch.lunch_order_action_control_suppliers
@@ -1715,9 +1713,8 @@ msgstr "بيتزا نباتية "
 #. module: lunch
 #. odoo-javascript
 #: code:addons/lunch/static/src/views/no_content_helper.xml:0
-#, python-format
 msgid "Please create a location to start ordering."
-msgstr ""
+msgstr "يُرجى إنشاء موقع لبدء الطلب. "
 
 #. module: lunch
 #: model_terms:lunch.alert,message:lunch.alert_office_3

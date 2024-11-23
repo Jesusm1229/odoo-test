@@ -29,7 +29,7 @@ class TestAccountUpdateTaxTagsWizard(AccountTestInvoicingCommon):
             'refund_tax': 'refund_tax_tag',
         }
         cls.tax_1 = cls._create_tax('update_test_tax', 15, tag_names=cls.tag_names)
-        cls.wizard = cls.env['account.update.tax.tags.wizard_test'].create({'date_from': '2023-02-01'})
+        cls.wizard = cls.env['account.update.tax.tags.wizard'].create({'date_from': '2023-02-01'})
 
     def _create_invoice(self, move_type='out_invoice', invoice_amount=50, currency_id=None, partner_id=None, date_invoice=None, payment_term_id=False, auto_validate=False, taxes=None, state=None):
         if move_type == 'entry':
@@ -142,8 +142,8 @@ class TestAccountUpdateTaxTagsWizard(AccountTestInvoicingCommon):
         return invoice_lines, tax_lines, counterpart_lines
 
     def test_update_tax_tags(self):
-        """ When we change the tags on the taxes and use the wizard_test to update history,
-        tags should be updated on amls within the wizard_test date range.
+        """ When we change the tags on the taxes and use the wizard to update history,
+        tags should be updated on amls within the wizard date range.
         """
         moves = self._create_invoice(taxes=self.tax_1) + self._create_invoice(taxes=self.tax_1)
         self._change_tax_tag(self.tax_1, 'invoice_tax_tag_changed', invoice=True, base=False)
@@ -193,7 +193,7 @@ class TestAccountUpdateTaxTagsWizard(AccountTestInvoicingCommon):
         self.assertFalse(counterpart_line.tax_tag_ids, 'Counterpart lines tags should not have changed.')
 
     def test_update_multi_company(self):
-        """ Tests that only the company that is selected when opening the wizard_test will have its amls updated. """
+        """ Tests that only the company that is selected when opening the wizard will have its amls updated. """
         move_1 = self._create_invoice(taxes=self.tax_1)
         self._change_tax_tag(self.tax_1, 'invoice_tax_tag_changed_for_company_1', invoice=True, base=False)
         be_country_id = self.env.ref('base.be').id
@@ -212,7 +212,7 @@ class TestAccountUpdateTaxTagsWizard(AccountTestInvoicingCommon):
 
         tax_line_1 = move_1.line_ids.filtered(lambda aml: aml.tax_line_id)
         tax_line_2 = move_2.line_ids.filtered(lambda aml: aml.tax_line_id)
-        # Only the first move_id should be updated since it belongs to first company which was initialized in the wizard_test
+        # Only the first move_id should be updated since it belongs to first company which was initialized in the wizard
         self.assertEqual(tax_line_1.tax_tag_ids.name, 'invoice_tax_tag_changed_for_company_1')
         self.assertEqual(tax_line_2.tax_tag_ids.name, 'update_test_invoice_tax_tag_company_2')
 

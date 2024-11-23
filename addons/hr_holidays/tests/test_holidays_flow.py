@@ -216,7 +216,7 @@ class TestHolidaysFlow(TestHrHolidaysCommon):
             _check_holidays_status(hol3_status, self.env['hr.employee'].browse(employee_id), 20.0, 1.0, 19.0, 19.0)
 
     def test_10_leave_summary_reports(self):
-        # Print the HR Holidays(Summary Employee) Report through the wizard_test
+        # Print the HR Holidays(Summary Employee) Report through the wizard
         ctx = {
             'model': 'hr.employee',
             'active_ids': [self.ref('hr.employee_admin')]

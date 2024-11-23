@@ -6,7 +6,7 @@ from odoo import Command, api, fields, models, _
 
 
 class ProjectShareWizard(models.TransientModel):
-    _name = 'project.share.wizard_test'
+    _name = 'project.share.wizard'
     _inherit = 'portal.share'
     _description = 'Project Sharing'
 
@@ -53,7 +53,7 @@ class ProjectShareWizard(models.TransientModel):
         return [(project_model.model, project_model.name)]
 
     share_link = fields.Char("Public Link", help="Anyone with this link can access the project in read mode.")
-    collaborator_ids = fields.One2many('project.share.collaborator.wizard_test', 'parent_wizard_id', string='Collaborators')
+    collaborator_ids = fields.One2many('project.share.collaborator.wizard', 'parent_wizard_id', string='Collaborators')
     existing_partner_ids = fields.Many2many('res.partner', compute='_compute_existing_partner_ids', export_string_translation=False)
 
     @api.depends('res_model', 'res_id')
@@ -135,6 +135,8 @@ class ProjectShareWizard(models.TransientModel):
     def action_share_record(self):
         # Confirmation dialog is only opened if new portal user(s) need to be created in a 'on invitation' website
         self.ensure_one()
+        if not self.collaborator_ids:
+            return
         on_invite = self.env['res.users']._get_signup_invitation_scope() == 'b2b'
         new_portal_user = self.collaborator_ids.filtered(lambda c: c.send_invitation and not c.partner_id.user_ids) and on_invite
         if not new_portal_user:
@@ -144,7 +146,7 @@ class ProjectShareWizard(models.TransientModel):
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
             'views': [(self.env.ref('project.project_share_wizard_confirm_form').id, 'form')],
-            'res_model': 'project.share.wizard_test',
+            'res_model': 'project.share.wizard',
             'res_id': self.id,
             'target': 'new',
             'context': self.env.context,

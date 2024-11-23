@@ -4419,7 +4419,7 @@ class StockMove(TransactionCase):
 
     def test_immediate_validate_1(self):
         """ In a picking with a single available move, clicking on validate without filling any
-        quantities should open a wizard_test asking to process all the reservation (so, the whole move).
+        quantities should open a wizard asking to process all the reservation (so, the whole move).
         """
         partner = self.env['res.partner'].create({'name': 'Jean'})
         picking = self.env['stock.picking'].create({
@@ -4445,8 +4445,8 @@ class StockMove(TransactionCase):
 
     def test_immediate_validate_2(self):
         """ In a picking with a single partially available move, clicking on validate without
-        filling any quantities should open a wizard_test asking to process all the reservation (so, only
-        a part of the initial demand). Validating this wizard_test should open another one asking for
+        filling any quantities should open a wizard asking to process all the reservation (so, only
+        a part of the initial demand). Validating this wizard should open another one asking for
         the creation of a backorder. If the backorder is created, it should contain the quantities
         not processed.
         """
@@ -4490,8 +4490,8 @@ class StockMove(TransactionCase):
 
     def test_immediate_validate_3(self):
         """ In a picking with two moves, one partially available and one unavailable, clicking
-        on validate without filling any quantities should open a wizard_test asking to process all the
-        reservation (so, only a part of one of the moves). Validating this wizard_test should open
+        on validate without filling any quantities should open a wizard asking to process all the
+        reservation (so, only a part of one of the moves). Validating this wizard should open
         another one asking for the creation of a backorder. If the backorder is created, it should
         contain the quantities not processed.
         """
@@ -4536,7 +4536,7 @@ class StockMove(TransactionCase):
         self.assertEqual(product5_move.state, 'confirmed')
 
         action = picking.button_validate()
-        self.assertTrue(isinstance(action, dict), 'Should open backorder wizard_test')
+        self.assertTrue(isinstance(action, dict), 'Should open backorder wizard')
         self.assertEqual(action.get('res_model'), 'stock.backorder.confirmation')
         wizard = self.env[(action.get('res_model'))].browse(action.get('res_id')).with_context(action.get('context'))
         wizard.process()
@@ -4552,7 +4552,7 @@ class StockMove(TransactionCase):
 
     def test_immediate_validate_4(self):
         """ In a picking with a single available tracked by lot move, clicking on validate without
-        filling any quantities should pop up the immediate transfer wizard_test.
+        filling any quantities should pop up the immediate transfer wizard.
         """
         partner = self.env['res.partner'].create({'name': 'Jean'})
         lot1 = self.env['stock.lot'].create({
@@ -4579,7 +4579,7 @@ class StockMove(TransactionCase):
         })
         picking.action_confirm()
         picking.action_assign()
-        # No quantities filled, immediate transfer wizard_test should pop up.
+        # No quantities filled, immediate transfer wizard should pop up.
         picking.button_validate()
 
         self.assertEqual(picking.move_ids.quantity, 5.0)
@@ -4638,10 +4638,10 @@ class StockMove(TransactionCase):
         """ In a receipt picking with two moves, one tracked and one untracked, clicking on
         validate without filling any quantities should displays an UserError as long as no quantity
         done and lot_name is set on the tracked move. Now if the user validates the picking, the
-        wizard_test telling the user all reserved quantities will be processed will NOT be opened. This
-        wizard_test is only opene if no quantities were filled. So validating the picking at this state
-        will open another wizard_test asking for the creation of a backorder. Now, if the user processed
-        on the second move more than the reservation, a wizard_test will ask him to confirm.
+        wizard telling the user all reserved quantities will be processed will NOT be opened. This
+        wizard is only opene if no quantities were filled. So validating the picking at this state
+        will open another wizard asking for the creation of a backorder. Now, if the user processed
+        on the second move more than the reservation, a wizard will ask him to confirm.
         """
         picking_type = self.env.ref('stock.picking_type_in')
         picking_type.use_create_lots = True
@@ -4679,9 +4679,9 @@ class StockMove(TransactionCase):
         with self.assertRaises(UserError):
             picking.button_validate()
         product3_move.move_line_ids[0].lot_name = '271828'
-        action = picking.button_validate()  # should open backorder wizard_test
+        action = picking.button_validate()  # should open backorder wizard
 
-        self.assertTrue(isinstance(action, dict), 'Should open backorder wizard_test')
+        self.assertTrue(isinstance(action, dict), 'Should open backorder wizard')
         self.assertEqual(action.get('res_model'), 'stock.backorder.confirmation')
 
     def test_immediate_validate_7(self):
@@ -4790,7 +4790,7 @@ class StockMove(TransactionCase):
     def test_immediate_validate_10_tracked_move_without_backorder(self):
         """
             Create a picking for a tracked product, validate it as an
-            immediate transfer, and ensure that the backorder wizard_test is
+            immediate transfer, and ensure that the backorder wizard is
             not triggered when the qty is reserved.
         """
         picking_type_internal = self.env.ref('stock.picking_type_internal')
@@ -6859,3 +6859,38 @@ class StockMove(TransactionCase):
             })
 
             self.assertEqual(picking.move_type, move_type)
+
+    def test_autocomplete_sml_location_based_on_sm_lot_ids(self):
+        """
+        When the user sets the lots on the SM, we will create the related SML. But in
+        case of serial number, we can also guess the source location
+        """
+        subloc = self.stock_location.child_ids[0]
+
+        lots = self.env['stock.lot'].create([{
+            'name': name,
+            'product_id': self.product_serial.id,
+        } for name in ['sn01', 'sn02', 'sn03']])
+
+        self.env['stock.quant']._update_available_quantity(self.product_serial, self.stock_location, 1, lot_id=lots[0])
+        self.env['stock.quant']._update_available_quantity(self.product_serial, subloc, 1, lot_id=lots[1])
+        # Third SN is at a wrong location -> we will fallback on SM loc
+        self.env['stock.quant']._update_available_quantity(self.product_serial, self.pack_location, 1, lot_id=lots[2])
+
+        sm = self.env['stock.move'].create({
+            'name': self.product_serial.name,
+            'location_id': self.stock_location.id,
+            'location_dest_id': self.customer_location.id,
+            'product_id': self.product_serial.id,
+            'product_uom': self.uom_unit.id,
+            'product_uom_qty': 3.0,
+        })
+        sm._action_confirm()
+
+        sm.lot_ids = [(6, 0, lots.ids)]
+
+        self.assertRecordValues(sm.move_line_ids, [
+            {'location_id': self.stock_location.id, 'lot_id': lots[0].id},
+            {'location_id': subloc.id, 'lot_id': lots[1].id},
+            {'location_id': self.stock_location.id, 'lot_id': lots[2].id},
+        ])

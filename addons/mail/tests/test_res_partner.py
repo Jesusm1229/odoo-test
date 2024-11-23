@@ -533,7 +533,7 @@ class TestPartner(MailCommon):
         self.assertEqual(p2.message_follower_ids.partner_id, self.partner_admin)
         self.assertEqual(p2.message_ids, p2_msg_ids_init)
 
-        MergeForm = Form(self.env['base.partner.merge.automatic.wizard_test'].with_context(
+        MergeForm = Form(self.env['base.partner.merge.automatic.wizard'].with_context(
             active_model='res.partner',
             active_ids=(p1 + p2).ids
         ))

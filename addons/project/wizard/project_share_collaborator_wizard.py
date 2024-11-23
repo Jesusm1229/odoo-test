@@ -4,11 +4,11 @@ from odoo import api, fields, models
 
 
 class ProjectSharingCollaboratorWizard(models.TransientModel):
-    _name = 'project.share.collaborator.wizard_test'
+    _name = 'project.share.collaborator.wizard'
     _description = 'Project Sharing Collaborator Wizard'
 
     parent_wizard_id = fields.Many2one(
-        'project.share.wizard_test',
+        'project.share.wizard',
         export_string_translation=False,
     )
     partner_id = fields.Many2one(

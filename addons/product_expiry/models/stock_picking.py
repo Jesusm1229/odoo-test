@@ -10,7 +10,7 @@ class StockPicking(models.Model):
     def _pre_action_done_hook(self):
         res = super()._pre_action_done_hook()
         # We use the 'skip_expired' context key to avoid to make the check when
-        # user did already confirmed the wizard_test about expired lots.
+        # user did already confirmed the wizard about expired lots.
         if res is True and not self.env.context.get('skip_expired'):
             pickings_to_warn_expired = self._check_expired_lots()
             if pickings_to_warn_expired:

@@ -170,7 +170,7 @@ class TestDeliveryCost(DeliveryCommon, SaleCommon):
             'default_order_id': sale_pricelist_based_delivery_charges.id,
             'default_carrier_id': self.normal_delivery.id
         }))
-        self.assertEqual(delivery_wizard.delivery_price, 5.0, "Delivery cost does not correspond to 5.0 in wizard_test")
+        self.assertEqual(delivery_wizard.delivery_price, 5.0, "Delivery cost does not correspond to 5.0 in wizard")
         delivery_wizard.save().button_confirm()
 
         line = sale_pricelist_based_delivery_charges.order_line.filtered_domain([
@@ -210,7 +210,7 @@ class TestDeliveryCost(DeliveryCommon, SaleCommon):
             'default_order_id': sale_pricelist_based_delivery_charges.id,
             'default_carrier_id': self.normal_delivery.id
         }))
-        self.assertEqual(delivery_wizard.delivery_price, 5.0, "Delivery cost does not correspond to 5.0 in wizard_test")
+        self.assertEqual(delivery_wizard.delivery_price, 5.0, "Delivery cost does not correspond to 5.0 in wizard")
         delivery_wizard.save().button_confirm()
 
         line = sale_pricelist_based_delivery_charges.order_line.filtered_domain([
@@ -265,7 +265,7 @@ class TestDeliveryCost(DeliveryCommon, SaleCommon):
 
         self.assertRecordValues(sale_order.order_line, [{'price_subtotal': 9.09, 'price_total': 10.45}])
 
-        # Now trying to add the delivery line using the delivery wizard_test, the results should be the same as before
+        # Now trying to add the delivery line using the delivery wizard, the results should be the same as before
         delivery_wizard = Form(self.env['choose.delivery.carrier'].with_context(default_order_id=sale_order.id,
                           default_carrier_id=self.normal_delivery.id))
         choose_delivery_carrier = delivery_wizard.save()

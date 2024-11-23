@@ -426,7 +426,7 @@ class TestSaleTimesheet(TestCommonSaleTimesheet):
         self.assertEqual(so_line_deliver_task_project.invoice_status, 'to invoice')
         self.assertEqual(sale_order.invoice_status, 'to invoice')
 
-        # Context for sale.advance.payment.inv wizard_test
+        # Context for sale.advance.payment.inv wizard
         self.context = {
             'active_model': 'sale.order',
             'active_ids': [sale_order.id],
@@ -441,7 +441,7 @@ class TestSaleTimesheet(TestCommonSaleTimesheet):
             'date_end_invoice_timesheet': today - timedelta(days=10)
         })
 
-        self.assertTrue(wizard.invoicing_timesheet_enabled, 'The "date_start_invoice_timesheet" and "date_end_invoice_timesheet" field should be visible in the wizard_test because a product in sale order has service_policy to "Timesheet on Task"')
+        self.assertTrue(wizard.invoicing_timesheet_enabled, 'The "date_start_invoice_timesheet" and "date_end_invoice_timesheet" field should be visible in the wizard because a product in sale order has service_policy to "Timesheet on Task"')
 
         with self.assertRaises(UserError):
             wizard.create_invoices()
@@ -454,7 +454,7 @@ class TestSaleTimesheet(TestCommonSaleTimesheet):
         })
         wizard.create_invoices()
 
-        self.assertTrue(sale_order.invoice_ids, 'One invoice should be created because the timesheet logged is between the period defined in wizard_test')
+        self.assertTrue(sale_order.invoice_ids, 'One invoice should be created because the timesheet logged is between the period defined in wizard')
         self.assertTrue(all(line.invoice_status == "to invoice" for line in sale_order.order_line if line.qty_delivered != line.qty_invoiced),
                         "All lines that still have some quantity to be invoiced should have an invoice status of 'to invoice', regardless if they were considered for previous invoicing, but didn't belong to the timesheet domain")
 
@@ -473,7 +473,7 @@ class TestSaleTimesheet(TestCommonSaleTimesheet):
         self.assertEqual(len(sale_order.invoice_ids), 2)
         invoice2 = sale_order.invoice_ids[-1]
 
-        self.assertEqual(so_line_deliver_global_project.qty_invoiced, timesheet1.unit_amount + timesheet3.unit_amount, "The last invoice done should have the quantity of the timesheet 3, because the date this timesheet is the only one before the 'date_end_invoice_timesheet' field in the wizard_test.")
+        self.assertEqual(so_line_deliver_global_project.qty_invoiced, timesheet1.unit_amount + timesheet3.unit_amount, "The last invoice done should have the quantity of the timesheet 3, because the date this timesheet is the only one before the 'date_end_invoice_timesheet' field in the wizard.")
 
         wizard.write({
             'date_start_invoice_timesheet': today - timedelta(days=4),
@@ -1088,6 +1088,37 @@ class TestSaleTimesheet(TestCommonSaleTimesheet):
         self.assertEqual(timesheet.account_id, analytic_account1)
         self.assertFalse(timesheet[other_analytic_plan2._column_name()])
         self.assertEqual(timesheet[other_analytic_plan3._column_name()], analytic_account3)
+
+    def test_timesheet_get_accounts_from_sol_fallback_on_project(self):
+        _project_analytic_plan, other_plans = self.env['account.analytic.plan']._get_all_plans()
+        other_analytic_plan2 = other_plans[0] if other_plans else self.env['account.analytic.plan'].create({'name': 'Analytic Plan 2'})
+        analytic_account2 = self.env['account.analytic.account'].create({
+            'name': 'Analytic Account 2',
+            'plan_id': other_analytic_plan2.id,
+        })
+        sale_order = self.env['sale.order'].create({
+            'name': 'SO Test',
+            'partner_id': self.partner_a.id,
+        })
+        so_line = self.env['sale.order.line'].create({
+            'product_id': self.product_order_timesheet3.id,
+            'order_id': sale_order.id,
+        })
+        sale_order.action_confirm()
+        so_project = sale_order.project_id
+        so_line.analytic_distribution = {str(analytic_account2.id): 100}
+        timesheet = self.env['account.analytic.line'].create({
+            'name': 'Timesheet',
+            'project_id': so_project.id,
+            'unit_amount': 1,
+            'employee_id': self.employee_manager.id,
+            'so_line': so_line.id,
+        })
+        self.assertEqual(
+            timesheet._get_analytic_accounts(),
+            so_project.account_id | analytic_account2,
+            "The analytic accounts should be the account_id from the project and the accounts from the SOL's distribution",
+        )
 
     def test_mandatory_plan_timesheet_applicability_from_sol(self):
         AnalyticPlan = self.env['account.analytic.plan']

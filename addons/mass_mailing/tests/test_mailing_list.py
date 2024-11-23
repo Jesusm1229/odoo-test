@@ -27,7 +27,7 @@ class TestMailingContactToList(MassMailCommon):
             'name': 'Contacts Agregator',
         })
 
-        # create wizard_test with context values
+        # create wizard with context values
         wizard_form = Form(self.env['mailing.contact.to.list'].with_context(default_contact_ids=contacts.ids))
         self.assertEqual(wizard_form.contact_ids.ids, contacts.ids)
 
@@ -116,8 +116,8 @@ class TestMailingListMerge(MassMailCommon):
                 subscription.list_id = self.mailing_list_2
                 subscription.opt_out = False
             contact = contact_form.save()
-        self.assertEqual(contact.subscription_ids[0].opt_out_datetime, datetime(2022, 1, 1, 12, 0, 0))
-        self.assertFalse(contact.subscription_ids[1].opt_out_datetime)
+        self.assertEqual(contact.subscription_ids.filtered(lambda s: s.list_id == self.mailing_list_1).opt_out_datetime, datetime(2022, 1, 1, 12, 0, 0))
+        self.assertFalse(contact.subscription_ids.filtered(lambda s: s.list_id == self.mailing_list_2).opt_out_datetime)
 
     @users('user_marketing')
     def test_mailing_list_action_send_mailing(self):
@@ -174,7 +174,7 @@ class TestMailingListMerge(MassMailCommon):
 
     @users('user_marketing')
     def test_mailing_list_merge_cornercase(self):
-        """ Check wrong use of merge wizard_test """
+        """ Check wrong use of merge wizard """
         with self.assertRaises(exceptions.UserError):
             merge_form = Form(self.env['mailing.list.merge'].with_context(
                 active_ids=[self.mailing_list_1.id, self.mailing_list_2.id],

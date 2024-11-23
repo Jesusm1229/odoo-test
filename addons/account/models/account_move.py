@@ -55,9 +55,9 @@ PAYMENT_STATE_SELECTION = [
 TYPE_REVERSE_MAP = {
     'entry': 'entry',
     'out_invoice': 'out_refund',
-    'out_refund': 'entry',
+    'out_refund': 'out_invoice',
     'in_invoice': 'in_refund',
-    'in_refund': 'entry',
+    'in_refund': 'in_invoice',
     'out_receipt': 'out_refund',
     'in_receipt': 'in_refund',
 }
@@ -291,6 +291,15 @@ class AccountMove(models.Model):
     country_code = fields.Char(related='company_id.account_fiscal_country_id.code', readonly=True)
     company_price_include = fields.Selection(related='company_id.account_price_include', readonly=True)
     attachment_ids = fields.One2many('ir.attachment', 'res_id', domain=[('res_model', '=', 'account.move')], string='Attachments')
+    audit_trail_message_ids = fields.One2many(
+        'mail.message',
+        'res_id',
+        domain=[
+            ('model', '=', 'account.move'),
+            ('message_type', '=', 'notification'),
+        ],
+        string='Audit Trail Messages',
+    )
 
     # === Hash Fields === #
     restrict_mode_hash_table = fields.Boolean(related='journal_id.restrict_mode_hash_table')
@@ -1831,42 +1840,53 @@ class AccountMove(models.Model):
             column_names = SQL(', ').join(SQL.identifier(field_name) for field_name in values)
             move_table_and_alias = SQL("(VALUES (%s)) AS move(%s)", casted_values, column_names)
 
-        result = self.env.execute_query(SQL("""
-            SELECT
-                   move.id AS move_id,
-                   array_agg(duplicate_move.id) AS duplicate_ids
-              FROM %(move_table_and_alias)s
-              JOIN account_move AS duplicate_move ON
-                   move.company_id = duplicate_move.company_id
-               AND move.id != duplicate_move.id
-               AND duplicate_move.state IN %(matching_states)s
-               AND move.move_type = duplicate_move.move_type
-               AND (
-                   move.commercial_partner_id = duplicate_move.commercial_partner_id
-                   OR (move.commercial_partner_id IS NULL AND duplicate_move.state = 'draft')
+        to_query = []
+        out_moves = moves.filtered(lambda m: m.move_type in ('out_invoice', 'out_refund'))
+        if out_moves:
+            out_moves_sql_condition = SQL("""
+                move.move_type in ('out_invoice', 'out_refund')
+                AND (
+                   move.amount_total = duplicate_move.amount_total
+                   AND move.invoice_date = duplicate_move.invoice_date
                 )
-               AND (
-                   -- For out moves
-                   move.move_type in ('out_invoice', 'out_refund')
+            """)
+            to_query.append((out_moves, out_moves_sql_condition))
+
+        in_moves = moves.filtered(lambda m: m.move_type in ('in_invoice', 'in_refund'))
+        if in_moves:
+            in_moves_sql_condition = SQL("""
+                move.move_type in ('in_invoice', 'in_refund')
+                AND (
+                   move.ref = duplicate_move.ref
+                   AND (move.invoice_date = duplicate_move.invoice_date OR move.state = 'draft')
+                )
+            """)
+            to_query.append((in_moves, in_moves_sql_condition))
+
+        result = []
+        for moves, move_type_sql_condition in to_query:
+            result.extend(self.env.execute_query(SQL("""
+                SELECT move.id AS move_id,
+                       array_agg(duplicate_move.id) AS duplicate_ids
+                  FROM %(move_table_and_alias)s
+                  JOIN account_move AS duplicate_move
+                    ON move.company_id = duplicate_move.company_id
+                   AND move.id != duplicate_move.id
+                   AND duplicate_move.state IN %(matching_states)s
+                   AND move.move_type = duplicate_move.move_type
                    AND (
-                       move.amount_total = duplicate_move.amount_total
-                       AND move.invoice_date = duplicate_move.invoice_date
-                   )
-                   OR
-                   -- For in moves
-                   move.move_type in ('in_invoice', 'in_refund')
-                   AND (
-                       move.ref = duplicate_move.ref
-                       AND (move.invoice_date = duplicate_move.invoice_date OR move.state = 'draft')
-                   )
-               )
-             WHERE move.id IN %(moves)s
-             GROUP BY move.id
-            """,
-            matching_states=tuple(matching_states),
-            moves=tuple(moves.ids or [0]),
-            move_table_and_alias=move_table_and_alias,
-        ))
+                           move.commercial_partner_id = duplicate_move.commercial_partner_id
+                           OR (move.commercial_partner_id IS NULL AND duplicate_move.state = 'draft')
+                       )
+                   AND (%(move_type_sql_condition)s)
+                 WHERE move.id IN %(moves)s
+                 GROUP BY move.id
+                """,
+                matching_states=tuple(matching_states),
+                moves=tuple(moves.ids or [0]),
+                move_table_and_alias=move_table_and_alias,
+                move_type_sql_condition=move_type_sql_condition,
+            )))
         return {
             self.env['account.move'].browse(move_id): self.env['account.move'].browse(duplicate_ids)
             for move_id, duplicate_ids in result
@@ -2484,11 +2504,12 @@ class AccountMove(models.Model):
     # -------------------------------------------------------------------------
     def _is_eligible_for_early_payment_discount(self, currency, reference_date):
         self.ensure_one()
+        payment_terms = self.line_ids.filtered(lambda line: line.display_type == 'payment_term')
         return self.currency_id == currency \
             and self.move_type in ('out_invoice', 'out_receipt', 'in_invoice', 'in_receipt') \
             and self.invoice_payment_term_id.early_discount \
             and (not reference_date or reference_date <= self.invoice_payment_term_id._get_last_discount_date(self.invoice_date)) \
-            and self.payment_state == 'not_paid'
+            and not (payment_terms.matched_debit_ids + payment_terms.matched_credit_ids)
 
     # -------------------------------------------------------------------------
     # BUSINESS MODELS SYNCHRONIZATION
@@ -3735,7 +3756,8 @@ class AccountMove(models.Model):
         if not float_is_zero(tax_amount_rounding_error, precision_rounding=self.currency_id.rounding):
             for subtotal in totals['subtotals']:
                 if _('Untaxed Amount') == subtotal['name']:
-                    subtotal['tax_groups'][0]['tax_amount_currency'] += tax_amount_rounding_error
+                    if subtotal['tax_groups']:
+                        subtotal['tax_groups'][0]['tax_amount_currency'] += tax_amount_rounding_error
                     totals['total_amount_currency'] = amount_total
                     self.tax_totals = totals
                     break
@@ -4230,7 +4252,7 @@ class AccountMove(models.Model):
         return results
 
     def _get_invoice_counterpart_amls_for_early_payment_discount_per_payment_term_line(self):
-        """ Helper to get the values to create the counterpart journal items on the register payment wizard_test and the
+        """ Helper to get the values to create the counterpart journal items on the register payment wizard and the
         bank reconciliation widget in case of an early payment discount. When the early payment discount computation
         is included, we need to compute the base amounts / tax amounts for each receivable / payable but we need to
         take care about the rounding issues. For others computations, we need to balance the discount you get.
@@ -4380,9 +4402,9 @@ class AccountMove(models.Model):
                             - sum(x['balance'] for x in res['base_lines'][payment_term_line].values()) \
                             - sum(x['balance'] for x in res['tax_lines'][payment_term_line].values())
 
-            last_tax_line = (list(res['tax_lines'][payment_term_line].values()) or list(res['base_lines'][payment_term_line].values()))[-1]
-            last_tax_line['amount_currency'] += delta_amount_currency
-            last_tax_line['balance'] += delta_balance
+            biggest_base_line = max(list(res['base_lines'][payment_term_line].values()), key=lambda x: x['amount_currency'])
+            biggest_base_line['amount_currency'] += delta_amount_currency
+            biggest_base_line['balance'] += delta_balance
 
         else:
             grouping_dict = {'account_id': cash_discount_account.id}
@@ -4399,7 +4421,7 @@ class AccountMove(models.Model):
 
     @api.model
     def _get_invoice_counterpart_amls_for_early_payment_discount(self, aml_values_list, open_balance):
-        """ Helper to get the values to create the counterpart journal items on the register payment wizard_test and the
+        """ Helper to get the values to create the counterpart journal items on the register payment wizard and the
         bank reconciliation widget in case of an early payment discount by taking care of the payment term lines we
         are matching and the exchange difference in case of multi-currencies.
 
@@ -4698,18 +4720,25 @@ class AccountMove(models.Model):
         is_part_of_audit_trail = self.posted_before and self.company_id.check_account_audit_trail
         return not self.inalterable_hash and self.date > lock_date and not is_part_of_audit_trail
 
+    def _is_protected_by_audit_trail(self):
+        return any(move.posted_before and move.company_id.check_account_audit_trail for move in self)
+
     def _unlink_or_reverse(self):
         if not self:
             return
-        to_reverse = self.env['account.move']
         to_unlink = self.env['account.move']
+        to_cancel = self.env['account.move']
+        to_reverse = self.env['account.move']
         for move in self:
-            if move._can_be_unlinked():
-                to_unlink += move
-            else:
+            if not move._can_be_unlinked():
                 to_reverse += move
+            elif move._is_protected_by_audit_trail():
+                to_cancel += move
+            else:
+                to_unlink += move
         to_unlink.filtered(lambda m: m.state in ('posted', 'cancel')).button_draft()
         to_unlink.filtered(lambda m: m.state == 'draft').unlink()
+        to_cancel.button_cancel()
         return to_reverse._reverse_moves(cancel=True)
 
     def _post(self, soft=True):
@@ -4846,11 +4875,9 @@ class AccountMove(models.Model):
         to_post.line_ids._reconcile_marked()
 
         for invoice in to_post:
-            invoice.message_subscribe([
-                p.id
-                for p in [invoice.partner_id]
-                if p not in invoice.sudo().message_partner_ids
-            ])
+            partner_id = invoice.partner_id
+            subscribers = [partner_id.id] if partner_id and partner_id not in invoice.sudo().message_partner_ids else None
+            invoice.message_subscribe(subscribers)
 
         customer_count, supplier_count = defaultdict(int), defaultdict(int)
         for invoice in to_post:
@@ -4944,14 +4971,14 @@ class AccountMove(models.Model):
             nb_unmodified_bills += 1
         if nb_unmodified_bills < 3:
             return False
-        wizard = self.env['account.autopost.bills.wizard_test'].create({
+        wizard = self.env['account.autopost.bills.wizard'].create({
             'partner_id': self.partner_id.id,
             'nb_unmodified_bills': nb_unmodified_bills,
         })
         return {
             'name': _("Autopost Bills"),
             'type': 'ir.actions.act_window',
-            'res_model': 'account.autopost.bills.wizard_test',
+            'res_model': 'account.autopost.bills.wizard',
             'res_id': wizard.id,
             'views': [(False, 'form')],
             'target': 'new',
@@ -5058,7 +5085,7 @@ class AccountMove(models.Model):
             'name': _("Print & Send"),
             'type': 'ir.actions.act_window',
             'view_mode': 'form',
-            'res_model': 'account.move.send.wizard_test' if len(self) == 1 else 'account.move.send.batch.wizard_test',
+            'res_model': 'account.move.send.wizard' if len(self) == 1 else 'account.move.send.batch.wizard',
             'target': 'new',
             'context': {
                 'active_model': 'account.move',
@@ -5337,7 +5364,7 @@ class AccountMove(models.Model):
         if not self.env['res.company']._with_locked_records(to_process, allow_raising=False):
             return
 
-        # Collect moves by res.partner that executed the Send & Print wizard_test, must be done before the _process
+        # Collect moves by res.partner that executed the Send & Print wizard, must be done before the _process
         # that modify sending_data.
         moves_by_partner = to_process.grouped(lambda m: m.sending_data['author_partner_id'])
 
@@ -5409,6 +5436,8 @@ class AccountMove(models.Model):
     def _get_invoice_next_payment_values(self, custom_amount=None):
         self.ensure_one()
         term_lines = self.line_ids.filtered(lambda line: line.display_type == 'payment_term')
+        if not term_lines:
+            return {}
         installments = term_lines._get_installments_data()
         not_reconciled_installments = [x for x in installments if not x['reconciled']]
         overdue_installments = [x for x in not_reconciled_installments if x['type'] == 'overdue']
@@ -5625,20 +5654,20 @@ class AccountMove(models.Model):
         :param force_synchronous: whether to process (as)synchronously (! only relevant for batch sending (multiple invoices))
         :param allow_fallback_pdf:  In case of error when generating the documents for invoices, generate a
                                     proforma PDF report instead.
-        :param custom_settings: custom settings to create the wizard_test (! only relevant for single sending (one invoice))
+        :param custom_settings: custom settings to create the wizard (! only relevant for single sending (one invoice))
         (Since default settings are use for batch sending.
         If you are looking for something more flexible, directly call env[account.move.send]._generate_and_send_invoices method.)
         """
         if not self:
             return
         if len(self) == 1:
-            wizard = self.env['account.move.send.wizard_test'].with_context(
+            wizard = self.env['account.move.send.wizard'].with_context(
                 active_model='account.move',
                 active_ids=self.ids,
             ).create(custom_settings)
             wizard.action_send_and_print(allow_fallback_pdf=allow_fallback_pdf)
         else:
-            wizard = self.env['account.move.send.batch.wizard_test'].with_context(
+            wizard = self.env['account.move.send.batch.wizard'].with_context(
                 active_model='account.move',
                 active_ids=self.ids,
             ).create({})

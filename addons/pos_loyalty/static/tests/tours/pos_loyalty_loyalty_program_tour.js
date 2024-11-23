@@ -162,7 +162,7 @@ registry.category("web_tour.tours").add("PosLoyaltyLoyaltyProgram3", {
 
             // At this point, the free_product program is triggered.
             // The reward button should be highlighted.
-            PosLoyalty.isRewardButtonHighlighted(true),
+            PosLoyalty.isRewardButtonHighlighted(true, true),
             PosLoyalty.claimReward("Free Product - Whiteboard Pen"),
             PosLoyalty.hasRewardLine("Free Product - Whiteboard Pen", "-1.00", "1.00"),
 
@@ -194,7 +194,7 @@ registry.category("web_tour.tours").add("PosLoyaltyDontGrantPointsForRewardOrder
 
             ProductScreen.addOrderline("Desk Organizer", "1"),
             ProductScreen.addOrderline("Whiteboard Pen", "1"),
-            PosLoyalty.isRewardButtonHighlighted(true),
+            PosLoyalty.isRewardButtonHighlighted(true, true),
             PosLoyalty.claimReward("100% on the cheapest product"),
 
             PosLoyalty.orderTotalIs("5.10"),
@@ -225,5 +225,21 @@ registry.category("web_tour.tours").add("PosComboCheapestRewardProgram", {
             Order.hasLine({ productName: "10% on the cheapest product" }),
             PosLoyalty.orderTotalIs("61.03"),
             PosLoyalty.finalizeOrder("Cash", "61.03"),
+        ].flat(),
+});
+
+registry.category("web_tour.tours").add("PosComboSpecificProductProgram", {
+    steps: () =>
+        [
+            Chrome.startPoS(),
+            Dialog.confirm("Open Register"),
+            ProductScreen.clickDisplayedProduct("Office Combo"),
+            combo.select("Combo Product 1"),
+            combo.select("Combo Product 4"),
+            combo.select("Combo Product 6"),
+            Dialog.confirm(),
+            Order.hasLine({ productName: "10% on Office Combo" }),
+            PosLoyalty.orderTotalIs("216.00"),
+            PosLoyalty.finalizeOrder("Cash", "216.00"),
         ].flat(),
 });

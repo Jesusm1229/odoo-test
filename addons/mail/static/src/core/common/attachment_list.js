@@ -50,6 +50,9 @@ export class AttachmentList extends Component {
      * @param {import("models").Attachment} attachment
      */
     getImageUrl(attachment) {
+        if (attachment.type === "url") {
+            return attachment.url;
+        }
         if (attachment.uploading && attachment.tmpUrl) {
             return attachment.tmpUrl;
         }
@@ -125,14 +128,14 @@ export class AttachmentList extends Component {
         const res = [];
         if (this.showDelete) {
             res.push({
-                label: "Remove",
+                label: _t("Remove"),
                 icon: "fa fa-trash",
                 onSelect: () => this.onClickUnlink(attachment),
             });
         }
         if (this.canDownload(attachment)) {
             res.push({
-                label: "Download",
+                label: _t("Download"),
                 icon: "fa fa-download",
                 onSelect: () => this.onClickDownload(attachment),
             });

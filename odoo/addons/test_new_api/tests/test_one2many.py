@@ -160,7 +160,7 @@ class One2manyCase(TransactionExpressionCase):
         model1 = model.create({'pArTneR_321_id': p1.id})
         model2 = model.create({'pArTneR_321_id': p2.id})
 
-        self.env['base.partner.merge.automatic.wizard_test']._merge((p1 + p2).ids, p1)
+        self.env['base.partner.merge.automatic.wizard']._merge((p1 + p2).ids, p1)
 
         self.assertFalse(p2.exists())
         self.assertTrue(p1.exists())
@@ -177,7 +177,7 @@ class One2manyCase(TransactionExpressionCase):
         p3 = partner.create({'name': 'test3', 'active': False})
         partners_ids = (p1 + p2 + p3)
 
-        wizard = self.env['base.partner.merge.automatic.wizard_test'].with_context(active_ids=partners_ids.ids, active_model='res.partner').create({})
+        wizard = self.env['base.partner.merge.automatic.wizard'].with_context(active_ids=partners_ids.ids, active_model='res.partner').create({})
 
         self.assertEqual(wizard.partner_ids, partners_ids)
         self.assertEqual(wizard.dst_partner_id, p2)
@@ -193,7 +193,7 @@ class One2manyCase(TransactionExpressionCase):
         p1, p2, dst_partner = self.env['res.partner'].create([{'name': f'test{idx + 1}'} for idx in range(3)])
         u1, u2 = self.env['res.users'].create([{'name': 'test1', 'login': 'test1', 'partner_id': p1.id},
                                                {'name': 'test2', 'login': 'test2', 'partner_id': p2.id}])
-        MergeWizard_with_context = self.env['base.partner.merge.automatic.wizard_test'].with_context(
+        MergeWizard_with_context = self.env['base.partner.merge.automatic.wizard'].with_context(
             active_ids=(u1.partner_id + u2.partner_id + dst_partner).ids, active_model='res.partner')
 
         with self.assertRaises(UserError):

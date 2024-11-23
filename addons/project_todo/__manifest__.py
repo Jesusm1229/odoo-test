@@ -17,7 +17,7 @@
         'data/todo_template.xml',
         'views/project_task_views.xml',
         'views/project_todo_menus.xml',
-        'wizard_test/mail_activity_todo_create.xml',
+        'wizard/mail_activity_todo_create.xml',
     ],
     'installable': True,
     'application': True,

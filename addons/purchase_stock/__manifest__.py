@@ -25,8 +25,8 @@
         'report/purchase_report_views.xml',
         'report/purchase_report_templates.xml',
         'report/report_stock_rule.xml',
-        'wizard_test/stock_replenishment_info.xml',
-        'wizard_test/product_replenish_views.xml',
+        'wizard/stock_replenishment_info.xml',
+        'wizard/product_replenish_views.xml',
     ],
     'demo': [
         'data/purchase_stock_demo.xml',

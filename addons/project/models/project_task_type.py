@@ -54,7 +54,7 @@ class ProjectTaskType(models.Model):
         readgroup = self.with_context(active_test=False).env['project.task']._read_group([('stage_id', 'in', self.ids)], ['project_id'])
         project_ids = list(set([project.id for [project] in readgroup] + self.project_ids.ids))
 
-        wizard = self.with_context(project_ids=project_ids).env['project.task.type.delete.wizard_test'].create({
+        wizard = self.with_context(project_ids=project_ids).env['project.task.type.delete.wizard'].create({
             'project_ids': project_ids,
             'stage_ids': self.ids
         })
@@ -64,7 +64,7 @@ class ProjectTaskType(models.Model):
         return {
             'name': _('Delete Stage'),
             'view_mode': 'form',
-            'res_model': 'project.task.type.delete.wizard_test',
+            'res_model': 'project.task.type.delete.wizard',
             'views': [(self.env.ref('project.view_project_task_type_delete_wizard').id, 'form')],
             'type': 'ir.actions.act_window',
             'res_id': wizard.id,
@@ -146,14 +146,14 @@ class ProjectTaskType(models.Model):
         inactive_tasks = self.env['project.task'].with_context(active_test=False).search(
             [('active', '=', False), ('stage_id', 'in', stage_active.ids)], limit=1)
         if stage_active and inactive_tasks:
-            wizard = self.env['project.task.type.delete.wizard_test'].create({
+            wizard = self.env['project.task.type.delete.wizard'].create({
                 'stage_ids': stage_active.ids,
             })
 
             return {
                 'name': _('Unarchive Tasks'),
                 'view_mode': 'form',
-                'res_model': 'project.task.type.delete.wizard_test',
+                'res_model': 'project.task.type.delete.wizard',
                 'views': [(self.env.ref('project.view_project_task_type_unarchive_wizard').id, 'form')],
                 'type': 'ir.actions.act_window',
                 'res_id': wizard.id,

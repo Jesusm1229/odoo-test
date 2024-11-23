@@ -8,7 +8,7 @@
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
-        'wizard_test/homework_location_wizard.xml',
+        'wizard/homework_location_wizard.xml',
     ],
     'installable': True,
     'auto_install': True,

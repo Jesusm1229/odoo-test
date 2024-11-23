@@ -41,7 +41,7 @@ class TestMailResend(MailCommon):
             message = self.test_record.with_user(self.user_admin).message_post(partner_ids=self.partners.ids, subtype_xmlid='mail.mt_comment', message_type='notification')
 
         wizard = self.env['mail.resend.message'].with_context({'mail_message_to_resend': message.id}).create({})
-        self.assertEqual(wizard.notification_ids.mapped('res_partner_id'), self.partners, "wizard_test should manage notifications for each failed partner")
+        self.assertEqual(wizard.notification_ids.mapped('res_partner_id'), self.partners, "wizard should manage notifications for each failed partner")
 
         # three more failure sent on bus, one for each mail in failure and one for resend
         self._reset_bus()

@@ -8,7 +8,7 @@ class SwissSetupBarBankConfigWizard(models.TransientModel):
     @api.onchange('acc_number')
     def _onchange_recompute_qr_iban(self):
         # Needed because ORM doesn't properly call the compute in 'new' mode, due to inherits, and
-        # we want this field to be displayed in the wizard_test. We need to manually set acc_number
+        # we want this field to be displayed in the wizard. We need to manually set acc_number
         # on the inherits m2o before calling the compute function manually.
         self.res_partner_bank_id.acc_number = self.acc_number
         self.res_partner_bank_id._compute_l10n_ch_qr_iban()

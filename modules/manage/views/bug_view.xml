@@ -6,9 +6,9 @@
             <field name="arch" type="xml">
                 <form>
                     <group>
+                        <field name="project_id"/>
                         <field name="definition_date"/>
                         <field name="history_id"/>
-                        <field name="project_id"/>
                         <field name="code"/>
                         <field name="name"/>
                         <field name="description"/>
@@ -21,12 +21,12 @@
                         <field
                                 name="developer_ids"
                                 domain="[('is_dev', '=', 'true')]"
-                                context="{'form_view_ref':'manage.devs_partner_form'}"
+                                context="{'form_view_ref':'manage.devs_partner_form','default_is_dev': True}"
                         />
                         <field name="technology_ids"/>
                         <field name="task_linked"/>
                         <field name="bug_linked"/>
-                        <field name="developer_ids"/>
+                        <field name="improvement_linked"/>
                     </group>
                 </form>
             </field>

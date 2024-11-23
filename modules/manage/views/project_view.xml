@@ -20,9 +20,9 @@
             <field name="res_model">manage.project</field>
             <field name="view_mode">list,form</field>
             <!--      desde acá añadimos un nuevo campo domain que es un filtro sólo mostrará si son desarrolladores-->
-            <field name="domain">[('is_dev', '=', 'true')]</field>
+<!--            <field name="domain">[('is_dev', '=', 'True')]</field>-->
             <!--      context guarda un diccionario de cosas que se le pasa al cliente. Debe estar en formato JSON-->
-            <field name="context">[('default_is_dev':True)]</field>
+<!--            <field name="context">{'default_is_dev': True}</field>-->
 
         </record>
 

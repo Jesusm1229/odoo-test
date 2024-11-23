@@ -23,7 +23,7 @@ class ProjectProjectStage(models.Model):
         return [dict(vals, name=self.env._("%s (copy)", stage.name)) for stage, vals in zip(self, vals_list)]
 
     def unlink_wizard(self, stage_view=False):
-        wizard = self.with_context(active_test=False).env['project.project.stage.delete.wizard_test'].create({
+        wizard = self.with_context(active_test=False).env['project.project.stage.delete.wizard'].create({
             'stage_ids': self.ids
         })
 
@@ -32,7 +32,7 @@ class ProjectProjectStage(models.Model):
         return {
             'name': _('Delete Project Stage'),
             'view_mode': 'form',
-            'res_model': 'project.project.stage.delete.wizard_test',
+            'res_model': 'project.project.stage.delete.wizard',
             'views': [(self.env.ref('project.view_project_project_stage_delete_wizard').id, 'form')],
             'type': 'ir.actions.act_window',
             'res_id': wizard.id,
@@ -65,14 +65,14 @@ class ProjectProjectStage(models.Model):
         inactive_projects = self.env['project.project'].with_context(active_test=False).search(
             [('active', '=', False), ('stage_id', 'in', stage_active.ids)], limit=1)
         if stage_active and inactive_projects:
-            wizard = self.env['project.project.stage.delete.wizard_test'].create({
+            wizard = self.env['project.project.stage.delete.wizard'].create({
                 'stage_ids': stage_active.ids,
             })
 
             return {
                 'name': _('Unarchive Projects'),
                 'view_mode': 'form',
-                'res_model': 'project.project.stage.delete.wizard_test',
+                'res_model': 'project.project.stage.delete.wizard',
                 'views': [(self.env.ref('project.view_project_project_stage_unarchive_wizard').id, 'form')],
                 'type': 'ir.actions.act_window',
                 'res_id': wizard.id,

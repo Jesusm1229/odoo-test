@@ -47,7 +47,7 @@ class TestAccruedTimeSheetSaleOrders(TestCommonSaleTimesheet):
         self._log_hours(10, '2020-01-02')
         # log 10 hours on 2020-01-05
         self._log_hours(10, '2020-01-05')
-        wizard = self.env['account.accrued.orders.wizard_test'].with_context({
+        wizard = self.env['account.accrued.orders.wizard'].with_context({
             'active_model': 'sale.order',
             'active_ids': self.sale_order.ids,
         }).create({
@@ -98,7 +98,7 @@ class TestAccruedTimeSheetSaleOrders(TestCommonSaleTimesheet):
         inv.invoice_date = fields.Date.to_date('2020-01-08')
         inv.action_post()
 
-        wizard = self.env['account.accrued.orders.wizard_test'].with_context({
+        wizard = self.env['account.accrued.orders.wizard'].with_context({
             'active_model': 'sale.order',
             'active_ids': self.sale_order.ids,
         }).create({

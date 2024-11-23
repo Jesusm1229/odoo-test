@@ -38,8 +38,8 @@ class TestPacking(TestPackingCommon):
         })
 
     def test_put_in_pack_weight_wizard(self):
-        """ Check that de default weight is correctly set by default when using the 'choose.delivery.package' wizard_test.
-        This purpose of this wizard_test is
+        """ Check that de default weight is correctly set by default when using the 'choose.delivery.package' wizard.
+        This purpose of this wizard is
         """
         self.env['stock.quant']._update_available_quantity(self.product_aw, self.stock_location, 20.0)
         self.env['stock.quant']._update_available_quantity(self.product_bw, self.stock_location, 20.0)
@@ -76,7 +76,7 @@ class TestPacking(TestPackingCommon):
         # We make sure the correct action was returned
         self.assertEqual(pack_action_model, 'choose.delivery.package')
 
-        # We instanciate the wizard_test with the context of the action and check that the
+        # We instanciate the wizard with the context of the action and check that the
         # default weight was set.
         pack_wiz = self.env['choose.delivery.package'].with_context(pack_action_ctx).create({})
         self.assertEqual(pack_wiz.shipping_weight, 13.5)

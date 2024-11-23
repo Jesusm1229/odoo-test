@@ -12,6 +12,7 @@ import * as Order from "@point_of_sale/../tests/tours/utils/generic_components/o
 import * as TicketScreen from "@point_of_sale/../tests/tours/utils/ticket_screen_util";
 import { inLeftSide, negateStep } from "@point_of_sale/../tests/tours/utils/common";
 import { registry } from "@web/core/registry";
+import * as Numpad from "@point_of_sale/../tests/tours/utils/numpad_util";
 
 const ProductScreen = { ...ProductScreenPos, ...ProductScreenResto };
 
@@ -267,10 +268,12 @@ registry.category("web_tour.tours").add("OrderTrackingTour", {
             ProductScreen.clickDisplayedProduct("Coca-Cola", true, "2.0"),
             Chrome.clickPlanButton(),
             FloorScreen.clickTable("5"),
-            ProductScreen.selectedOrderlineHas("Coca-Cola", "2.0"),
-            ProductScreen.clickNumpad("⌫"),
-            ProductScreen.clickNumpad("1"),
-            ProductScreen.selectedOrderlineHas("Coca-Cola", "1.0"),
+            inLeftSide([
+                ...ProductScreen.clickLine("Coca-Cola", "2.0"),
+                ...ProductScreen.selectedOrderlineHasDirect("Coca-Cola", "2.0"),
+                ...["⌫", "1"].map(Numpad.click),
+                ...ProductScreen.selectedOrderlineHasDirect("Coca-Cola", "1.0"),
+            ]),
             ProductScreen.clickPayButton(),
             PaymentScreen.clickPaymentMethod("Bank"),
             PaymentScreen.clickValidate(),
@@ -290,5 +293,40 @@ registry.category("web_tour.tours").add("CategLabelCheck", {
             FloorScreen.clickTable("5"),
             ProductScreen.clickDisplayedProduct("Test Multi Category Product"),
             ProductScreen.OrderButtonNotContain("Drinks"),
+        ].flat(),
+});
+registry.category("web_tour.tours").add("OrderChange", {
+    steps: () =>
+        [
+            Chrome.startPoS(),
+            Dialog.confirm("Open Register"),
+            FloorScreen.clickTable("5"),
+            ProductScreen.clickDisplayedProduct("Coca-Cola", true, "1.0"),
+            ProductScreen.clickOrderButton(),
+            {
+                ...Dialog.confirm(),
+                content:
+                    "acknowledge printing error ( because we don't have printer in the test. )",
+            },
+            ProductScreen.orderlinesHaveNoChange(),
+            ProductScreen.clickPayButton(),
+            PaymentScreen.clickPaymentMethod("Cash"),
+            PaymentScreen.clickNumpad("+10"),
+            PaymentScreen.clickValidate(),
+            ReceiptScreen.isShown(),
+            TicketScreen.receiptChangeIs("7.80"),
+        ].flat(),
+});
+
+registry.category("web_tour.tours").add("CrmTeamTour", {
+    steps: () =>
+        [
+            Chrome.startPoS(),
+            Dialog.confirm("Open Register"),
+            FloorScreen.clickTable("5"),
+            ProductScreen.clickDisplayedProduct("Coca-Cola"),
+            Chrome.clickPlanButton(),
+            FloorScreen.clickTable("5"),
+            Chrome.clickPlanButton(),
         ].flat(),
 });

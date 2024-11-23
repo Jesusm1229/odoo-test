@@ -17,7 +17,7 @@ class TestSnailmailOnInvoice(TransactionCase):
         })
 
         partner_without_email.write({
-            'country_id': self.env.ref('base.us'),
+            'country_id': self.env.ref('base.us').id,
             'street': 'Test street',
             'zip': '12345',
             'city': 'testcity',
@@ -37,7 +37,7 @@ class TestSnailmailOnInvoice(TransactionCase):
         })
         invoice.action_post()
 
-        print_wiz = self.env['account.move.send.wizard_test'].create({
+        print_wiz = self.env['account.move.send.wizard'].create({
             'move_id': invoice.id,
             'sending_methods': ['snailmail'],
         })

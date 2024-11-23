@@ -158,9 +158,9 @@ class TestPeppolParticipant(TransactionCase):
         self.assertEqual(company.account_peppol_proxy_state, 'receiver')
 
     def test_create_success_receiver_two_steps(self):
-        # it should be possible to first register as a sender in the wizard_test
+        # it should be possible to first register as a sender in the wizard
         # and then come back to settings and register as a receiver
-        # first step: use the peppol wizard_test to register only as a sender
+        # first step: use the peppol wizard to register only as a sender
         company = self.env.company
         wizard = self.env['peppol.registration'].create(self._get_participant_vals())
         wizard.button_peppol_sender_registration()

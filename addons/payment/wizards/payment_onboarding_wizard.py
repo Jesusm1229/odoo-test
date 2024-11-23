@@ -5,8 +5,8 @@ from odoo.exceptions import UserError
 
 
 class PaymentWizard(models.TransientModel):
-    _name = 'payment.provider.onboarding.wizard_test'
-    _description = 'Payment provider onboarding wizard_test'
+    _name = 'payment.provider.onboarding.wizard'
+    _description = 'Payment provider onboarding wizard'
 
     payment_method = fields.Selection([
         ('stripe', "Credit & Debit card (via Stripe)"),
@@ -126,7 +126,7 @@ class PaymentWizard(models.TransientModel):
         if self.payment_method in ('paypal', 'manual', 'stripe'):
             self.env.company.payment_onboarding_payment_method = self.payment_method
 
-        # delete wizard_test data immediately to get rid of residual credentials
+        # delete wizard data immediately to get rid of residual credentials
         self.sudo().unlink()
 
         if payment_method == 'stripe':
