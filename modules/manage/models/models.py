@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import re
 from datetime import timedelta
 
 from unicodedata import category
@@ -9,16 +10,25 @@ from odoo.api import readonly
 from odoo.exceptions import ValidationError
 from odoo.tools.safe_eval import datetime
 
+
 _logger = logging.getLogger(__name__)
+
+#Herencia clásica: Se extiende la misma tabla con los mismos atributos más los nuevos. SÓLO SE USA INHERIT
+#Herencia prototípica: Se crea una tabla nueva con los mismos atributos más los nuevos. SE USA INHERIT Y NAME
+#Herencia por delegación: Se crea una tabla nueva con los mismos atributos más los nuevos. SE USA INHERIts
 
 
 class Developer(models.Model):
-    # herencia de clase. Cuando se usa el _inherit junto con el mismo _name del objeto se crea una extensión. Si el name cambia  se crea un objeto nuevo con su propia database y es ignorada por vistas existentes
-    # _name = 'res.partner'
+    # herencia de clase. Cuando se usa el _inherit junto con el mismo _name del objeto se crea una extensión.
+    # Si el name cambia  se crea un objeto nuevo con su propia database y es ignorada por vistas existentes
+    # NOTA: si usas el mismo nombre y la inherit, entonces la herencia será clásica
+    _name = 'res.partner'
     _inherit = 'res.partner'
 
     # crearemos si el usuario que se crea es developer o no
     is_dev = fields.Boolean()
+
+    access_code = fields.Char(string="Access Code")
 
     technology_ids = fields.Many2many('manage.technology',
                                       relation='developer_technologies',
@@ -47,6 +57,26 @@ class Developer(models.Model):
 
     #task_ids = fields.One2many('manage.task', 'developer_id', string="Tasks")
 
+    @api.constrains
+    def _check_code(self):
+        regex = re.compile('^[0-9]{8}[a-z]', re.I)
+        for dev in self:
+            if regex.match(dev.access_code):
+                _logger.info('Código de acceso generado correctamente')
+            else:
+                raise ValidationError('Formato de código de acceso incorrecto')
+
+
+    #diferncia entre una vista y una tupla. La vista se puede modificar los elementos de la vista. La tupla no
+    #Se pueden concatenar restricciones [(), ()] para que se cumplan todas las tuplas.
+    _sql_constraints = [(
+       'access_code_unique',
+        'UNIQUE(access_code)',
+        'El código de acceso debe ser único'
+    )]
+
+
+
     # Cuando cambie el is_dev. Para buscar el category name vas a tech. Modelo res.partner y ves el campo name
     @api.onchange('is_dev')
     def _onchange_is_dev(self):
@@ -57,6 +87,38 @@ class Developer(models.Model):
             category = self.env['res.partner.category'].create({'name': 'Developer'})
         # si es developer se añade la categoría. Category es un campo many2many. El 4 es añadir y el 3 es quitar
         self.category_id = [(4, category.id)]  # if self.is_dev else [(3, category.id)]
+
+from odoo import models, fields, api
+
+#testing model view of sql
+class DeveloperReport(models.Model):
+    _name = 'developer.report'
+    _auto = False  # This indicates that the model is not associated with a database table
+
+    name = fields.Char(string="Developer Name")
+    task_count = fields.Integer(string="Task Count")
+
+    #La vista no sirve porque no existen las tablas.
+    #Este es sólo un ejemplo para mostrar cómo se puede hacer una vista en Odoo
+    # def init(self):
+    #     self.env.cr.execute("""
+    #         CREATE OR REPLACE VIEW developer_report AS (
+    #             SELECT
+    #                 row_number() OVER () AS id,
+    #                 rp.name AS name,
+    #                 COUNT(mt.id) AS task_count
+    #             FROM
+    #                 res_partner rp
+    #             LEFT JOIN
+    #                 developers_tasks_rel dtr ON rp.id = dtr.developer_id
+    #             LEFT JOIN
+    #                 manage_task mt ON dtr.task_id = mt.id
+    #             WHERE
+    #                 rp.is_dev = True
+    #             GROUP BY
+    #                 rp.name
+    #         )
+    #     """)
 
 
 class Project(models.Model):
@@ -286,14 +348,23 @@ class Sprint(models.Model):
 
     name = fields.Char(string="Name", required=True)
     description = fields.Text(string="Description")
-    duration = fields.Integer(string="Duration", default=15)
 
+    duration = fields.Integer(string="Duration", default=15)
     start_date = fields.Datetime(string="Start Date")
     end_date = fields.Datetime(compute='_get_end_date', store={True}, string="End Date")
 
     task_ids = fields.One2many('manage.task', 'sprint_id', string="Tasks")
 
     project_id = fields.Many2one('manage.project', ondelete='set null', string="Project")
+
+    # Define the compute method
+    #en odoo un campo sin valor es booleano.
+    @api.depends('start_date', 'duration')
+    def _compute_active(self):
+        for sprint in self:
+            sprint.active = sprint.start_date <= fields.Datetime.now() <= sprint.end_date
+
+    active = fields.Boolean(string="Active", compute='_compute_active', store=True)
 
     @api.depends('start_date', 'duration')
     def _get_end_date(self):

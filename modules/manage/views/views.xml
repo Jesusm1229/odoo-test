@@ -13,7 +13,7 @@
             <field name="mode">primary</field>
             <field name="arch" type="xml">
                 <!--       Ubicamos la posición y la añadimos. No necesitamos el form porque lo susituiría-->
-
+<!--                Posición del tab-->
                 <xpath expr="//sheet/notebook/page[@name='internal_notes']" position="after">
                     <!--          mostrar pagina sólo si default_is_dev no es true-->
                     <!--Cambiando attrs to show {[('default_is_dev', '!=', True)]}-->
@@ -22,6 +22,7 @@
                             <group>
                                 <!--                campo is dev sólo para comprobar-->
                                 <field name="is_dev" show="True"/>
+                                <field name="access_code"/>
                                 <field name="technology_ids"/>
 <!--                                Adding context para mostrar el developer-->
                                 <field name="task_ids"

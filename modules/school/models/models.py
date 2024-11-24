@@ -21,7 +21,7 @@ class School(models.Model):
     @api.constrains('name')
     def _check_name_unique(self):
         for record in self:
-            if self.search_count([('name', '=', record.name.lower()), ('id', '!=', record.id)]) > 0:
+            if self.search_count([('name', '=', record.name), ('id', '!=', record.id)]) > 0:
                 raise ValidationError("El nombre del estudiante ya existe !")
 
     @api.constrains('age')
