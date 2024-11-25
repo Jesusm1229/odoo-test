@@ -6,12 +6,14 @@
             <field name="model">manage.sprint</field>
             <!--             hacer que sprint con duración de 15 dáis tengan color amarillo-->
             <field name="arch" type="xml">
-                <list decoration-info="active == True" decoration-warning="duration == 15">
+                <!--             duration < 15 no funciona -->
+                <list decoration-info="active == True" decoration-warning="duration &lt; 15">
                     <field name="name"/>
                     <field name="start_date"/>
                     <field name="end_date"/>
-                    <field name="duration"/>
-                    <field name="active"/>
+<!--                    sum suma todos los valores del campo-->
+                    <field name="duration" sum="Total"/>
+                    <field name="active" show="False"/>
                 </list>
             </field>
         </record>
